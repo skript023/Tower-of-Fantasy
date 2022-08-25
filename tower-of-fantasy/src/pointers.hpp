@@ -23,7 +23,7 @@ namespace big
 		Navigation** m_player_nav{};
 		uintptr_t** m_uobject{};
 		uintptr_t** m_object;
-		uintptr_t** m_name;
+		FNamePool* m_name;
 
 		iVector2* m_screen{};
 

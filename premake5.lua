@@ -10,11 +10,10 @@ workspace "tower-of-fantasy"
   outputdir = "%{cfg.buildcfg}"
 
   IncludeDir = {}
-  IncludeDir["fmt"] = "vendor/fmt/include"
   IncludeDir["json"] = "vendor/json/single_include"
   IncludeDir["MinHook"] = "vendor/MinHook/include"
-  IncludeDir["ImGui"] = "vendor/ImGui"
-  IncludeDir["ImGuiImpl"] = "vendor/ImGui/examples"
+  IncludeDir["ImGui"] = "vendor/imgui"
+  IncludeDir["ImGuiImpl"] = "vendor/imgui/examples"
   IncludeDir["StackWalker"] = "vendor/StackWalker/Main/StackWalker"
   
   CppVersion = "C++20"
@@ -60,7 +59,7 @@ workspace "tower-of-fantasy"
       defines { "NDEBUG" }
   end
    
-  project "ImGui"
+  project "imgui"
     location "vendor/%{prj.name}"
     kind "StaticLib"
     language "C++"
@@ -87,46 +86,24 @@ workspace "tower-of-fantasy"
     DeclareMSVCOptions()
     DeclareDebugOptions()
 
-  project "fmt"
-    location "vendor/%{prj.name}"
-    kind "StaticLib"
-    language "C++"
-
-    targetdir ("bin/lib/" .. outputdir)
-    objdir ("bin/lib/int/" .. outputdir .. "/%{prj.name}")
-
-    files
-    {
-      "vendor/%{prj.name}/include/**.h",
-      "vendor/%{prj.name}/src/**.cc"
-    }
-
-    includedirs
-    {
-      "vendor/%{prj.name}/include"
-    }
-
-    DeclareMSVCOptions()
-    DeclareDebugOptions()
-
   project "MinHook"
-    location "vendor/%{prj.name}"
-    kind "StaticLib"
-    language "C"
+      location "vendor/%{prj.name}"
+      kind "StaticLib"
+      language "C"
 
-    targetdir ("bin/lib/" .. outputdir)
-    objdir ("bin/lib/int/" .. outputdir .. "/%{prj.name}")
+      targetdir ("bin/lib/" .. outputdir)
+      objdir ("bin/lib/int/" .. outputdir .. "/%{prj.name}")
 
-    files
-    {
-      "vendor/%{prj.name}/include/**.h",
-      "vendor/%{prj.name}/src/**.h",
-      "vendor/%{prj.name}/src/**.c"
-    }
+      files
+      {
+        "vendor/%{prj.name}/include/**.h",
+        "vendor/%{prj.name}/src/**.h",
+        "vendor/%{prj.name}/src/**.c"
+      }
 
-    DeclareMSVCOptions()
-    DeclareDebugOptions()
-	
+      DeclareMSVCOptions()
+      DeclareDebugOptions()
+
   project "StackWalker"
     location "vendor/%{prj.name}"
     kind "StaticLib"
@@ -169,7 +146,6 @@ workspace "tower-of-fantasy"
 
     includedirs
     {
-      "%{IncludeDir.fmt}",
       "%{IncludeDir.json}",
       "%{IncludeDir.MinHook}",
       "%{IncludeDir.ImGui}",
@@ -185,7 +161,6 @@ workspace "tower-of-fantasy"
 
     links
     {
-      "fmt",
       "MinHook",
       "ImGui",
       "StackWalker"

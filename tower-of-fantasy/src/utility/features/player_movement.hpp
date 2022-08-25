@@ -22,15 +22,18 @@ namespace big::movement
 	{
 		if (activate)
 		{
-			if (auto player = unreal_engine::get_local_player())
+			if (GetAsyncKeyState(VK_LSHIFT) & 0x1)
 			{
-				if (auto controller = player->m_player_controller)
+				if (auto player = unreal_engine::get_local_player())
 				{
-					if (auto pawn = controller->m_pawn)
+					if (auto controller = player->m_player_controller)
 					{
-						pawn->m_rand_bean = 6001;
-						pawn->m_cur_bean_count = 6641;
-						pawn->m_change_time = 637963816908830000;
+						if (auto pawn = controller->m_pawn)
+						{
+							pawn->m_rand_bean = 6001;
+							pawn->m_cur_bean_count = 6641;
+							pawn->m_change_time = 637963816908830000;
+						}
 					}
 				}
 			}
@@ -101,13 +104,16 @@ namespace big::movement
 	{
 		if (activate)
 		{
-			if (auto player = unreal_engine::get_local_player())
+			if (GetAsyncKeyState(VK_SPACE) & 0x1)
 			{
-				if (auto controller = player->m_player_controller)
+				if (auto player = unreal_engine::get_local_player())
 				{
-					if (auto actor_pawn = controller->m_pawn)
+					if (auto controller = player->m_player_controller)
 					{
-						actor_pawn->m_jump_count = 0;
+						if (auto actor_pawn = controller->m_pawn)
+						{
+							actor_pawn->m_jump_count = 0;
+						}
 					}
 				}
 			}

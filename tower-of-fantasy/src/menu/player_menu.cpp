@@ -23,6 +23,8 @@ namespace big
             if (ImGui::Checkbox("No Cooldown", &g_settings->player.no_cooldown))
                 attack::remove_cooldown(g_settings->player.no_cooldown);
 
+            ImGui::Checkbox("ESP", &g_settings->player.esp);
+
             ImGui::EndGroup();
 
             ImGui::SameLine(200);

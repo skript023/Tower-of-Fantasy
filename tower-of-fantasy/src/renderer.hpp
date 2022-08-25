@@ -20,6 +20,8 @@ namespace big
 		void post_reset(IDXGISwapChain* this_);
 
 		void wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+	private:
+		void render_esp(bool activate);
 	public:
 		ImFont* m_font;
 		ImFont* m_monospace_font;
@@ -29,6 +31,7 @@ namespace big
 		ID3D11Device* m_d3d_device = nullptr;
 		ID3D11DeviceContext* m_d3d_context = nullptr;
 		ID3D11RenderTargetView* m_d3d_render_target = nullptr;
+		iVector2 m_resolution;
 	};
 
 	inline renderer *g_renderer{};

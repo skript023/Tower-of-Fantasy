@@ -13,6 +13,7 @@ namespace big
 	class SkillComponent;
 
 	class Navigation;
+	class FNamePool;
 
 	class ULevel;
 }

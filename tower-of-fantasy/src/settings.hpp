@@ -21,6 +21,7 @@ namespace big
 			bool infinite_dodge{ false };
 			bool fast_attack{ false };
 			bool no_clip{ false };
+			bool esp{ false };
 
 			float attack_multiplier{ 0.0f };
 			float pysical_attack{ 0.0f };
@@ -66,6 +67,7 @@ namespace big
 			this->player.infinite_dodge = j["player"]["infinite_dodge"];
 			this->player.fast_attack = j["player"]["fast_attack"];
 			this->player.no_clip = j["player"]["no_clip"];
+			this->player.esp = j["player"]["esp"];
 		}
 
 		nlohmann::json to_json()
@@ -89,7 +91,8 @@ namespace big
 						{ "freeze_mobs", this->player.freeze_mobs},
 						{ "infinite_dodge", this->player.infinite_dodge},
 						{ "fast_attack", this->player.fast_attack},
-						{ "no_clip", this->player.no_clip}
+						{ "no_clip", this->player.no_clip},
+						{ "esp", this->player.esp}
 					}
 				}
 			};

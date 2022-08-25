@@ -15,15 +15,17 @@ namespace big::attack
 
 	inline void rapid_attack(bool activate)
 	{
-		if (activate && *g_pointers->m_rapid_attack == 0xC2)
+		if (activate)
 		{
 			switch (get_weapon_type())
 			{
 			case 2:
-				*g_pointers->m_rapid_attack = 0xC0;
+				if (*g_pointers->m_rapid_attack != 0xC0)
+					*g_pointers->m_rapid_attack = 0xC0;
 				break;
 			case 3:
-				*g_pointers->m_rapid_attack = 0xC3;
+				if (*g_pointers->m_rapid_attack != 0xC3)
+					*g_pointers->m_rapid_attack = 0xC3;
 				break;
 			}
 		}

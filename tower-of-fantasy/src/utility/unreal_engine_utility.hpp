@@ -1,6 +1,7 @@
 #pragma once
 #include <pointers.hpp>
 #include "class/world.hpp"
+#include "class/fname_pool.hpp"
 
 namespace big::unreal_engine
 {
@@ -62,50 +63,14 @@ namespace big::unreal_engine
 
 	inline std::string get_name(int key)
 	{
-		uint32_t chunk_offset = uint32_t((int)key >> 16);
-		auto name_offset = (unsigned short)key;
-
-		auto name_pool_chunk = g_pointers->m_name[chunk_offset + 2];
-		auto entry_offset = name_pool_chunk + (ULONG)(2 * name_offset);
-
-		return std::string((char*)((uintptr_t)entry_offset + 2));
-	}
-
-	inline Vector3 get_entity()
-	{
-		auto level_array = (*g_pointers->m_world)->m_level;
-		auto level_size = (*g_pointers->m_world)->m_level_size;
-
-		for (int j = 0; j < level_size; j++)
+		if (!g_pointers->m_name->m_entry_allocator.is_valid_index(key))
 		{
-			auto level_data = level_array->m_level_array[j];
-			if (level_data == nullptr) continue;
-
-			auto actor_array = level_data->m_actor;
-			auto actor_size = level_data->m_actor_count;
-
-			for (int i = 0; i < actor_size; i++)
-			{
-				auto actor = actor_array->m_actor_array[i];
-				if (actor == nullptr) continue;
-
-				if (int id = actor->m_name_index)
-				{
-					auto name = get_name(id);
-					if (name.find("Scene_Box_Refresh_Wild_") != std::string::npos ||
-						name.find("BP_Harvest_Gem_") != std::string::npos ||
-						name.find("Box_OnlyOnce_") != std::string::npos
-						)
-					{
-						g_logger->info(name.c_str());
-						if (auto root_component = actor->m_root_component)
-						{
-							auto pos = root_component->m_relative_location;
-
-						}
-					}
-				}
-			}
+			g_logger->warning("key is invalid");
+			return "";
 		}
+
+		auto fname_entry = g_pointers->m_name->m_entry_allocator.get_by_id(key);
+		auto ret = fname_entry.get_ansi_name();
+		return ret;
 	}
 }

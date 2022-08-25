@@ -16,6 +16,49 @@
 
 namespace big
 {
+	void gui::get_entity()
+	{
+		auto level_array = (*g_pointers->m_world)->m_level;
+		auto level_size = (*g_pointers->m_world)->m_level_size;
+
+		for (int j = 0; j < level_size; j++)
+		{
+			auto level_data = level_array->m_level_array[j];
+			if (*(uintptr_t*)level_data == NULL) continue;
+
+			auto actor_array = level_data->m_actor;
+			auto actor_size = level_data->m_actor_count;
+
+			for (int i = 0; i < actor_size; i++)
+			{
+				auto actor = actor_array->m_actor_array[i];
+				if (*(uintptr_t*)actor == NULL) continue;
+
+				if (int id = actor->m_name_index)
+				{
+					auto name = unreal_engine::get_name(id);
+
+					auto root_component = actor->m_root_component;
+					if (*(uintptr_t*)root_component == NULL) continue;
+
+					auto pos = root_component->m_relative_location;
+					auto location = unreal_engine::get_local_player()->m_player_controller->project_world_to_screen(pos);
+					m_entity_list[name] = location;
+				}
+			}
+		}
+	}
+
+	void gui::script_on_tick_timed()
+	{
+		static auto start = std::chrono::steady_clock::now();
+		if ((std::chrono::steady_clock::now() - start).count() >= std::chrono::milliseconds(1000).count())
+		{
+			get_entity();
+			start = std::chrono::steady_clock::now();
+		}
+	}
+
 	void gui::dx_init()
 	{
 		auto &style = ImGui::GetStyle();
@@ -122,9 +165,11 @@ namespace big
 			TRY_CLAUSE
 			{
 				attack::rapid_attack(g_settings->player.fast_attack);
-
+				
 				movement::infinite_jump(g_settings->player.infinite_jump);
 				movement::infinite_dodge(g_settings->player.infinite_dodge);
+
+				//script_on_tick_timed();
 			} EXCEPT_CLAUSE
 		}
 	}

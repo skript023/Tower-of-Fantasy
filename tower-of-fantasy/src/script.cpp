@@ -7,7 +7,15 @@ namespace big
 {
 	void script::script_exception_handler(PEXCEPTION_POINTERS exp)
 	{
-		g_logger->warning("Script Got Exception");
+		HMODULE mod{};
+		DWORD64 offset{};
+		char buffer[MAX_PATH]{};
+		if (GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS, (LPCWSTR)exp->ExceptionRecord->ExceptionAddress, &mod) == TRUE && mod != nullptr)
+		{
+			offset = ((DWORD64)exp->ExceptionRecord->ExceptionAddress - (DWORD64)mod);
+			GetModuleFileNameA(mod, buffer, MAX_PATH - 1);
+		}
+		g_logger->warning("Exception Code: 0x%X Exception Offset: 0x%X Fault Module Name: 0x%X", exp->ExceptionRecord->ExceptionCode, offset, buffer);
 		g_stackwalker.ShowCallstack(GetCurrentThread(), exp->ContextRecord);
 	}
 

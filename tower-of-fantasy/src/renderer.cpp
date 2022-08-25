@@ -3,6 +3,7 @@
 #include "logger.hpp"
 #include "gui.hpp"
 #include "pointers.hpp"
+#include "utility/drawing/d3d_drawing.hpp"
 #include "renderer.hpp"
 #include <imgui.h>
 #include <backends/imgui_impl_dx11.h>
@@ -13,7 +14,8 @@ IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARA
 //CW.exe+2D4E21610
 namespace big
 {
-	renderer::renderer()
+	renderer::renderer():
+		m_resolution(*g_pointers->m_screen)
 	{
 		g_renderer = this;
 	}
@@ -117,6 +119,8 @@ namespace big
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
+		render_esp(g_settings->player.esp);
+
 		if (g_gui.m_opened)
 		{
 			g_gui.dx_on_tick();
@@ -181,6 +185,26 @@ namespace big
 		if (g_gui.m_opened)
 		{
 			ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam);
+		}
+	}
+
+	void renderer::render_esp(bool activate)
+	{
+		if (activate)
+		{
+			if (!g_gui.m_entity_list.empty())
+			{
+				for (auto entity : g_gui.m_entity_list)
+				{
+					auto name = entity.first;
+					auto location = entity.second;
+
+					draw::RGBA red = { 255, 0, 0, 255 };
+					draw::RGBA white = { 255, 255, 255, 255 };
+					draw::draw_line(location.x, location.y, static_cast<float>(m_resolution.x / 2), 0.f, &red, 1.f);
+					draw::draw_stroke_text(location.x, location.y, &white, name.c_str());
+				}
+			}
 		}
 	}
 }

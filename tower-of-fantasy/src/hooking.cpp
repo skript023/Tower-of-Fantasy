@@ -51,6 +51,7 @@ namespace big
 		SetWindowLongPtrW(g_pointers->m_hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(m_og_wndproc));
 		m_swapchain_resizebuffers_hook.disable();
 		m_swapchain_present_hook.disable();
+		free(g_pointers->m_swapchain_methods);
 	}
 
 	minhook_keepalive::minhook_keepalive()

@@ -1,4 +1,5 @@
 #pragma once
+#include <class/vector.hpp>
 
 namespace big
 {

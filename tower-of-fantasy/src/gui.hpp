@@ -1,5 +1,6 @@
 #pragma once
 #include "common.hpp"
+#include "class/vector.hpp"
 
 namespace big
 {
@@ -14,6 +15,10 @@ namespace big
 		static void script_func();
 	public:
 		bool m_opened{};
+		std::map<std::string, Vector3> m_entity_list{};
+	private:
+		void get_entity();
+		void script_on_tick_timed();
 	};
 
 	inline gui g_gui;
