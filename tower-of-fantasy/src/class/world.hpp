@@ -46,9 +46,8 @@ namespace big
 		char pad_0058[0xD0]; //0x0058
 		class GameState* m_game_state; //0x0128
 		char pad_0130[0x10]; //0x0130
-		class ULevel* m_level; //0x0140
-		int m_level_size; //0x0148
-		char pad_014C[0x3C]; //0x014C
+		TArray<class ULevel*> m_level; //0x0140
+		char pad_0150[0x38]; //0x0150
 		class OwningGameInstance* m_game_instance; //0x0188
 	};
 	static_assert(sizeof(GWorld) == 0x190);

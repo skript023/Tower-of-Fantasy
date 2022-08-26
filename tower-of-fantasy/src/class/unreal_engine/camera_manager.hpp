@@ -26,7 +26,7 @@ namespace big
 		{
 			Vector3 m_screen_location = Vector3(0, 0, 0);
 
-			Matrix m_matrix = this->m_view_info.m_rotation;
+			Matrix m_matrix(this->m_view_info.m_rotation);
 
 			Vector3 axisX, axisY, axisZ;
 
@@ -40,7 +40,7 @@ namespace big
 			if (v_transformed.z < 1.f)
 				v_transformed.z = 1.f;
 
-			float FovAngle = this->m_view_info.m_field_of_view + 0x18;
+			float FovAngle = this->m_view_info.m_field_of_view + 24.f;
 
 			iVector2 m_screen_divider{ 20, 20 };
 			iVector2 m_screen_center = m_screen_divider / *g_pointers->m_screen;

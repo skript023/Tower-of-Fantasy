@@ -15,12 +15,12 @@ namespace big
 		void imgui_init();
 
 		void on_present();
-
 		void pre_reset();
 		void post_reset(IDXGISwapChain* this_);
 
 		void wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 	private:
+		void draw_overlay();
 		void render_esp(bool activate);
 	public:
 		ImFont* m_font;

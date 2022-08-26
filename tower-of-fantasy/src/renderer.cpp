@@ -119,7 +119,7 @@ namespace big
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
-		render_esp(g_settings->player.esp);
+		draw_overlay();
 
 		if (g_gui.m_opened)
 		{
@@ -188,22 +188,46 @@ namespace big
 		}
 	}
 
+	void renderer::draw_overlay()
+	{
+		char fps[64];
+		sprintf(fps, "Overlay FPS: %0.f", ImGui::GetIO().Framerate);
+		draw::RGBA white = { 255,255,255,255 };
+		draw::draw_stroke_text(30.f, 44.f, &white, fps);
+
+		render_esp(g_settings->player.esp);
+	}
+
 	void renderer::render_esp(bool activate)
 	{
 		if (activate)
 		{
+			std::string name = "";
+			Vector3 location;
+
 			if (!g_gui.m_entity_list.empty())
 			{
 				for (auto entity : g_gui.m_entity_list)
 				{
-					auto name = entity.first;
-					auto location = entity.second;
+					name = entity.first;
+					location = entity.second;
 
-					draw::RGBA red = { 255, 0, 0, 255 };
-					draw::RGBA white = { 255, 255, 255, 255 };
-					draw::draw_line(location.x, location.y, static_cast<float>(m_resolution.x / 2), 0.f, &red, 1.f);
-					draw::draw_stroke_text(location.x, location.y, &white, name.c_str());
+					g_logger->info("Name : %s Location : %f | %f | %f", name.c_str(), location.x, location.y, location.z);
 				}
+			}
+
+			if (name.find("Scene_Box_Refresh_Wild_") != std::string::npos ||
+				name.find("BP_Harvest_Gem_") != std::string::npos ||
+				name.find("Box_OnlyOnce_") != std::string::npos ||
+				name.find("SM_Item_Fruits_") != std::string::npos
+				)
+			{
+				draw::RGBA red = { 255, 0, 0, 255 };
+				draw::RGBA white = { 255, 255, 255, 255 };
+				draw::draw_line(location.x, location.y, static_cast<float>(m_resolution.x / 2), 0.f, &red, 1.f);
+				draw::draw_stroke_text(location.x, location.y, &white, name.c_str());
+
+				g_gui.m_entity_list.clear();
 			}
 		}
 	}

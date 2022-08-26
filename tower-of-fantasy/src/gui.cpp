@@ -18,32 +18,38 @@ namespace big
 {
 	void gui::get_entity()
 	{
-		auto level_array = (*g_pointers->m_world)->m_level;
-		auto level_size = (*g_pointers->m_world)->m_level_size;
-
-		for (int j = 0; j < level_size; j++)
+		if (m_entity_list.empty())
 		{
-			auto level_data = level_array->m_level_array[j];
-			if (*(uintptr_t*)level_data == NULL) continue;
+			auto level_array = (*g_pointers->m_world)->m_level;
 
-			auto actor_array = level_data->m_actor;
-			auto actor_size = level_data->m_actor_count;
-
-			for (int i = 0; i < actor_size; i++)
+			for (int j = 0; j < level_array.count(); j++)
 			{
-				auto actor = actor_array->m_actor_array[i];
-				if (*(uintptr_t*)actor == NULL) continue;
+				auto level_data = level_array[j];
+				if (!level_array.valid(j)) continue;
 
-				if (int id = actor->m_name_index)
+				auto actor_array = level_data->m_actor;
+				auto actor_size = actor_array.count();
+
+				for (int i = 0; i < actor_size; i++)
 				{
-					auto name = unreal_engine::get_name(id);
+					auto actor = actor_array[i];
+					if (!actor_array.valid(i)) continue;
 
-					auto root_component = actor->m_root_component;
-					if (*(uintptr_t*)root_component == NULL) continue;
+					if (int id = actor->m_name_index)
+					{
+						auto name = unreal_engine::get_name(id);
 
-					auto pos = root_component->m_relative_location;
-					auto location = unreal_engine::get_local_player()->m_player_controller->project_world_to_screen(pos);
-					m_entity_list[name] = location;
+						{
+							if (auto root_component = actor->m_root_component)
+							{
+								if (!actor->valid_root_component()) continue;
+
+								auto pos = root_component->m_relative_location;
+								auto location = unreal_engine::get_local_player()->m_player_controller->project_world_to_screen(pos);
+								m_entity_list[name] = { location.x, location.y, location.z };
+							}
+						}
+					}
 				}
 			}
 		}
@@ -51,12 +57,17 @@ namespace big
 
 	void gui::script_on_tick_timed()
 	{
-		static auto start = std::chrono::steady_clock::now();
-		if ((std::chrono::steady_clock::now() - start).count() >= std::chrono::milliseconds(1000).count())
+		TRY_CLAUSE
 		{
-			get_entity();
-			start = std::chrono::steady_clock::now();
-		}
+			static auto start = std::chrono::steady_clock::now();
+			if ((std::chrono::steady_clock::now() - start).count() >= std::chrono::milliseconds(1000).count())
+			{
+				if (unreal_engine::world_state())
+					get_entity();
+
+				start = std::chrono::steady_clock::now();
+			}
+		} EXCEPT_CLAUSE
 	}
 
 	void gui::dx_init()
@@ -149,7 +160,7 @@ namespace big
 				setting_menu::render_menu();
 				ImGui::EndTabBar();
 			}
-		ImGui::End();
+			ImGui::End();
 		} EXCEPT_CLAUSE
 	}
 
@@ -168,8 +179,6 @@ namespace big
 				
 				movement::infinite_jump(g_settings->player.infinite_jump);
 				movement::infinite_dodge(g_settings->player.infinite_dodge);
-
-				//script_on_tick_timed();
 			} EXCEPT_CLAUSE
 		}
 	}
@@ -180,6 +189,7 @@ namespace big
 		while (true)
 		{
 			g_gui.script_on_tick();
+			g_gui.script_on_tick_timed();
 		}
 	}
 }

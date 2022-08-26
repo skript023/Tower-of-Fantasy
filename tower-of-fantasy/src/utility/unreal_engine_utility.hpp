@@ -56,6 +56,22 @@ namespace big::unreal_engine
 		return false;
 	}
 
+	inline bool world_state()
+	{
+		if (auto world = *g_pointers->m_world)
+		{
+			if (auto game_state = world->m_game_state)
+			{
+				if (auto state = game_state->m_game_state)
+				{
+					return state == 8;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	inline Vector3 world_to_screen(Vector3 location)
 	{
 
@@ -72,5 +88,33 @@ namespace big::unreal_engine
 		auto fname_entry = g_pointers->m_name->m_entry_allocator.get_by_id(key);
 		auto ret = fname_entry.get_ansi_name();
 		return ret;
+	}
+
+	inline uintptr_t read_pointer(uintptr_t base_address, std::vector<DWORD> offsets)
+	{
+		uintptr_t ptr = *(uintptr_t*)(base_address);
+		if (!ptr)
+		{
+
+			return NULL;
+		}
+		auto level = offsets.size();
+
+		for (auto i = 0; i < level; i++)
+		{
+			if (i == level - 1)
+			{
+				ptr += offsets[i];
+				if (!ptr) return NULL;
+				return ptr;
+			}
+			else
+			{
+				ptr = *(uint64_t*)(ptr + offsets[i]);
+				if (!ptr) return NULL;
+			}
+		}
+
+		return ptr;
 	}
 }

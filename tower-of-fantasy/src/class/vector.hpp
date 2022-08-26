@@ -15,6 +15,8 @@ namespace big
 
 	struct iVector3
 	{
+		iVector3() = default;
+		iVector3(int x, int y, int z) : x(x), y(y), z(z) {}
 		int x{};
 		int y{};
 		int z{};
@@ -88,9 +90,9 @@ namespace big
 		Matrix() { ZeroMemory(this, sizeof(Matrix)); }
 		Matrix(const Vector3& rotation, const Vector3& origin = { 0.f, 0.f, 0.f })
 		{
-			float radPitch = (float)(rotation.x * M_PI) / 180.f;
-			float radYaw = (float)(rotation.y * M_PI) / 180.f;
-			float radRoll = (float)(rotation.z * M_PI) / 180.f;
+			float radPitch = rotation.x * float(M_PI) / 180.f;
+			float radYaw = rotation.y * float(M_PI) / 180.f;
+			float radRoll = rotation.z * float(M_PI) / 180.f;
 
 			float SP = sinf(radPitch);
 			float CP = cosf(radPitch);
