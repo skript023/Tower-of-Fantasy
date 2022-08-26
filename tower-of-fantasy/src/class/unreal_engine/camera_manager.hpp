@@ -22,9 +22,9 @@ namespace big
 		float m_time_stamp; // 0x00(0x04)
 		char pad_4[0xc]; // 0x04(0x0c)
 		FMinimalViewInfo m_view_info; // 0x10(0x5e0)
-		Vector3 project_world_to_screen(Vector3 location)
+		Vector2 project_world_to_screen(Vector3 location)
 		{
-			Vector3 m_screen_location = Vector3(0, 0, 0);
+			Vector2 m_screen_location = Vector2(0, 0);
 
 			Matrix m_matrix(this->m_view_info.m_rotation);
 

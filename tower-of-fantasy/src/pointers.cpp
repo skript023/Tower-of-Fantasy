@@ -80,6 +80,11 @@ namespace big
 			m_get_bone_matrix = ptr.as<decltype(m_get_bone_matrix)>();
 		});
 
+		main_batch.add("Skip Cutscene", "74 ? 41 83 be ? ? ? ? ? 75 ? 49 8b ce", [this](memory::handle ptr)
+		{
+
+		});
+
 		main_batch.run(memory::module(nullptr));
 
 		this->m_hwnd = FindWindowW(L"UnrealWindow", L"Tower of Fantasy  ");

@@ -5,6 +5,7 @@
 #include "pointers.hpp"
 #include "utility/drawing/d3d_drawing.hpp"
 #include "renderer.hpp"
+#include "utility/features/all.hpp"
 #include <imgui.h>
 #include <backends/imgui_impl_dx11.h>
 #include <backends/imgui_impl_win32.h>
@@ -202,25 +203,53 @@ namespace big
 	{
 		if (activate)
 		{
-			if (!g_gui.m_entity_list.empty())
-			{
-				for (auto entity : g_gui.m_entity_list)
-				{
-					auto name = entity.first;
-					auto location = entity.second;
+			auto level_array = (*g_pointers->m_world)->m_level;
 
-					//g_logger->info("Name : %s Location : %f | %f | %f", name.c_str(), location.x, location.y, location.z);
-					if (name.find("Scene_Box_Refresh_Wild_") != std::string::npos ||
-						name.find("BP_Harvest_Gem_") != std::string::npos ||
-						name.find("Box_OnlyOnce_") != std::string::npos ||
-						name.find("SM_Item_Fruits_") != std::string::npos
-						)
+			for (int j = 0; j < level_array.count(); j++)
+			{
+				auto level_data = level_array[j];
+				if (!level_array.valid(j)) continue;
+
+				auto actor_array = level_data->m_actor;
+
+				for (int i = 0; i < actor_array.count(); i++)
+				{
+					auto actor = actor_array[i];
+					if (!actor_array.valid(i)) continue;
+
+					if (int id = actor->m_name_index)
 					{
-						draw::RGBA red = { 255, 0, 0, 255 };
-						draw::RGBA white = { 255, 255, 255, 255 };
-						g_logger->info("Name : %s Location : %f | %f | %f", name.c_str(), location.x, location.y, location.z);
-						draw::draw_line(location.x, location.y, static_cast<float>(m_resolution.x / 2), static_cast<float>(m_resolution.y / 2), &red, 1.f);
-						draw::draw_stroke_text(location.x, location.y, &white, name.c_str());
+						auto name = unreal_engine::get_name(id);
+						if (!actor->valid_root_component()) continue;
+
+						if (auto root_component = actor->m_root_component)
+						{
+							auto pos = root_component->m_relative_location;
+							if (auto player = unreal_engine::get_local_player())
+							{
+								if (auto control = player->m_player_controller)
+								{
+									if (auto camera_mgr = control->m_camera_manager)
+									{
+										auto location = camera_mgr->m_camera_cache.project_world_to_screen(pos);
+										//g_logger->info("Location : %f | %f | %f", location.x, location.y, location.z);
+										if (name.find("Scene_Box_Refresh_Wild_") != std::string::npos ||
+											name.find("BP_Harvest_Gem_") != std::string::npos ||
+											name.find("Box_OnlyOnce_") != std::string::npos ||
+											name.find("SM_Item_Fruits_") != std::string::npos
+											)
+										{
+											draw::RGBA red = { 255, 0, 0, 255 };
+											draw::RGBA white = { 255, 255, 255, 255 };
+
+											draw::draw_line(location.x, location.y, static_cast<float>(m_resolution.x / 2), static_cast<float>(m_resolution.y / 2), &red, 1.f);
+											draw::draw_stroke_text(location.x, location.y, &white, name.c_str());
+
+										}
+									}
+								}
+							}
+						}
 					}
 				}
 			}

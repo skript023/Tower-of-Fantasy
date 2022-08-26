@@ -70,8 +70,8 @@ namespace big
 			static auto start = std::chrono::steady_clock::now();
 			if ((std::chrono::steady_clock::now() - start).count() >= std::chrono::milliseconds(1000).count())
 			{
-				if (unreal_engine::world_state())
-					get_entity();
+				//if (unreal_engine::world_state())
+					//get_entity();
 
 				start = std::chrono::steady_clock::now();
 			}
