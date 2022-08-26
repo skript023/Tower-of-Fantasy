@@ -42,11 +42,10 @@ namespace big
 
 			float FovAngle = this->m_view_info.m_field_of_view + 24.f;
 
-			iVector2 m_screen_divider{ 20, 20 };
-			iVector2 m_screen_center = m_screen_divider / *g_pointers->m_screen;
+			iVector2 m_screen_center((*g_pointers->m_screen).x / 2, (*g_pointers->m_screen).x / 2);
 
-			m_screen_location.x = m_screen_center.x + v_transformed.x * (m_screen_center.x / tanf(FovAngle * (float)M_PI / 360.f)) / v_transformed.z;
-			m_screen_location.y = m_screen_center.y - v_transformed.y * (m_screen_center.y / tanf(FovAngle * (float)M_PI / 360.f)) / v_transformed.z;
+			m_screen_location.x = (float)m_screen_center.x + v_transformed.x * (m_screen_center.x / tanf(FovAngle * (float)M_PI / 360.f)) / v_transformed.z;
+			m_screen_location.y = (float)m_screen_center.y - v_transformed.y * (m_screen_center.y / tanf(FovAngle * (float)M_PI / 360.f)) / v_transformed.z;
 
 			return m_screen_location;
 		}

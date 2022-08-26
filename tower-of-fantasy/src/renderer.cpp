@@ -202,32 +202,27 @@ namespace big
 	{
 		if (activate)
 		{
-			std::string name = "";
-			Vector3 location;
-
 			if (!g_gui.m_entity_list.empty())
 			{
 				for (auto entity : g_gui.m_entity_list)
 				{
-					name = entity.first;
-					location = entity.second;
+					auto name = entity.first;
+					auto location = entity.second;
 
-					g_logger->info("Name : %s Location : %f | %f | %f", name.c_str(), location.x, location.y, location.z);
+					//g_logger->info("Name : %s Location : %f | %f | %f", name.c_str(), location.x, location.y, location.z);
+					if (name.find("Scene_Box_Refresh_Wild_") != std::string::npos ||
+						name.find("BP_Harvest_Gem_") != std::string::npos ||
+						name.find("Box_OnlyOnce_") != std::string::npos ||
+						name.find("SM_Item_Fruits_") != std::string::npos
+						)
+					{
+						draw::RGBA red = { 255, 0, 0, 255 };
+						draw::RGBA white = { 255, 255, 255, 255 };
+						g_logger->info("Name : %s Location : %f | %f | %f", name.c_str(), location.x, location.y, location.z);
+						draw::draw_line(location.x, location.y, static_cast<float>(m_resolution.x / 2), static_cast<float>(m_resolution.y / 2), &red, 1.f);
+						draw::draw_stroke_text(location.x, location.y, &white, name.c_str());
+					}
 				}
-			}
-
-			if (name.find("Scene_Box_Refresh_Wild_") != std::string::npos ||
-				name.find("BP_Harvest_Gem_") != std::string::npos ||
-				name.find("Box_OnlyOnce_") != std::string::npos ||
-				name.find("SM_Item_Fruits_") != std::string::npos
-				)
-			{
-				draw::RGBA red = { 255, 0, 0, 255 };
-				draw::RGBA white = { 255, 255, 255, 255 };
-				draw::draw_line(location.x, location.y, static_cast<float>(m_resolution.x / 2), 0.f, &red, 1.f);
-				draw::draw_stroke_text(location.x, location.y, &white, name.c_str());
-
-				g_gui.m_entity_list.clear();
 			}
 		}
 	}

@@ -43,8 +43,8 @@ namespace big
 								if (pos == Vector3(0.f, 0.f, 0.f)) continue;
 
 								g_logger->info("Location : x : %f | y : %f | z : %f", pos.x, pos.y, pos.z);
-								auto location = unreal_engine::get_local_player()->m_player_controller->project_world_to_screen(pos);
-								g_gui.m_entity_list[name] = location;
+								//auto location = unreal_engine::get_local_player()->m_player_controller->project_world_to_screen(pos);
+								//g_gui.m_entity_list[name] = location;
 							}
 						}
 					}

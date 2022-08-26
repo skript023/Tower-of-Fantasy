@@ -179,6 +179,8 @@ namespace big
 
 		::memcpy(this->m_swapchain_methods, *(void***)this->m_swapchain, sizeof(m_swapchain_methods));
 
+		std::this_thread::sleep_for(1s);
+
 		this->m_swapchain->Release();
 		this->m_swapchain = NULL;
 
@@ -329,6 +331,8 @@ namespace big
 		}
 
 		memcpy(this->m_swapchain_methods, *(void***)this->m_swapchain, sizeof(this->m_swapchain_methods));
+
+		std::this_thread::sleep_for(1s);
 
 		Device->Release();
 		Device = NULL;

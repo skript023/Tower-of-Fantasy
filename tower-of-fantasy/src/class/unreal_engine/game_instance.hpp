@@ -27,7 +27,7 @@ namespace big
 		char pad_2B8[16]; //0x2B8
 		class PlayerCameraManager* m_camera_manager; //0x2C8
 
-		Vector3 project_world_to_screen(Vector3 location)
+		Vector3 project_world_to_screen_ex(Vector3 location)
 		{
 			Vector3 m_screen_location = Vector3(0, 0, 0);
 

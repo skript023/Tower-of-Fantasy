@@ -18,8 +18,10 @@ namespace big
 {
 	void gui::get_entity()
 	{
-		if (m_entity_list.empty())
+		if (g_settings->player.esp)
 		{
+			g_gui.m_entity_list.clear();
+
 			auto level_array = (*g_pointers->m_world)->m_level;
 
 			for (int j = 0; j < level_array.count(); j++)
@@ -28,9 +30,8 @@ namespace big
 				if (!level_array.valid(j)) continue;
 
 				auto actor_array = level_data->m_actor;
-				auto actor_size = actor_array.count();
 
-				for (int i = 0; i < actor_size; i++)
+				for (int i = 0; i < actor_array.count(); i++)
 				{
 					auto actor = actor_array[i];
 					if (!actor_array.valid(i)) continue;
@@ -38,15 +39,22 @@ namespace big
 					if (int id = actor->m_name_index)
 					{
 						auto name = unreal_engine::get_name(id);
+						if (!actor->valid_root_component()) continue;
 
+						if (auto root_component = actor->m_root_component)
 						{
-							if (auto root_component = actor->m_root_component)
+							auto pos = root_component->m_relative_location;
+							if (auto player = unreal_engine::get_local_player())
 							{
-								if (!actor->valid_root_component()) continue;
-
-								auto pos = root_component->m_relative_location;
-								auto location = unreal_engine::get_local_player()->m_player_controller->project_world_to_screen(pos);
-								m_entity_list[name] = { location.x, location.y, location.z };
+								if (auto control = player->m_player_controller)
+								{
+									if (auto camera_mgr = control->m_camera_manager)
+									{
+										auto location = camera_mgr->m_camera_cache.project_world_to_screen(pos);
+										//g_logger->info("Location : %f | %f | %f", location.x, location.y, location.z);
+										m_entity_list[name] = { location.x, location.y, location.z };
+									}
+								}
 							}
 						}
 					}
