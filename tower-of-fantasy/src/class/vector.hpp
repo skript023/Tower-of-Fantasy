@@ -37,6 +37,13 @@ namespace big
 		float x;
 		float y;
 
+		float distance(const Vector2 b) const
+		{ 
+			float x = this->x - b.x;
+			float y = this->y - b.y;
+			return sqrtf((x * x) + (y * y)) * 0.03048f;
+		}
+
 		float dot(Vector2 vec2)
 		{
 			return (x * vec2.x) + (y * vec2.y);
@@ -56,9 +63,13 @@ namespace big
 			return (x * vec3.x) + (y * vec3.y) + (z * vec3.z);
 		}
 
-		Vector3 sub(Vector3 vec3)
+		float distance(Vector3 v) const
 		{
-			return Vector3(vec3.x - x, vec3.y - y, vec3.z - z);
+			float x = this->x - v.x;
+			float y = this->y - v.y;
+			float z = this->z - v.z;
+
+			return sqrtf((x * x) + (y * y) + (z * z)) * 0.03048f;
 		}
 
 		Vector3 operator-(const Vector3 vec3) const { return { vec3.x - x, vec3.y - y, vec3.z - z }; }
@@ -81,6 +92,26 @@ namespace big
 		{
 			return (x * vec4.x) + (y * vec4.y) + (z * vec4.z) + (w * vec4.w);
 		}
+	};
+
+	struct FString
+	{
+		inline wchar_t* get_wstring() { return this->str; }
+
+		inline char* get_string()
+		{
+			/*
+			std::wstring buf(this->str);
+			char ret[256];
+			strcpy_s(ret, std::string(buf.begin(), buf.end()).c_str());
+			return ret;
+			*/
+		}
+
+	private:
+		wchar_t* str;
+		int count;
+		int max;
 	};
 
 	struct Matrix

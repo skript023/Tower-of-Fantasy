@@ -17,6 +17,7 @@ namespace big
 		bool m_enable{};
 		protected_memory m_rapid_attack_protect;
 		protected_memory m_cooldown_protect;
+		protected_memory m_task_queue_protect;
 	};
 
 	inline virtual_protect* g_virtual_protect;

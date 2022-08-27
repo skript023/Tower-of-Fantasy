@@ -34,9 +34,11 @@ namespace big
 			return true;
 		}
 
-		inline bool valid_ex(int i)
+		inline bool valid_ex()
 		{
-			if (!**items[i])
+			if (item_count > max_item)
+				return false;
+			if (!**items)
 				return false;
 
 			return true;

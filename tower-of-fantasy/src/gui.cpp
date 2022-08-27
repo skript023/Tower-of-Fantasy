@@ -6,6 +6,9 @@
 #include "renderer.hpp"
 
 #include "utility/features/all.hpp"
+#include "utility/drawing/d3d_drawing.hpp"
+#include "utility/drawing/notification.hpp"
+#include "utility/services/all.hpp"
 #include "settings.hpp"
 
 #include <imgui.h>
@@ -16,68 +19,6 @@
 
 namespace big
 {
-	void gui::get_entity()
-	{
-		if (g_settings->player.esp)
-		{
-			g_gui.m_entity_list.clear();
-
-			auto level_array = (*g_pointers->m_world)->m_level;
-
-			for (int j = 0; j < level_array.count(); j++)
-			{
-				auto level_data = level_array[j];
-				if (!level_array.valid(j)) continue;
-
-				auto actor_array = level_data->m_actor;
-
-				for (int i = 0; i < actor_array.count(); i++)
-				{
-					auto actor = actor_array[i];
-					if (!actor_array.valid(i)) continue;
-
-					if (int id = actor->m_name_index)
-					{
-						auto name = unreal_engine::get_name(id);
-						if (!actor->valid_root_component()) continue;
-
-						if (auto root_component = actor->m_root_component)
-						{
-							auto pos = root_component->m_relative_location;
-							if (auto player = unreal_engine::get_local_player())
-							{
-								if (auto control = player->m_player_controller)
-								{
-									if (auto camera_mgr = control->m_camera_manager)
-									{
-										auto location = camera_mgr->m_camera_cache.project_world_to_screen(pos);
-										//g_logger->info("Location : %f | %f | %f", location.x, location.y, location.z);
-										m_entity_list[name] = { location.x, location.y, location.z };
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	void gui::script_on_tick_timed()
-	{
-		TRY_CLAUSE
-		{
-			static auto start = std::chrono::steady_clock::now();
-			if ((std::chrono::steady_clock::now() - start).count() >= std::chrono::milliseconds(1000).count())
-			{
-				//if (unreal_engine::world_state())
-					//get_entity();
-
-				start = std::chrono::steady_clock::now();
-			}
-		} EXCEPT_CLAUSE
-	}
-
 	void gui::dx_init()
 	{
 		auto &style = ImGui::GetStyle();
@@ -156,7 +97,7 @@ namespace big
 		colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);
 	}
 
-	void gui::dx_on_tick()
+	void gui::dx_draw_menu()
 	{
 		TRY_CLAUSE
 		{
@@ -172,8 +113,24 @@ namespace big
 		} EXCEPT_CLAUSE
 	}
 
+	void gui::dx_on_tick()
+	{
+		TRY_CLAUSE
+		{
+			char fps[64];
+			sprintf(fps, "Overlay FPS: %0.f", ImGui::GetIO().Framerate);
+			draw::RGBA white = { 255,255,255,255 };
+			draw::draw_stroke_text(30.f, 44.f, &white, fps);
+			misc::render_esp(g_settings->player.esp);
+
+			notify::notifications();
+		}
+		EXCEPT_CLAUSE
+	}
+
 	void gui::script_init()
 	{
+		g_notification_service->success("Ellohim Private Cheat", "Cheat succesfully injected to the game press 'Insert' to show/hide menu");
 		g_gui.m_opened = true;
 	}
 
@@ -197,7 +154,6 @@ namespace big
 		while (true)
 		{
 			g_gui.script_on_tick();
-			g_gui.script_on_tick_timed();
 		}
 	}
 }

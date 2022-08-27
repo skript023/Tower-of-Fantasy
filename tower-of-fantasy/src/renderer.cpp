@@ -3,9 +3,7 @@
 #include "logger.hpp"
 #include "gui.hpp"
 #include "pointers.hpp"
-#include "utility/drawing/d3d_drawing.hpp"
 #include "renderer.hpp"
-#include "utility/features/all.hpp"
 #include <imgui.h>
 #include <backends/imgui_impl_dx11.h>
 #include <backends/imgui_impl_win32.h>
@@ -98,8 +96,20 @@ namespace big
 		std::strcpy(font_cfg.Name, "Rubik");
 
 		m_font = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 14.5f, &font_cfg);
-		m_monospace_font = ImGui::GetIO().Fonts->AddFontDefault();
-
+		
+		g_settings->window.font_title = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 14.5f, &font_cfg);
+		g_settings->window.font_sub_title = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 14.5f, &font_cfg);
+		g_settings->window.font_normal = m_font;
+		g_settings->window.font_small = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 12.f, &font_cfg);
+		
+		static const ImWchar icons_ranges[] = { 0xf000, 0xf950, 0 };
+		ImFontConfig font_icons_cfg{};
+		font_icons_cfg.MergeMode = true;
+		font_icons_cfg.PixelSnapH = true;
+		font_icons_cfg.FontDataOwnedByAtlas = false;
+		std::strcpy(font_icons_cfg.Name, "Icons");
+		g_settings->window.font_icon = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_icons), sizeof(font_icons), 18.5f, &font_icons_cfg, icons_ranges);
+		
 		g_gui.dx_init();
 	}
 
@@ -120,11 +130,11 @@ namespace big
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
-		draw_overlay();
+		g_gui.dx_on_tick();
 
 		if (g_gui.m_opened)
 		{
-			g_gui.dx_on_tick();
+			g_gui.dx_draw_menu();
 		}
 
 		ImGui::Render();
@@ -186,73 +196,6 @@ namespace big
 		if (g_gui.m_opened)
 		{
 			ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam);
-		}
-	}
-
-	void renderer::draw_overlay()
-	{
-		char fps[64];
-		sprintf(fps, "Overlay FPS: %0.f", ImGui::GetIO().Framerate);
-		draw::RGBA white = { 255,255,255,255 };
-		draw::draw_stroke_text(30.f, 44.f, &white, fps);
-
-		render_esp(g_settings->player.esp);
-	}
-
-	void renderer::render_esp(bool activate)
-	{
-		if (activate)
-		{
-			auto level_array = (*g_pointers->m_world)->m_level;
-
-			for (int j = 0; j < level_array.count(); j++)
-			{
-				auto level_data = level_array[j];
-				if (!level_array.valid(j)) continue;
-
-				auto actor_array = level_data->m_actor;
-
-				for (int i = 0; i < actor_array.count(); i++)
-				{
-					auto actor = actor_array[i];
-					if (!actor_array.valid(i)) continue;
-
-					if (int id = actor->m_name_index)
-					{
-						auto name = unreal_engine::get_name(id);
-						if (!actor->valid_root_component()) continue;
-
-						if (auto root_component = actor->m_root_component)
-						{
-							auto pos = root_component->m_relative_location;
-							if (auto player = unreal_engine::get_local_player())
-							{
-								if (auto control = player->m_player_controller)
-								{
-									if (auto camera_mgr = control->m_camera_manager)
-									{
-										auto location = camera_mgr->m_camera_cache.project_world_to_screen(pos);
-										//g_logger->info("Location : %f | %f | %f", location.x, location.y, location.z);
-										if (name.find("Scene_Box_Refresh_Wild_") != std::string::npos ||
-											name.find("BP_Harvest_Gem_") != std::string::npos ||
-											name.find("Box_OnlyOnce_") != std::string::npos ||
-											name.find("SM_Item_Fruits_") != std::string::npos
-											)
-										{
-											draw::RGBA red = { 255, 0, 0, 255 };
-											draw::RGBA white = { 255, 255, 255, 255 };
-
-											draw::draw_line(location.x, location.y, static_cast<float>(m_resolution.x / 2), static_cast<float>(m_resolution.y / 2), &red, 1.f);
-											draw::draw_stroke_text(location.x, location.y, &white, name.c_str());
-
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
 		}
 	}
 }

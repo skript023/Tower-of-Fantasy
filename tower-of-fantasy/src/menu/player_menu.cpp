@@ -40,6 +40,9 @@ namespace big
             if (ImGui::Checkbox("Freeze Mobs", &g_settings->player.freeze_mobs))
                 movement::freeze_mobs(g_settings->player.freeze_mobs);
 
+            if (ImGui::Checkbox("Skip Button", &g_settings->player.skip_button))
+                misc::skip_button(g_settings->player.skip_button);
+
             ImGui::EndGroup();
 
             ImGui::SameLine(400);
@@ -69,7 +72,7 @@ namespace big
 
                 if (ImGui::Button("Save Location"))
                 {
-                    persist_teleport::save_location(movement::get_entity_coords(), teleport_name);
+                    persist_teleport::save_location(*movement::get_entity_coords(), teleport_name);
                     ZeroMemory(teleport_name, sizeof(teleport_name));
                 }
 

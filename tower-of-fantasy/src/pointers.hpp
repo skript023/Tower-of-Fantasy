@@ -29,6 +29,7 @@ namespace big
 
 		uint8_t* m_cooldown;
 		uint8_t* m_rapid_attack;
+		uint8_t* m_skip_button;
 		PVOID m_player_navigation;
 		PVOID m_task_queue;
 

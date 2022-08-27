@@ -30,8 +30,13 @@ namespace big
 
 	void hooking::enable()
 	{
-		m_swapchain_present_hook.enable();
-		m_swapchain_resizebuffers_hook.enable();
+		while (!g_renderer->m_init)
+		{
+			m_swapchain_present_hook.enable();
+			m_swapchain_resizebuffers_hook.enable();
+			std::this_thread::sleep_for(1000ms);
+		}
+
 		m_og_wndproc = reinterpret_cast<WNDPROC>(SetWindowLongPtrW(g_pointers->m_hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&hooks::wndproc)));
 		m_set_cursor_pos_hook.enable();
 

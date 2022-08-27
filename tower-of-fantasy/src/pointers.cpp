@@ -65,7 +65,7 @@ namespace big
 			m_uobject = ptr.add(1).rip().as<decltype(m_uobject)>();
 		});
 
-		main_batch.add("Task Queue", "48 89 5C 24 ? 57 48 83 EC 20 8B FA 48 8B D9 E8 ? ? ? ? 40 F6 C7 01 74 26", [this](memory::handle ptr)
+		main_batch.add("Task Queue", "41 56 41 57 48 63 01 4C 8B D2 48 89 6C 24 ? 4D 8B F1 41 8B 69 08 4C 8B F9 4D 8B 09 44 8B DD", [this](memory::handle ptr)
 		{
 			m_task_queue = ptr.as<decltype(m_task_queue)>();
 		});
@@ -80,9 +80,9 @@ namespace big
 			m_get_bone_matrix = ptr.as<decltype(m_get_bone_matrix)>();
 		});
 
-		main_batch.add("Skip Cutscene", "74 ? 41 83 be ? ? ? ? ? 75 ? 49 8b ce", [this](memory::handle ptr)
+		main_batch.add("Skip Cutscene Button", "74 ? 41 83 BE ? ? ? ? ? 75 ? 49 8B CE", [this](memory::handle ptr)
 		{
-
+			m_skip_button = ptr.as<decltype(m_skip_button)>();
 		});
 
 		main_batch.run(memory::module(nullptr));
@@ -183,8 +183,6 @@ namespace big
 		}
 
 		::memcpy(this->m_swapchain_methods, *(void***)this->m_swapchain, sizeof(m_swapchain_methods));
-
-		std::this_thread::sleep_for(1s);
 
 		this->m_swapchain->Release();
 		this->m_swapchain = NULL;

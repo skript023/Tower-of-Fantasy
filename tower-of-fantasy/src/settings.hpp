@@ -1,5 +1,6 @@
 #pragma once
 #include "logger.hpp"
+#include "imgui.h"
 
 namespace big
 {
@@ -9,6 +10,18 @@ namespace big
 	class settings {
 		nlohmann::json default_options;
 		nlohmann::json options;
+
+		struct window
+		{
+			ImU32 color = 3357612055;
+			float gui_scale = 1.f;
+
+			ImFont* font_title;
+			ImFont* font_sub_title;
+			ImFont* font_normal;
+			ImFont* font_small;
+			ImFont* font_icon;
+		};
 
 		struct player_option
 		{
@@ -22,6 +35,7 @@ namespace big
 			bool fast_attack{ false };
 			bool no_clip{ false };
 			bool esp{ false };
+			bool skip_button{ false };
 
 			float attack_multiplier{ 0.0f };
 			float pysical_attack{ 0.0f };
@@ -48,6 +62,7 @@ namespace big
 		}
 
 		player_option player{};
+		window window{};
 
 		void from_json(const nlohmann::json& j)
 		{
@@ -68,6 +83,7 @@ namespace big
 			this->player.fast_attack = j["player"]["fast_attack"];
 			this->player.no_clip = j["player"]["no_clip"];
 			this->player.esp = j["player"]["esp"];
+			this->player.skip_button = j["player"]["skip_button"];
 		}
 
 		nlohmann::json to_json()
@@ -92,7 +108,8 @@ namespace big
 						{ "infinite_dodge", this->player.infinite_dodge},
 						{ "fast_attack", this->player.fast_attack},
 						{ "no_clip", this->player.no_clip},
-						{ "esp", this->player.esp}
+						{ "esp", this->player.esp},
+						{ "skip_button", this->player.skip_button}
 					}
 				}
 			};

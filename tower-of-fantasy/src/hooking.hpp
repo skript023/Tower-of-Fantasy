@@ -18,7 +18,7 @@ namespace big
 		static LRESULT wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 		static BOOL set_cursor_pos(int x, int y);
 
-		static uintptr_t* task_queue(uintptr_t* this_, int8_t a2);
+		static __int64 task_queue(int* a1, __int64 a2, char a3, __int64 a4);
 	};
 
 	struct minhook_keepalive

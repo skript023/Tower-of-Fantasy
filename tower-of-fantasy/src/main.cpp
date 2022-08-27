@@ -6,8 +6,8 @@
 #include "renderer.hpp"
 #include "thread_pool.hpp"
 #include "settings.hpp"
-#include "utility/unreal_engine_utility.hpp"
 #include "virtual_protect.hpp"
+#include "utility/services/init_services.hpp"
 
 DWORD APIENTRY main_thread(LPVOID)
 {
@@ -49,6 +49,9 @@ DWORD APIENTRY main_thread(LPVOID)
 		auto thread_pool_instance = std::make_unique<thread_pool>();
 		g_logger->info("Thread Pool initialized.");
 
+		auto service_instance = std::make_unique<init_service>();
+		g_logger->info("Service initialized.");
+
 		g_thread_pool->push(gui::script_func);
 		g_logger->info("Scripts registered.");
 
@@ -73,6 +76,9 @@ DWORD APIENTRY main_thread(LPVOID)
 
 		thread_pool_instance.reset();
 		g_logger->info("Thread Pool uninitialized.");
+
+		service_instance.reset();
+		g_logger->info("Service uninitialized.");
 
 		renderer_instance.reset();
 		g_logger->info("Renderer uninitialized.");

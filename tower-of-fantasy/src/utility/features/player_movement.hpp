@@ -40,14 +40,14 @@ namespace big::movement
 		}
 	}
 
-	inline Vector3 get_entity_coords()
+	inline Vector3* get_entity_coords()
 	{
 		if (auto player_pos = unreal_engine::get_player_pos())
 		{
-			return player_pos->m_position;
+			return &player_pos->m_position;
 		}
 
-		return Vector3{ 0.f, 0.f, 0.f };
+		return nullptr;
 	}
 
 	inline void set_entity_coords(Vector3 coords)
