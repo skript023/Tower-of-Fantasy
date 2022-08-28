@@ -83,4 +83,12 @@ namespace big
 		std::stringstream info; info << "Thread " << std::this_thread::get_id() << " exiting";
 		g_logger->info(info.str().c_str());
 	}
+
+	void thread_pool::hold()
+	{
+		std::unique_lock m_main_thread(m_main_lock);
+		m_condition.wait(m_main_thread, [] { return g_running ? false : true; });
+		m_main_thread.unlock();
+		m_condition.notify_one();
+	}
 }

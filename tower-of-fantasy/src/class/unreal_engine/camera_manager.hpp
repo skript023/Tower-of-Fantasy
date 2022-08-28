@@ -5,23 +5,28 @@
 namespace big
 {
 #pragma pack(push, 1)
-	struct FMinimalViewInfo
+	class FMinimalViewInfo
 	{
-		Vector3 m_location; // 0x00(0x0c)
-		Vector3 m_rotation; // 0x0c(0x0c)
-		float m_field_of_view; // 0x18(0x04)
-		float m_desired_fov; // 0x1c(0x04)
-		float m_ortho_width; // 0x20(0x04)
-		float m_ortho_near_clip_plane; // 0x24(0x04)
-		float m_ortho_far_clip_plane; // 0x28(0x04)
-		float m_aspect_ratio; // 0x2c(0x04)
+	public:
+		Vector3 m_location; // 0x1B00
+		Vector3 m_rotation; // 0x1B0C
+		float m_field_of_view; // 0x1B18
+		float m_desired_fov; // 0x0x1B1C
+		float m_ortho_width; // 0x0x1B20
+		float m_ortho_near_clip_plane; // 0x0x1B24
+		float m_ortho_far_clip_plane; // 0x0x1B28
+		float m_aspect_ratio; // 0x0x1B2C
 	};
 
-	struct FCameraCacheEntry
+
+	class FCameraCacheEntry
 	{
-		float m_time_stamp; // 0x00(0x04)
-		char pad_4[0xc]; // 0x04(0x0c)
-		FMinimalViewInfo m_view_info; // 0x10(0x5e0)
+	public:
+		float m_time_stamp; // 0x1AF0
+		char pad_4[0xC]; // 0x1AF4
+		FMinimalViewInfo m_view_info; // 0x1B00
+
+	public:
 		bool project_world_to_screen(Vector3 location, Vector2& m_screen_location)
 		{
 			auto m_matrix = matrix(this->m_view_info.m_rotation);
@@ -33,18 +38,18 @@ namespace big
 			axisZ = Vector3(m_matrix.m[2][0], m_matrix.m[2][1], m_matrix.m[2][2]);
 
 			Vector3 v_delta = location - this->m_view_info.m_location;
-			Vector3 v_transformed = Vector3(v_delta.dot(axisY), v_delta.dot(axisZ), v_delta.dot(axisX));
+			Vector3 v_transformed = Vector3(v_delta.dot(axisZ), v_delta.dot(axisY), v_delta.dot(axisX));
 
-			if (v_transformed.z < 1.f) v_transformed.z = 1.f;
+			//if (v_transformed.z < 1.f) v_transformed.z = 1.f;
 
-			float fov_angle = this->m_view_info.m_field_of_view + 24.f;
+			float fov_angle = this->m_view_info.m_field_of_view;
 
-			iVector2 m_screen_center(g_pointers->m_screen->x / 2, g_pointers->m_screen->y / 2);
+			Vector2 m_screen_center(float(g_pointers->m_screen->x / 2), float(g_pointers->m_screen->y / 2));
 
-			m_screen_location.x = (float)m_screen_center.x + v_transformed.x * (m_screen_center.x / tanf(fov_angle * (float)M_PI / 360.f)) / v_transformed.z;
-			m_screen_location.y = (float)m_screen_center.y - v_transformed.y * (m_screen_center.y / tanf(fov_angle * (float)M_PI / 360.f)) / v_transformed.z;
+			m_screen_location.x = m_screen_center.x + v_transformed.x * (m_screen_center.x / tanf(fov_angle * (float)M_PI / 360.f)) / v_transformed.z;
+			m_screen_location.y = m_screen_center.y - v_transformed.y * (m_screen_center.y / tanf(fov_angle * (float)M_PI / 360.f)) / v_transformed.z;
 
-			return true;
+			return true; 
 		}
 
 	private:
@@ -90,7 +95,7 @@ namespace big
 	{
 	public:
 		char pad_0000[0x1AF0]; //0x0000
-		FCameraCacheEntry m_camera_cache;
+		FCameraCacheEntry m_camera_cache; //0x1AF0
 	};
 #pragma pack(pop)
 }

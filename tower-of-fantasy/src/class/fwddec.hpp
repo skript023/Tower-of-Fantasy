@@ -26,21 +26,19 @@ namespace big
 		
 		inline bool valid(int i)
 		{
+			if (item_count > max_item || !items[i])
+				return false;
+
+			return true;
+		}
+
+		inline bool valid_ex(int i)
+		{
 			uintptr_t result{};
 			if (!ReadProcessMemory(GetCurrentProcess(), this->items[i], &result, sizeof(this->items[i]), nullptr))
 			{
 				return false;
 			}
-			return true;
-		}
-
-		inline bool valid_ex()
-		{
-			if (item_count > max_item)
-				return false;
-			if (!**items)
-				return false;
-
 			return true;
 		}
 

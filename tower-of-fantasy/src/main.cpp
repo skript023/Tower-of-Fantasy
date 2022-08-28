@@ -58,10 +58,7 @@ DWORD APIENTRY main_thread(LPVOID)
 		g_hooking->enable();
 		g_logger->info("Hooking enabled.");
 
-		std::unique_lock thread(g_thread_holder);
-		g_condition.wait(thread, [] {return g_running ? false : true; });
-		thread.unlock();
-		g_condition.notify_one();
+		g_thread_pool->hold();
 
 		g_hooking->disable();
 		g_logger->info("Hooking disabled.");

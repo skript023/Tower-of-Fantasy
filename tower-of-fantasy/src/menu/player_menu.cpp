@@ -1,5 +1,6 @@
 #include "imgui.h"
 #include "player_menu.h"
+#include "utility/ecryption.h"
 #include "utility/features/all.hpp"
 #include "utility/config/persist_teleport.h"
 

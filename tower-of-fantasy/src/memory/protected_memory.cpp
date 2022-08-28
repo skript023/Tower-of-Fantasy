@@ -11,7 +11,7 @@ namespace big
 	{
 		if (VirtualProtect(m_target, sizeof(m_target) * 2, PAGE_EXECUTE_READWRITE, &m_original))
 		{
-			g_logger->file("Virtual protect at '%X' changed to PAGE_EXCECUTE_READWRITE", reinterpret_cast<std::uintptr_t>(m_target));
+			g_logger->file("Virtual protect at '%s' changed to PAGE_EXCECUTE_READWRITE", m_name);
 		}
 		else
 		{
@@ -26,6 +26,6 @@ namespace big
 			VirtualProtect(m_target, sizeof(m_target) * 2, m_original, &m_disable_original);
 		}
 
-		g_logger->file("Restore original '%s'.", m_name.c_str());
+		g_logger->file("Restore original '%s' .", m_name.c_str());
 	}
 }

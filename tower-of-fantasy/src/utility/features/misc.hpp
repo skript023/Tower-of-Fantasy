@@ -59,11 +59,14 @@ namespace big::misc
 												auto distance = movement::get_entity_coords()->distance(pos);
 												draw::RGBA red = { 255, 0, 0, 255 };
 												draw::RGBA white = { 255, 255, 255, 255 };
-												float width = static_cast<float>((*g_pointers->m_screen).x / 2);
-												float height = static_cast<float>((*g_pointers->m_screen).y / 2);
+												draw::RGBA green = { 0, 255, 0, 255 };
+												float width = static_cast<float>(g_pointers->m_screen->x / 2);
+												float height = static_cast<float>(g_pointers->m_screen->y / 2);
 
 												draw::draw_line(width, height, location.x, location.y, &red, 1.f);
 												draw::draw_stroke_text(location.x, location.y, &white, std::format("{} [{:.2f}]m", name, distance).c_str());
+
+												if (distance < 100.f) draw::draw_corner_box(location.x, location.y, 100.f, 50.f, 2.f, &green);
 											}
 										}
 									}

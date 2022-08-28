@@ -60,7 +60,7 @@ namespace big
 
 		float dot(Vector3 vec3)
 		{
-			return (x * vec3.x) + (y * vec3.y) + (z * vec3.z);
+			return x * vec3.x + y * vec3.y + z * vec3.z;
 		}
 
 		float distance(Vector3 v) const

@@ -66,6 +66,8 @@
 
 #define ENVIRONMENT "Tower of Fantasy"
 
+#define GWORLD_OFFSET = 0x700FDD0;
+
 namespace big
 {
 	using namespace std::chrono_literals;

@@ -4,10 +4,13 @@
 #include "gui.hpp"
 #include "pointers.hpp"
 #include "renderer.hpp"
+
 #include <imgui.h>
 #include <backends/imgui_impl_dx11.h>
 #include <backends/imgui_impl_win32.h>
 #include <imgui_internal.h>
+
+#include "utility/drawing/notification.hpp"
 
 IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 //CW.exe+2D4E21610
@@ -63,7 +66,7 @@ namespace big
 		this->imgui_init();
 
 		this->m_init = true;
-		g_logger->info("Swapchain initialized.");
+		g_notification_service->success("Ellohim Private Cheat", "UI successfully running!");
 
 		return true;
 	}
