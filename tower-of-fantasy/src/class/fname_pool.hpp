@@ -4,21 +4,16 @@
 
 namespace big
 {
-#pragma pack(push, 1)
     template <typename T>
     FORCEINLINE constexpr T Align(T Val, uint64_t Alignment)
     {
         return (T)(((uint64_t)Val + Alignment - 1) & ~(Alignment - 1));
     }
 
-
-    enum
-    {
-        fname_max_block_bits = 13,
-        fname_block_offset_bits = 16,
-        fname_max_block = 1 << fname_max_block_bits,
-        fname_block_offset = 1 << fname_block_offset_bits
-    };
+    constexpr uint32_t fname_max_block_bits = 13;
+    constexpr uint32_t fname_block_offset_bits = 16;
+    constexpr uint32_t  fname_max_block = 1 << fname_max_block_bits;
+    constexpr uint32_t fname_block_offset = 1 << fname_block_offset_bits;
 
     struct FNameEntryId
     {
@@ -95,19 +90,8 @@ namespace big
 
     struct FNameEntry
     {
+        enum { NAME_SIZE = 1024 };
     public:
-#ifdef WITH_CASE_PRESERVING_NAME
-        FNameEntryId m_comparison_id;
-#endif
-
-        FNameEntryHeader m_header;
-
-        union
-        {
-            char m_ansi_name[1024];
-            wchar_t m_wide_name[1024];
-        };
-
         uint32_t get_length() const
         {
             return m_header.m_len;
@@ -152,6 +136,18 @@ namespace big
             }
             return std::string(m_ansi_name, m_header.m_len);
         }
+
+    private:
+#ifdef WITH_CASE_PRESERVING_NAME
+        FNameEntryId m_comparison_id;
+#endif
+        FNameEntryHeader m_header;
+
+        union
+        {
+            char m_ansi_name[NAME_SIZE];
+            wchar_t m_wide_name[NAME_SIZE];
+        };
     };
 
     class FNameEntryAllocator
@@ -159,14 +155,12 @@ namespace big
     private:
         enum { stride = alignof(FNameEntry) };
         enum { block_size = stride * fname_block_offset };
-        enum { fixed_stride = 2 };
         enum { max_size = 0x1FFFE };
-        enum { max_block = 8192 };
         char frwLock[0x8];
     public:
-        int32_t m_current_block;
-        int32_t m_current_byte_cursor;
-        int8_t* m_block[max_block];
+        uint32_t m_current_block;
+        uint32_t m_current_byte_cursor;
+        uint8_t* m_block[fname_max_block];
 
         FNameEntry& get_by_id(int32_t key) const
         {
@@ -181,7 +175,7 @@ namespace big
 
         uint32_t num_blocks() const
         {
-            return static_cast<uint32_t>(m_current_block + 1);
+            return m_current_block + 1;
         }
 
         bool is_valid_index(int32_t key) const
@@ -193,18 +187,18 @@ namespace big
 
         FNameEntry* resolve(FNameEntryHandle handle) const
         {
-            if (handle.m_offset < 0 && handle.m_block > num_blocks() && handle.m_offset * fixed_stride < max_block)
+            if (handle.m_offset < 0 && handle.m_block > num_blocks() && handle.m_offset * stride < fname_block_offset)
             {
                 g_logger->error("Invalid FNameEntryHandle Passed To FNameEntryAllocator::Resolve.");
                 return reinterpret_cast<FNameEntry*>(m_block[0] + 0);
             }
 
-            return reinterpret_cast<FNameEntry*>(m_block[handle.m_block] + fixed_stride * handle.m_offset);
+            return reinterpret_cast<FNameEntry*>(m_block[handle.m_block] + stride * handle.m_offset);
         }
 
         bool is_valid_index(int32_t key, uint32_t block, uint16_t offset) const
         {
-            return (key >= 0 && block < num_blocks() && offset * 2 < max_size);
+            return (key >= 0 && block < num_blocks() && offset * stride < block_size);
         }
     };
 
@@ -275,5 +269,4 @@ namespace big
         const FNameEntry* get_display_name_entry() const;
     };
     static_assert(sizeof(FName) == 0x8);
-#pragma pack(pop)
 }

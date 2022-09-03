@@ -4,7 +4,6 @@
 
 namespace big
 {
-#pragma pack(push, 1)
 	enum class EInternalObjectFlags : int32_t
 	{
 		None = 0,
@@ -32,10 +31,10 @@ namespace big
 	class FUObjectItem
 	{
 	public:
-		UObject* m_object;
-		int32_t m_flags;
-		int32_t m_cluster_index;
-		int32_t m_serial_number;
+		UObject* m_object; //0x0000
+		int32_t m_flags; //0x0008
+		int32_t m_cluster_index; //0x000C
+		int32_t m_serial_number; //0x0010
 		
 		inline bool is_unreachable() const
 		{
@@ -47,6 +46,7 @@ namespace big
 		}
 		UObject* get_valid_object();
 	};
+	static_assert(sizeof(FUObjectItem) == 0x18);
 
 	class TUObjectArray
 	{
@@ -91,23 +91,19 @@ namespace big
 
 		inline FUObjectItem* get_object_pointer(uint32_t index)
 		{
-			uint32_t chunk_index = index / (m_num_elements / m_num_chunks);
+			uint32_t chunk_index = index / num_elements_per_chunks;
+			uint32_t within_chunk_index = index % num_elements_per_chunks;
 
-			if (valid_index(index))
-			{
-				if (chunk_index < m_num_chunks)
-				{
-					if (index < m_max_elements)
-					{
-						auto m_chunk = &m_objects[chunk_index][index * 3];
-						if (!m_chunk) return nullptr;
+			if (!valid_index(index)) return nullptr;
 
-						return m_chunk;
-					}
-				}
-			}
-			
-			return nullptr;
+			if (chunk_index >= m_num_chunks) return nullptr;
+
+			if (index >= m_max_elements) return nullptr;
+
+			auto m_chunk = m_objects[chunk_index];
+			if (!m_chunk) return nullptr;
+
+			return m_chunk + within_chunk_index;
 		}
 
 		int64_t get_allocated_size() const
@@ -133,6 +129,7 @@ namespace big
 			num_elements_per_chunks = 64 * 1024,
 		};
 	};
+	static_assert(sizeof(TUObjectArray) == 0x20);
 
 	class FUObjectArray
 	{
@@ -141,7 +138,6 @@ namespace big
 		int32_t m_obt_last_non_gc_index; //0x0004
 		int32_t m_max_objects_not_considered_by_gc; //0x0008
 		bool m_open_for_disregard_for_gc; //0x000C
-		char pad_000D[3];
 		TUObjectArray m_obj_objects; //0x0010
 
 		inline FUObjectItem* index_to_object(int32_t Index)
@@ -303,5 +299,4 @@ namespace big
 		__int32 m_offset; //0x0050 
 		char pad_0x0054[0x24]; //0x0054
 	};
-#pragma pack(pop)
 }
