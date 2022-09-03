@@ -49,12 +49,15 @@
 
 #include <regex>
 #include <tlhelp32.h>
+#include <set>
 
 #include <nlohmann/json.hpp>
 #include <StackWalker.h>
 
 #include "logger.hpp"
 #include "settings.hpp"
+
+#include "fonts/icon.h"
 
 #define MOD_NAME "Ellohim Private Menu"
 

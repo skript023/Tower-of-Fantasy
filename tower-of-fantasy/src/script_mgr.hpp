@@ -1,6 +1,7 @@
 #pragma once
 #include "common.hpp"
 #include "script.hpp"
+#include "class/fwddec.hpp"
 
 namespace big
 {
@@ -12,13 +13,23 @@ namespace big
 
 		void add_script(std::unique_ptr<script> script);
 		void remove_all_scripts();
-
+		
 		void tick();
+		
+		void get_function(UObject* _this);
 	private:
 		void tick_internal();
 	private:
 		std::recursive_mutex m_mutex;
 		std::vector<std::unique_ptr<script>> m_scripts;
+	public:
+		struct NativeFunction 
+		{ 
+			std::string name; 
+			UObject* object; 
+		};
+		std::vector<NativeFunction> m_crossmap;
+		
 	};
 
 	inline script_mgr g_script_mgr;

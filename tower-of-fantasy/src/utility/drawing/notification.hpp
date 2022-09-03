@@ -40,14 +40,14 @@ namespace big::notify
 			}
 		}
 
-		dl->AddRectFilled({ (float)(*g_pointers->m_screen).x - 360.f, 10.f + start_pos }, { (float)(*g_pointers->m_screen).x - 10.f, start_pos + 45.f + total_size }, g_settings->window.color);
-		dl->AddRectFilledMultiColor({ (float)(*g_pointers->m_screen).x - 360.f, 10.f + start_pos }, { (float)(*g_pointers->m_screen).x - 255.f, start_pos + 45.f + total_size }, fadeBegin, fadeEnd, fadeEnd, fadeBegin);
+		dl->AddRectFilled({ (float)(*g_pointers->m_screen).x - 360.f, 10.f + start_pos }, { (float)g_pointers->m_screen->x - 10.f, start_pos + 45.f + total_size }, g_settings->window.color);
+		dl->AddRectFilledMultiColor({ (float)(*g_pointers->m_screen).x - 360.f, 10.f + start_pos }, { (float)g_pointers->m_screen->x - 255.f, start_pos + 45.f + total_size }, fadeBegin, fadeEnd, fadeEnd, fadeBegin);
 
-		dl->AddText(g_settings->window.font_sub_title, 14.f, { (float)(*g_pointers->m_screen).x - 350.f, 15.f + start_pos }, textCol, title.c_str());
+		dl->AddText(g_settings->window.font_sub_title, 14.f, { (float)g_pointers->m_screen->x - 350.f, 15.f + start_pos }, textCol, title.c_str());
 		int i = 0;
 		for (std::string txt : split_points)
 		{
-			dl->AddText({ (float)(*g_pointers->m_screen).x - 350.f, 40.f + (i * 20.f) + start_pos }, textCol, txt.c_str());
+			dl->AddText({ (float)g_pointers->m_screen->x - 350.f, 40.f + (i * 20.f) + start_pos }, textCol, txt.c_str());
 			i++;
 		}
 

@@ -18,12 +18,13 @@ namespace big
 
 		GWorld** m_world{};
 		Player** m_player{};
+		TUObjectArray* m_object{};
+		FUObjectArray* m_object_array{};
+		FNamePool* m_name{};
 
 		uintptr_t** m_view_matrix{};
 		Navigation** m_player_nav{};
-		uintptr_t** m_uobject{};
-		uintptr_t** m_object;
-		FNamePool* m_name;
+		functions::process_event_t m_process_event{};
 
 		iVector2* m_screen{};
 

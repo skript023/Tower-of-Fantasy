@@ -2,6 +2,25 @@
 
 namespace big
 {
+	struct FPointer
+	{
+		uintptr_t Dummy;
+	};
+
+	struct FQWord
+	{
+		int A;
+		int B;
+	};
+
+	template<typename KeyType, typename ValueType>
+	class TPair
+	{
+	public:
+		KeyType   Key;
+		ValueType Value;
+	};
+
 	template <typename T>
 	struct TArray
 	{
@@ -23,7 +42,7 @@ namespace big
 		{
 			delete[] this->items;
 		}
-		
+
 		inline bool valid(int i)
 		{
 			if (item_count > max_item || !items[i])
@@ -57,6 +76,20 @@ namespace big
 		int max_item = 0;
 	};
 
+	struct FString : public TArray<wchar_t>
+	{
+		inline wchar_t* get_wstring() { return this->items; }
+
+		inline std::string get_string()
+		{
+
+			int size = WideCharToMultiByte(CP_UTF8, 0, items, item_count, nullptr, 0, nullptr, nullptr);
+			std::string str(size, 0);
+			WideCharToMultiByte(CP_UTF8, 0, items, item_count, &str[0], size, nullptr, nullptr);
+			return str;
+		}
+	};
+
 	class GWorld;
 	class OwningGameInstance;
 	class LocalPlayer;
@@ -71,4 +104,21 @@ namespace big
 	class FNamePool;
 
 	class ULevel;
+
+	class FUObjectItem;
+	class TUObjectArray;
+	class FUObjectArray;
+	class UObject;
+
+	template<typename ElementType, int32_t MaxTotalElements, int32_t ElementsPerChunk>
+	class TStaticIndirectArrayThreadSafeRead;
+
+	class FName;
+
+	class FScriptInterface;
+	template<class InterfaceType>
+	class TScriptInterface;
+
+	class UFunction;
+	class UClass;
 }

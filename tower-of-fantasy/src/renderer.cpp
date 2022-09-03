@@ -99,20 +99,22 @@ namespace big
 		std::strcpy(font_cfg.Name, "Rubik");
 
 		m_font = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 14.5f, &font_cfg);
+		g_notification_service->merge_icon_with_latest_font(13.f);
+
+		g_settings->window.font_title = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 15.5f, &font_cfg);
+		g_notification_service->merge_icon_with_latest_font(14.5f);
 		
-		g_settings->window.font_title = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 14.5f, &font_cfg);
-		g_settings->window.font_sub_title = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 14.5f, &font_cfg);
+		g_settings->window.font_sub_title = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 15.f, &font_cfg);
+		g_notification_service->merge_icon_with_latest_font(14.f);
+
 		g_settings->window.font_normal = m_font;
+		g_notification_service->merge_icon_with_latest_font(13.f);
+
 		g_settings->window.font_small = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 12.f, &font_cfg);
-		
-		static const ImWchar icons_ranges[] = { 0xf000, 0xf950, 0 };
-		ImFontConfig font_icons_cfg{};
-		font_icons_cfg.MergeMode = true;
-		font_icons_cfg.PixelSnapH = true;
-		font_icons_cfg.FontDataOwnedByAtlas = false;
-		std::strcpy(font_icons_cfg.Name, "Icons");
-		g_settings->window.font_icon = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_icons), sizeof(font_icons), 18.5f, &font_icons_cfg, icons_ranges);
-		
+		g_notification_service->merge_icon_with_latest_font(11.f);
+
+		m_monospace_font = ImGui::GetIO().Fonts->AddFontDefault();
+
 		g_gui.dx_init();
 	}
 
@@ -158,8 +160,6 @@ namespace big
 
 	void renderer::post_reset(IDXGISwapChain* this_)
 	{
-		ImGui_ImplDX11_CreateDeviceObjects();
-
 		ID3D11Texture2D* m_back_buffer;
 		this_->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&m_back_buffer);
 
@@ -170,6 +170,8 @@ namespace big
 
 		m_back_buffer->Release();
 		m_d3d_context->OMSetRenderTargets(1, &m_d3d_render_target, NULL);
+
+		ImGui_ImplDX11_CreateDeviceObjects();
 	}
 
 	void renderer::wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
@@ -189,13 +191,7 @@ namespace big
 
 			g_gui.m_opened ^= true;
 		}
-
-		if (msg == WM_KEYUP && wparam == VK_DELETE)
-		{
-			g_running = false;
-		}
-			
-
+	
 		if (g_gui.m_opened)
 		{
 			ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam);

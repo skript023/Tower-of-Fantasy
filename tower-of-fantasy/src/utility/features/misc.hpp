@@ -1,24 +1,42 @@
 #pragma once
 #include "../unreal_engine_utility.hpp"
 #include "../drawing/d3d_drawing.hpp"
+#include "thread_pool.hpp"
 
 namespace big::misc
 {
+	inline bool* attribute_initialized()
+	{
+		if (auto player = unreal_engine::get_local_player())
+		{
+			if (auto control = player->m_player_controller)
+			{
+				if (auto pawn = control->m_pawn)
+				{
+					return &pawn->m_is_ability_initialized;
+				}
+			}
+		}
+		return nullptr;
+	}
+
 	inline void skip_button(bool activate)
 	{
-		if (activate)
-		{
-			*g_pointers->m_skip_button = 0x75;
-		}
-		else if(!activate)
-		{
-			*g_pointers->m_skip_button = 0x74;
-		}
+		g_thread_pool->push([activate] {
+			if (activate)
+			{
+				*g_pointers->m_skip_button = 0x75;
+			}
+			else if (!activate)
+			{
+				*g_pointers->m_skip_button = 0x74;
+			}
+		});
 	}
 
 	inline void render_esp(bool activate)
 	{
-		if (activate && unreal_engine::world_state())
+		if (activate && unreal_engine::game_state())
 		{
 			auto level_array = (*g_pointers->m_world)->m_level;
 
@@ -34,43 +52,31 @@ namespace big::misc
 					auto actor = actor_array[i];
 					if (!actor_array.valid(i)) continue;
 
-					if (int id = actor->m_name_index)
+					auto name = actor->m_object.m_name.get_name();
+					if (!actor->valid_root_component()) continue;
+
+					if (auto root_component = actor->m_root_component)
 					{
-						auto name = unreal_engine::get_name(id);
-						if (!actor->valid_root_component()) continue;
-
-						if (auto root_component = actor->m_root_component)
+						auto pos = root_component->m_relative_location;
+						Vector2 location;
+						if (unreal_engine::project_world_to_screen(pos, location))
 						{
-							auto pos = root_component->m_relative_location;
-							if (auto player = unreal_engine::get_local_player())
+							if (name.find("Scene_Box_Refresh_Wild_") != std::string::npos ||
+								name.find("BP_Harvest_Gem_") != std::string::npos ||
+								name.find("Box_OnlyOnce_") != std::string::npos
+								)
 							{
-								if (auto control = player->m_player_controller)
-								{
-									if (auto camera_mgr = control->m_camera_manager)
-									{
-										Vector2 location;
-										if (camera_mgr->m_camera_cache.project_world_to_screen(pos, location))
-										{
-											if (name.find("Scene_Box_Refresh_Wild_") != std::string::npos ||
-												name.find("BP_Harvest_Gem_") != std::string::npos ||
-												name.find("Box_OnlyOnce_") != std::string::npos
-												)
-											{
-												auto distance = movement::get_entity_coords()->distance(pos);
-												draw::RGBA red = { 255, 0, 0, 255 };
-												draw::RGBA white = { 255, 255, 255, 255 };
-												draw::RGBA green = { 0, 255, 0, 255 };
-												float width = static_cast<float>(g_pointers->m_screen->x / 2);
-												float height = static_cast<float>(g_pointers->m_screen->y / 2);
+								auto distance = movement::get_entity_coords()->distance(pos);
+								draw::RGBA red = { 255, 0, 0, 255 };
+								draw::RGBA white = { 255, 255, 255, 255 };
+								draw::RGBA green = { 0, 255, 0, 255 };
+								float width = static_cast<float>(g_pointers->m_screen->x / 2);
+								float height = static_cast<float>(g_pointers->m_screen->y / 2);
 
-												draw::draw_line(width, height, location.x, location.y, &red, 1.f);
-												draw::draw_stroke_text(location.x, location.y, &white, std::format("{} [{:.2f}]m", name, distance).c_str());
+								draw::draw_line(width, 0, location.x, location.y, &red, 1.f);
+								draw::draw_stroke_text(location.x, location.y, &white, std::format("{} [{:.2f}]m", name, distance).c_str());
 
-												if (distance < 100.f) draw::draw_corner_box(location.x, location.y, 100.f, 50.f, 2.f, &green);
-											}
-										}
-									}
-								}
+								if (distance < 100.f) draw::draw_corner_box(location.x, location.y, 100.f, 50.f, 2.f, &green);
 							}
 						}
 					}

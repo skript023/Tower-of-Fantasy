@@ -16,6 +16,26 @@ namespace big
 
 		void enable();
 		void disable();
+		inline void read_raw(void* base, size_t size, void* out)
+		{
+			if (!::ReadProcessMemory(GetCurrentProcess(), (LPCVOID)base, out, size, nullptr))
+			{
+				throw std::exception("RPM failed");
+			}
+		}
+		template <typename T>
+		inline void read(uintptr_t base, T& ref)
+		{
+			read_raw(base, sizeof(T), &ref);
+		}
+
+		template <typename T>
+		inline T read(uintptr_t base)
+		{
+			T out{};
+			read_raw(base, sizeof(T), &out);
+			return out;
+		}
 	private:
 		std::string m_name;
 		void* m_target;

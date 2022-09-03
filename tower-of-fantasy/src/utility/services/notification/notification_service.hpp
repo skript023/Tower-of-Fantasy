@@ -35,6 +35,8 @@ namespace big
 		void error(std::string, std::string);
 		std::vector<notification> get();
 
+		void merge_icon_with_latest_font(float font_size, bool FontDataOwnedByAtlas = false);
+
 		std::map<NotificationType, ImVec4> notification_colors = {
 			{NotificationType::INFO, ImVec4(0.80f, 0.80f, 0.83f, 1.00f)},
 			{NotificationType::SUCCESS, ImVec4(0.29f, 0.69f, 0.34f, 1.00f)},

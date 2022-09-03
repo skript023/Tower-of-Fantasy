@@ -14,20 +14,19 @@ namespace big
 	class AActor
 	{
 	public:
-		char pad_0000[0x18];
-		int m_name_index; //0x18
-		char pad_001C[0x11C];
+		UObject m_object;
+		char pad_0028[0x110];
 		class RootComponent* m_root_component; //0x138
 		bool valid_root_component()
 		{
-			RootComponent* result;
-			if (!ReadProcessMemory(GetCurrentProcess(), this->m_root_component, &result, sizeof(this->m_root_component), nullptr))
+			if (IsBadReadPtr(this->m_root_component, sizeof(this->m_root_component)))
 			{
 				return false;
 			}
 			return true;
 		}
 	};
+	static_assert(sizeof(AActor) == 0x140);
 
 	class ULevel
 	{

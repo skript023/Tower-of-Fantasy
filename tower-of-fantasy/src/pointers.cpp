@@ -22,12 +22,17 @@ namespace big
 
 		main_batch.add("GObject", "48 8B 05 ? ? ? ? C1 F9 10 48 63 C9 48 8B 14 C8 4B 8D 0C 40 4C 8D 04 CA", [this](memory::handle ptr)
 		{
-			m_object = ptr.add(3).rip().as<decltype(m_object)>();
+			m_object = ptr.add(3).rip().as<decltype(m_object)>();//7FF6818412D8
 		});
 
 		main_batch.add("GName", "48 8D 05 ? ? ? ? EB 13 48 8D 0D ? ? ? ? E8 ? ? ? ? C6 05 ? ? ? ? ? 0F 10 03 4C 8D 44 24", [this](memory::handle ptr)
 		{
 			m_name = ptr.add(3).rip().as<decltype(m_name)>();
+		});
+
+		main_batch.add("FUObjectArray", "48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? 48 83 C4 28 E9 ? ? ? ? 48 83 EC 28 48 8D 0D ? ? ? ? FF 15 ? ? ? ?", [this](memory::handle ptr)
+		{
+			m_object_array = ptr.add(3).rip().as<decltype(m_object_array)>();
 		});
 
 		main_batch.add("Screen Resolution", "8B 0D ? ? ? ? 8B 05 ? ? ? ? 41 89 4E 04 E9 ? ? ? ? 32 C9", [this](memory::handle ptr)
@@ -62,7 +67,7 @@ namespace big
 
 		main_batch.add("UObjectt::ProcessEvent", "E8 ? ? ? ? 48 8B 74 24 ? 48 8B 5C 24 ? 48 8B 6C 24 ? 48 83 C4 20 5F C3 40 57", [this](memory::handle ptr)
 		{
-			m_uobject = ptr.add(1).rip().as<decltype(m_uobject)>();
+			m_process_event = ptr.add(1).rip().as<decltype(m_process_event)>();
 		});
 
 		main_batch.add("Task Queue", "41 56 41 57 48 63 01 4C 8B D2 48 89 6C 24 ? 4D 8B F1 41 8B 69 08 4C 8B F9 4D 8B 09 44 8B DD", [this](memory::handle ptr)

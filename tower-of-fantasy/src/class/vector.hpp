@@ -94,26 +94,6 @@ namespace big
 		}
 	};
 
-	struct FString
-	{
-		inline wchar_t* get_wstring() { return this->str; }
-
-		inline char* get_string()
-		{
-			/*
-			std::wstring buf(this->str);
-			char ret[256];
-			strcpy_s(ret, std::string(buf.begin(), buf.end()).c_str());
-			return ret;
-			*/
-		}
-
-	private:
-		wchar_t* str;
-		int count;
-		int max;
-	};
-
 	struct Matrix
 	{
 		float m[4][4];

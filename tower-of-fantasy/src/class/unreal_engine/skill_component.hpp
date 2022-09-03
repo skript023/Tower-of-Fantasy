@@ -26,8 +26,14 @@ namespace big
 		float m_critical_deff; //0x1638
 		char pad_163C[0xC]; //0x163C
 		float m_health; //0x1648
-		char pad_164C[0x1C];
-		float m_critical_damage; //0x1668
+		char pad_164C[0x4];
+		float m_energy; //0x1650
+		float psycal_def_ignore; //0x1654
+		float ice_def_ignore; //0x1658
+		float fire_def_ignore; //0x165C
+		float thunder_def_ignore; //0x1660
+		float super_power_def_ignore; //0x1664
+		float m_critical_damage; //0x1668 
 		float m_energy_recovery; //0x166C
 		char pad_1670[0x40]; //0x1670
 		float m_critical_rate; //0x16B0

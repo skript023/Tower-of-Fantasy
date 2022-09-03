@@ -7,6 +7,7 @@
 #include "thread_pool.hpp"
 #include "settings.hpp"
 #include "virtual_protect.hpp"
+#include "script_mgr.hpp"
 #include "utility/services/init_services.hpp"
 
 DWORD APIENTRY main_thread(LPVOID)

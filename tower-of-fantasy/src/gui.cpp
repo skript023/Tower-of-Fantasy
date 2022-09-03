@@ -151,7 +151,7 @@ namespace big
 	void gui::script_func()
 	{
 		g_gui.script_init();
-		while (true)
+		while (g_running)
 		{
 			g_gui.script_on_tick();
 		}

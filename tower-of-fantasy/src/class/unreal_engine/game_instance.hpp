@@ -26,6 +26,11 @@ namespace big
 		class Unk_1* m_unk; //0x2B0
 		char pad_2B8[16]; //0x2B8
 		class PlayerCameraManager* m_camera_manager; //0x2C8
+	public:
+		bool project_world_to_screen(Vector3 location, Vector2& screen_location)
+		{
+			return this->m_camera_manager->m_camera_cache.project_world_to_screen(location, screen_location);
+		}
 	};
 	static_assert(sizeof(PlayerController) == 0x2D0);
 

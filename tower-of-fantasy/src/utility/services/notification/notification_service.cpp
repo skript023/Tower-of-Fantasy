@@ -1,4 +1,5 @@
 #include "notification_service.hpp"
+#include "fonts/font_icon.hpp"
 #include "fonts/icon.h"
 
 namespace big
@@ -63,4 +64,15 @@ namespace big
 		return notifications_to_sent;
 	}
 
+	void notification_service::merge_icon_with_latest_font(float font_size, bool FontDataOwnedByAtlas)
+	{
+		static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+
+		ImFontConfig icons_config;
+		icons_config.MergeMode = true;
+		icons_config.PixelSnapH = true;
+		icons_config.FontDataOwnedByAtlas = FontDataOwnedByAtlas;
+
+		g_settings->window.font_icon = ImGui::GetIO().Fonts->AddFontFromMemoryTTF((void*)font_icons, sizeof(font_icons), font_size, &icons_config, icons_ranges);
+	}
 }

@@ -34,4 +34,56 @@ namespace big
 		m_cooldown_protect.disable();
 		m_task_queue_protect.disable();
 	}
+
+	template<typename T>
+	bool virtual_protect::validate_memory(T address)
+	{
+		MEMORY_BASIC_INFORMATION mbi;
+		SIZE_T size = VirtualQuery(reinterpret_cast<LPVOID>(address), &mbi, sizeof(MEMORY_BASIC_INFORMATION));
+
+		if (size == 0)
+			return false;
+
+		if (mbi.Protect & PAGE_NOACCESS)
+			return false;
+
+		if (mbi.Protect & PAGE_GUARD)
+			return false;
+
+		return true;
+	}
+
+	bool virtual_protect::binary_search(uintptr_t pointer)
+	{
+		int high = virtual_entries - 1,
+			low = 0, middle = 0;
+
+		while (low <= high)
+		{
+			middle = (low + high) / 2;
+
+			if (pointer >= virtual_list[middle].start_addr && pointer < virtual_list[middle].end_addr)
+			{
+				return true;
+			}
+			else if (pointer < virtual_list[middle].end_addr)
+			{
+				high = middle - 1;
+			}
+			else if (pointer > virtual_list[middle].start_addr)
+			{
+				low = middle + 1;
+			}
+		}
+
+		return false;
+	}
+
+	bool virtual_protect::is_valid_ptr(uintptr_t pointer)
+	{
+		if (!virtual_list || !pointer || !virtual_entries)
+			return false;
+
+		return binary_search(pointer);
+	}
 }

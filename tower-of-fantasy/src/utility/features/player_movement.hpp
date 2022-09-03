@@ -79,7 +79,7 @@ namespace big::movement
 	inline float* player_swim_speed()
 	{
 		if (auto player = unreal_engine::get_local_player())
-			return &player->m_player_controller->m_pawn->m_swim_speed;
+			return &player->m_player_controller->m_pawn->m_max_swim_speed;
 
 		return nullptr;
 	}

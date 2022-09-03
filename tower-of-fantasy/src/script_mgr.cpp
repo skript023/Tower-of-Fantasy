@@ -1,6 +1,7 @@
 #include "common.hpp"
 #include "pointers.hpp"
 #include "script_mgr.hpp"
+#include "class/uobject.hpp"
 
 namespace big
 {
@@ -19,6 +20,14 @@ namespace big
 	void script_mgr::tick()
 	{
 		std::invoke(std::mem_fn(&script_mgr::tick_internal), this);
+	}
+
+	void script_mgr::get_function(UObject* _this)
+	{
+		if (this->m_crossmap.size() <= 2162688)
+		{
+			this->m_crossmap.push_back({ _this->get_fullname(), _this });
+		}
 	}
 
 	void script_mgr::tick_internal()
