@@ -6,6 +6,8 @@
 #include "skill_component.hpp"
 #include "camera_manager.hpp"
 
+#include "native_invoker.hpp"
+
 namespace big
 {
 	#pragma pack(push, 1)
@@ -17,19 +19,28 @@ namespace big
 		uint8_t no_clip;
 	};
 
-	class PlayerController
+	class PlayerController : public UObject
 	{
 	public:
-		char pad_0000[0x260];
+		char pad_0028[0x238];
 		class Pawn* m_pawn; //0x260
 		char pad_0268[72]; //0x268
 		class Unk_1* m_unk; //0x2B0
 		char pad_2B8[16]; //0x2B8
 		class PlayerCameraManager* m_camera_manager; //0x2C8
 	public:
-		bool project_world_to_screen(Vector3 location, Vector2& screen_location)
+		bool project_world_to_screen(FVector& WorldLocation, FVector2D& ScreenLocation, bool bPlayerViewportRelative = false)
 		{
-			return this->m_camera_manager->m_camera_cache.project_world_to_screen(location, screen_location);
+			auto fn = g_native_invoker->m_world_to_screen;
+			
+			g_native_invoker->m_world_to_screen_param.world_location = WorldLocation;
+			g_native_invoker->m_world_to_screen_param.screen_location = ScreenLocation;
+			g_native_invoker->m_world_to_screen_param.m_viewport_relative = bPlayerViewportRelative;
+
+			process_event(fn, &g_native_invoker->m_world_to_screen_param);
+
+			ScreenLocation = g_native_invoker->m_world_to_screen_param.screen_location;
+			return g_native_invoker->m_world_to_screen_param.m_return;
 		}
 	};
 	static_assert(sizeof(PlayerController) == 0x2D0);

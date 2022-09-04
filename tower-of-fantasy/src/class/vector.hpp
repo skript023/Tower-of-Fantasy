@@ -150,4 +150,7 @@ namespace big
 		}
 		__forceinline void operator*=(const Matrix& m2) { *this = this->operator*(m2); }
 	};
+
+	using FVector = Vector3;
+	using FVector2D = Vector2;
 }

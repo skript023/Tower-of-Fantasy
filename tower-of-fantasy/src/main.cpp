@@ -9,6 +9,7 @@
 #include "virtual_protect.hpp"
 #include "script_mgr.hpp"
 #include "utility/services/init_services.hpp"
+#include "native_invoker.hpp"
 
 DWORD APIENTRY main_thread(LPVOID)
 {
@@ -50,6 +51,9 @@ DWORD APIENTRY main_thread(LPVOID)
 		auto thread_pool_instance = std::make_unique<thread_pool>();
 		g_logger->info("Thread Pool initialized.");
 
+		auto native_instance = std::make_unique<NativeInvoker>();
+		g_logger->info("Native Function initialized.");
+
 		auto service_instance = std::make_unique<init_service>();
 		g_logger->info("Service initialized.");
 
@@ -74,6 +78,9 @@ DWORD APIENTRY main_thread(LPVOID)
 
 		thread_pool_instance.reset();
 		g_logger->info("Thread Pool uninitialized.");
+
+		native_instance.reset();
+		g_logger->info("Native Function uninitialized.");
 
 		service_instance.reset();
 		g_logger->info("Service uninitialized.");

@@ -19,7 +19,7 @@ namespace big
 		static LRESULT wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 		static BOOL set_cursor_pos(int x, int y);
 
-		static void process_event(UObject* _this, UFunction* function, void* parms);
+		static void APIENTRY process_event(UObject* _this, UFunction* function, void* parms);
 	};
 
 	struct minhook_keepalive

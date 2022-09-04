@@ -37,6 +37,29 @@ namespace big
 		return name;
     }
 
+	const char* UObject::get_fullname_ex() const
+	{
+		std::string name;
+
+		if (m_class)
+		{
+			if (m_outer)
+			{
+				for (auto p = m_outer; p; p = p->m_outer)
+				{
+					name = p->get_name() + "." + name;
+				}
+				name = m_class->get_name() + " " + name + this->get_name();
+			}
+			else if (!m_outer)
+			{
+				name = m_class->get_name() + " " + this->get_name();
+			}
+		}
+
+		return name.c_str();
+	}
+
 	bool UObject::IsA(UClass* cmp) const
 	{
 		{
@@ -53,7 +76,7 @@ namespace big
 		}
 	}
 
-	void UObject::process_event(UFunction* func, void* params)
+	void UObject::Process_event(UFunction* func, void* params)
 	{
 		return g_pointers->m_process_event(this, func, params);
 	}

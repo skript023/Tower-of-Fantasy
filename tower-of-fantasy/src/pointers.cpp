@@ -5,7 +5,7 @@
 
 namespace big
 {
-	pointers::pointers()
+	pointers::pointers(): m_base_address(memory::module("QRSL.exe").begin().as<uintptr_t>())
 	{
 		memory::pattern_batch main_batch;
 

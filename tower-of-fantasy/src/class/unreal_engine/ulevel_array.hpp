@@ -11,19 +11,18 @@ namespace big
 		Vector3 m_relative_location; //0x124
 	};
 
-	class AActor
+	class AActor : public UObject
 	{
 	public:
-		UObject m_object;
 		char pad_0028[0x110];
 		class RootComponent* m_root_component; //0x138
-		bool valid_root_component()
+		RootComponent* root_component()
 		{
 			if (IsBadReadPtr(this->m_root_component, sizeof(this->m_root_component)))
 			{
-				return false;
+				return nullptr;
 			}
-			return true;
+			return this->m_root_component;
 		}
 	};
 	static_assert(sizeof(AActor) == 0x140);

@@ -52,14 +52,13 @@ namespace big::misc
 					auto actor = actor_array[i];
 					if (!actor_array.valid(i)) continue;
 
-					auto name = actor->m_object.m_name.get_name();
-					if (!actor->valid_root_component()) continue;
+					auto name = actor->get_name();
 
-					if (auto root_component = actor->m_root_component)
+					if (auto root_component = actor->root_component())
 					{
 						auto pos = root_component->m_relative_location;
 						Vector2 location;
-						if (unreal_engine::project_world_to_screen(pos, location))
+						if (unreal_engine::get_local_player()->m_player_controller->project_world_to_screen(pos, location))
 						{
 							if (name.find("Scene_Box_Refresh_Wild_") != std::string::npos ||
 								name.find("BP_Harvest_Gem_") != std::string::npos ||

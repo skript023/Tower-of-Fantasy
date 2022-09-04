@@ -2,6 +2,7 @@
 #include <pointers.hpp>
 #include "class/world.hpp"
 #include "class/fname_pool.hpp"
+#include "thread_pool.hpp"
 
 namespace big::unreal_engine
 {
@@ -67,22 +68,6 @@ namespace big::unreal_engine
 		}
 
 		return false;
-	}
-
-	inline bool project_world_to_screen(Vector3 location, Vector2& screen_location, bool bPlayerViewportRelative = false)
-	{
-		static auto fn = UObject::find_object_by_index<UObject*>(9589);
-		struct {
-			Vector3 world_location;
-			Vector2 screen_location;
-			bool bPlayerViewportRelative;
-			bool ReturnValue;
-		} parms;
-		parms = { location, screen_location, bPlayerViewportRelative};
-		fn->process_event(fn, &parms);
-		g_logger->info("Locations %f Relative Location %f", parms.screen_location.x, parms.world_location.x);
-		screen_location = parms.screen_location;
-		return parms.ReturnValue;
 	}
 
 	inline std::string get_name(int key)

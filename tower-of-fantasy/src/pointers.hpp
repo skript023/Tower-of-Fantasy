@@ -13,7 +13,7 @@ namespace big
 		~pointers();
 	public:
 		HWND m_hwnd{};
-		DWORD64 m_base_address;
+		uintptr_t m_base_address;
 		void* m_swapchain_methods[19];
 
 		GWorld** m_world{};

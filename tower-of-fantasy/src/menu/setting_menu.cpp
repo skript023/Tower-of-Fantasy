@@ -14,16 +14,17 @@ namespace big
             if (ImGui::Button("Test Object"))
             {
                 Vector2 location;
-                unreal_engine::project_world_to_screen(*movement::get_entity_coords(), location);
-                g_logger->info("Locations %f Relative Location %f", location.x, location.x);
+                unreal_engine::get_local_player()->m_player_controller->project_world_to_screen(*movement::get_entity_coords(), location, false);
+
+                g_logger->info("Locations %f Screen Location %f", movement::get_entity_coords()->x, location.x);
             }
 
             ImGui::SameLine();
 
             if (ImGui::Button("Test FindOBJ"))
             {
-                static auto fn = UObject::find_object_by_index<UFunction*>(9589);
-                g_logger->info("function address : %X | Function name : %s", fn, " None");
+                static auto fn = UObject::find_object<UFunction*>("Function Engine.PlayerController.ProjectWorldLocationToScreen");
+                g_logger->info("function address : QRSL.exe+%X | Function Pointer : %X| Function name : %s", fn->Func, fn, fn->get_fullname().c_str());
             }
             
             ImGui::SameLine();
