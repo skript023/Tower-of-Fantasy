@@ -9,11 +9,11 @@ namespace big::movement
 		{
 			if (activate)
 			{
-				player->m_player_controller->m_unk->no_clip = 0x40;
+				player->m_player_controller->m_acknowledge_pawn->no_clip = 0x40;
 			}
 			else
 			{
-				player->m_player_controller->m_unk->no_clip = 0x44;
+				player->m_player_controller->m_acknowledge_pawn->no_clip = 0x44;
 			}
 		}
 	}
