@@ -212,11 +212,7 @@ namespace big
 			return ptr;
 		}
 
-		inline void process_event(UFunction* function, void* parms)
-		{
-			return GetVFunction<void(*)(UObject*, UFunction*, void*)>(this, 0x43)(this, function, parms);
-		}
-
+		void process_event(UFunction* function, void* parms);
 		void Process_event(UFunction* func, void* params);
 	};
 	static_assert(sizeof(UObject) == 0x28, "UObject not properly sized.");

@@ -76,6 +76,11 @@ namespace big
 		}
 	}
 
+	void UObject::process_event(UFunction* function, void* parms)
+	{
+		return GetVFunction<void(*)(UObject*, UFunction*, void*)>(this, 0x43)(this, function, parms);
+	}
+
 	void UObject::Process_event(UFunction* func, void* params)
 	{
 		return g_pointers->m_process_event(this, func, params);
