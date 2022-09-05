@@ -31,6 +31,7 @@ namespace big
 		explicit NativeInvoker();
 		~NativeInvoker();
 
+		UFunction* get_native(std::string name);
 	public:
 		UFunction* m_world_to_screen;
 		UFunction* m_server_quest_update_progress;

@@ -24,6 +24,9 @@ namespace big
 	public:
 		void m_server_quest_update_progress(int QuestID, int ObjectiveID, int progress, bool is_add)
 		{
+			if (!g_native_invoker->m_server_quest_update_progress)
+				g_native_invoker->m_server_quest_update_progress = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.ServerQuestUpdateProgress");
+			
 			g_native_invoker->m_server_quest_update_progress_param.quest_id = QuestID;
 			g_native_invoker->m_server_quest_update_progress_param.objective_id = ObjectiveID;
 			g_native_invoker->m_server_quest_update_progress_param.progress = progress;
@@ -46,6 +49,9 @@ namespace big
 	public:
 		bool project_world_to_screen(FVector& WorldLocation, FVector2D& ScreenLocation, bool bPlayerViewportRelative = false)
 		{
+			if (!g_native_invoker->m_world_to_screen)
+				g_native_invoker->m_world_to_screen = g_native_invoker->get_native("Function Engine.PlayerController.ProjectWorldLocationToScreen");
+			
 			g_native_invoker->m_world_to_screen_param.world_location = WorldLocation;
 			g_native_invoker->m_world_to_screen_param.screen_location = ScreenLocation;
 			g_native_invoker->m_world_to_screen_param.m_viewport_relative = bPlayerViewportRelative;
