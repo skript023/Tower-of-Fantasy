@@ -21,46 +21,43 @@ namespace big
 
             ImGui::SameLine();
 
-            if (ImGui::Button("Test FindOBJ"))
+            if (ImGui::Button("Test Quest"))
             {
-                static auto fn = UObject::find_object<UFunction*>("Function Engine.PlayerController.ProjectWorldLocationToScreen");
-                g_logger->info("function address : QRSL.exe+%X | Function Pointer : %X| Function name : %s", fn->Func, fn, fn->get_fullname().c_str());
-            }
-            
-            ImGui::SameLine();
-
-            if (ImGui::Button("Test get name"))
-            {
-                for (int i = 0; i < UObject::get_global_object()->num(); i++)
+                if (auto const self = unreal_engine::get_hotta_character(); self)
                 {
-                    auto object = UObject::get_global_object()->get_by_index(i);
-                    if (object)
+                    auto quest_component = self->m_quest_component->m_quest_in_progress;
+                    for (int i = 0; i < quest_component.count(); i+=14)
                     {
-                        g_logger->info("Outer : 0x%X | UObject : 0x%X", object->m_outer, object);
-                        g_logger->info("[%i]Name : %s", i, object->get_fullname().c_str());
-                        if (object->get_fullname() == "Function Engine.PlayerController.ProjectWorldLocationToScreen")
+                        if (!quest_component.valid(i)) continue;
+                        auto quest = quest_component[i];
+                        auto objective_progress = quest_component[i]->m_objective_progress;
+
+                        for (int j = 0; j < objective_progress.count(); j+=4)
                         {
-                            g_logger->info("[%i]found : %s", i, object->get_fullname().c_str());
+                            if (!objective_progress.valid(j)) continue;
+                            auto objective = objective_progress[j];
+
+                            self->m_server_quest_update_progress(quest->m_quest_id, objective->m_objective_id, objective->m_needed_amount, true);
+                        }
+                    }
+
+                    auto accept = self->m_quest_component->m_auto_accept_quest_array;
+                    for (int i = 0; i < accept.count(); i+=5)
+                    {
+                        if (!accept.valid(i)) continue;
+                        auto quest = *accept[i];
+                        auto objective_progress = accept[i]->m_objective_progress;
+
+                        for (int j = 0; j < objective_progress.count(); j+=4)
+                        {
+                            if (!objective_progress.valid(j)) continue;
+                            auto objective = objective_progress[j];
+                            self->m_server_quest_update_progress(quest.m_quest_id, objective->m_objective_id, objective->m_needed_amount, true);
                         }
                     }
                 }
-                //g_logger->info("fullname : %s", UObject::get_global_object()->get_object_pointer(0)->m_object->get_fullname().c_str());
             }
-
-            ImGui::SameLine();
-
-            if (ImGui::Button("Test pointer name"))
-            {
-                for (int i = 0; i < UObject::get_global_object()->num(); i++)
-                {
-                    auto object = UObject::get_global_object()->get_object_pointer(i);
-                    if (object->get_valid_object())
-                    {
-                        g_logger->info("[%i]FUObject : 0x%X | Dereference : 0x%X | UObject : %s", i, object, object->get_valid_object(), object->get_valid_object()->get_fullname().c_str());
-                    }
-                }
-            }
-
+            
             if (ImGui::Button("Quit"))
             {
                 g_running = false;

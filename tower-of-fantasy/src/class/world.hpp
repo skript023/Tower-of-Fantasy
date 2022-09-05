@@ -2,6 +2,7 @@
 #include "fwddec.hpp"
 #include "unreal_engine/game_instance.hpp"
 #include "unreal_engine/ulevel_array.hpp"
+#include "unreal_engine/quest_component.hpp"
 
 namespace big
 {

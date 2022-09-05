@@ -90,6 +90,11 @@ namespace big
 			m_skip_button = ptr.as<decltype(m_skip_button)>();
 		});
 
+		main_batch.add("SSR Stuff", "80 39 1D 75 2C 48 8B 41 08 48 63 49 10 4C 8D 04 49 4E 8D 0C 80 49 3B C1 74 14 48 8B 0A 0F 1F", [this](memory::handle ptr)
+		{
+			m_ssr_stuff = ptr.sub(13).as<decltype(m_ssr_stuff)>();
+		});
+
 		main_batch.run(memory::module(nullptr));
 
 		this->m_hwnd = FindWindowW(L"UnrealWindow", L"Tower of Fantasy  ");

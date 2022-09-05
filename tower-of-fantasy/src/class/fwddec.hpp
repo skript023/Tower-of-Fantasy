@@ -100,6 +100,9 @@ namespace big
 	class AttributeSet;
 	class SkillComponent;
 
+	class AcknowledgedPawn;
+	class QuestComponent;
+
 	class Navigation;
 	class FNamePool;
 

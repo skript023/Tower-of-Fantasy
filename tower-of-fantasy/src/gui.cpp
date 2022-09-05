@@ -13,9 +13,7 @@
 
 #include <imgui.h>
 
-#include "menu/player_menu.h"
-#include "menu/player_stats.h"
-#include "menu/setting_menu.h"
+#include "menu/main_menu.hpp"
 
 namespace big
 {
@@ -101,15 +99,7 @@ namespace big
 	{
 		TRY_CLAUSE
 		{
-			if (ImGui::Begin("[Internal] Tower of Fantasy"))
-			{
-				ImGui::BeginTabBar("tabbar");
-				player_menu::render_menu();
-				player_stat::render_menu();
-				setting_menu::render_menu();
-				ImGui::EndTabBar();
-			}
-			ImGui::End();
+			main_menu::main_window("[Internal] Tower of Fantasy");
 		} EXCEPT_CLAUSE
 	}
 

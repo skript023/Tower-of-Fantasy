@@ -14,8 +14,8 @@ namespace big
 
 	struct ServerQuestUpdateProgress
 	{
-		std::string quest_id;
-		std::string objective_id;
+		int quest_id;
+		int objective_id;
 		int progress;
 		bool is_add;
 	};

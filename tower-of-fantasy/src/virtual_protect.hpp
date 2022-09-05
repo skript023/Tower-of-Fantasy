@@ -22,6 +22,7 @@ namespace big
 		protected_memory m_rapid_attack_protect;
 		protected_memory m_cooldown_protect;
 		protected_memory m_task_queue_protect;
+		protected_memory m_ssr_stuff_protect;
 
 		struct _VIRTUAL_LIST
 		{

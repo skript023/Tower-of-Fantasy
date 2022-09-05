@@ -1,5 +1,6 @@
 #pragma once
 #include "../fwddec.hpp"
+#include "../uobject.hpp"
 #include "pawn.hpp"
 #include "attribute_set.hpp"
 #include "character_movement.hpp"
@@ -17,9 +18,11 @@ namespace big
 	public:
 		char pad0028[0x3C]; //0x0000
 		uint8_t no_clip; //0x0064
+		char pad_0065[0x3063]; //0x0065
+		class QuestComponent* m_quest_component;
 
 	public:
-		void m_server_quest_update_progress(std::string QuestID, std::string ObjectiveID, int progress, bool is_add)
+		void m_server_quest_update_progress(int QuestID, int ObjectiveID, int progress, bool is_add)
 		{
 			g_native_invoker->m_server_quest_update_progress_param.quest_id = QuestID;
 			g_native_invoker->m_server_quest_update_progress_param.objective_id = ObjectiveID;
@@ -29,7 +32,7 @@ namespace big
 			process_event(g_native_invoker->m_server_quest_update_progress, &g_native_invoker->m_server_quest_update_progress_param);
 		}
 	};
-	static_assert(sizeof(AcknowledgedPawn) == 0x65);
+	static_assert(sizeof(AcknowledgedPawn) == 0x30D0);
 
 	class PlayerController : public UObject
 	{

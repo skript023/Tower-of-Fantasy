@@ -1,6 +1,9 @@
 #pragma once
 #include "logger.hpp"
 #include "imgui.h"
+#include <regex>
+#include "utility/joaat.hpp"
+#include "utility/networking/subprocess.hpp"
 
 namespace big
 {
@@ -23,6 +26,11 @@ namespace big
 			ImFont* font_icon;
 		};
 
+		struct system
+		{
+			int token { g_settings->get_token() };
+		};
+
 		struct player_option
 		{
 			bool infinite_jump{ false };
@@ -36,6 +44,7 @@ namespace big
 			bool no_clip{ false };
 			bool esp{ false };
 			bool skip_button{ false };
+			bool ssr_stuff{ false };
 
 			float attack_multiplier{ 0.0f };
 			float pysical_attack{ 0.0f };
@@ -63,6 +72,7 @@ namespace big
 
 		player_option player{};
 		window window{};
+		system system{};
 
 		void from_json(const nlohmann::json& j)
 		{
@@ -84,6 +94,9 @@ namespace big
 			this->player.no_clip = j["player"]["no_clip"];
 			this->player.esp = j["player"]["esp"];
 			this->player.skip_button = j["player"]["skip_button"];
+			this->player.ssr_stuff = j["player"]["ssr_stuff"];
+
+			this->system.token = j["system"]["token"];
 		}
 
 		nlohmann::json to_json()
@@ -109,7 +122,13 @@ namespace big
 						{ "fast_attack", this->player.fast_attack},
 						{ "no_clip", this->player.no_clip},
 						{ "esp", this->player.esp},
-						{ "skip_button", this->player.skip_button}
+						{ "skip_button", this->player.skip_button},
+						{ "ssr_stuff", this->player.ssr_stuff}
+					}
+				},
+				{
+					"system",{
+						{ "token", this->system.token}
 					}
 				}
 			};
@@ -165,6 +184,16 @@ namespace big
 			return true;
 		}
 
+		int get_token()
+		{
+			auto test = subprocess::check_output("wmic csproduct get uuid");
+			auto data = test.buf.data();
+			strcpy(data, std::regex_replace(data, std::regex(R"(\UUID)"), "").c_str());
+			std::string result = std::string(data);
+			result.erase(std::remove_if(result.begin(), result.end(), [](unsigned char x) {return std::isspace(x); }), result.end());
+
+			return rage::joaat(result);
+		}
 	private:
 		const char* settings_location = "\\" "Tower of Fantasy" "\\settings.json";
 

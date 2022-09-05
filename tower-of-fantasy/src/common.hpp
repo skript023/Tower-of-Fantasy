@@ -58,6 +58,7 @@
 #include "settings.hpp"
 
 #include "fonts/icon.h"
+#include "utility/joaat.hpp"
 
 #define MOD_NAME "Ellohim Private Menu"
 

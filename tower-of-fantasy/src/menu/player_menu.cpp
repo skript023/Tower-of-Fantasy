@@ -57,6 +57,18 @@ namespace big
             if (ImGui::Checkbox("No Clip", &g_settings->player.no_clip))
                 movement::no_clip(g_settings->player.no_clip);
 
+            if (ImGui::Checkbox("SSR Stealing", &g_settings->player.ssr_stuff))
+            {
+                if (g_settings->player.ssr_stuff)
+                {
+                    *g_pointers->m_ssr_stuff = 1;//APawn+0xCC8+0x810 APawn->CurrentWeapon->AWeaponBase : AItemActor.CanUseAutoPickUp
+                }
+                else if(!g_settings->player.ssr_stuff)
+                {
+                    *g_pointers->m_ssr_stuff = 2064;
+                }
+            }
+
             ImGui::EndGroup();
 
             if (ImGui::CollapsingHeader("Teleport Option"))
