@@ -1,5 +1,8 @@
 #include "imgui.h"
 #include "player_menu.h"
+#include "script.hpp"
+#include <translation.hpp>
+
 #include "utility/ecryption.h"
 #include "utility/features/all.hpp"
 #include "utility/config/persist_teleport.h"
@@ -16,18 +19,15 @@ namespace big
             ImGui::Text("%s", std::ctime(&date));
 
             ImGui::BeginGroup();
-            if (ImGui::Checkbox("God mode", &g_settings->player.godmode))
+            if (ImGui::Checkbox(BIG_TRANSLATE("Godmode"), &g_settings->player.godmode))
                 defense::godmode(g_settings->player.godmode);
 
-            ImGui::Checkbox("Infinite Jump", &g_settings->player.infinite_jump);
+            ImGui::Checkbox(BIG_TRANSLATE("Infinite Jump"), &g_settings->player.infinite_jump);
 
-            if (ImGui::Checkbox("No Cooldown", &g_settings->player.no_cooldown))
+            if (ImGui::Checkbox(BIG_TRANSLATE("No Cooldown"), &g_settings->player.no_cooldown))
                 attack::remove_cooldown(g_settings->player.no_cooldown);
 
-            ImGui::Checkbox("ESP", &g_settings->player.esp);
-
-            if (ImGui::Checkbox(xorstr("AI Only PVP"), &g_settings->player.bot_pvp))
-                unreal_engine::get_local_player()->server_match_solo_league(g_settings->player.bot_pvp);
+            ImGui::Checkbox(BIG_TRANSLATE("ESP"), &g_settings->player.esp);
 
             ImGui::EndGroup();
 
@@ -53,11 +53,11 @@ namespace big
 
             ImGui::BeginGroup();
 
-            ImGui::Checkbox("Infinite Dodge", &g_settings->player.infinite_dodge);
+            ImGui::Checkbox(BIG_TRANSLATE("Infinite Dodge"), &g_settings->player.infinite_dodge);
 
-            ImGui::Checkbox("Rapid Attack", &g_settings->player.fast_attack);
+            ImGui::Checkbox(BIG_TRANSLATE("Rapid Attack"), &g_settings->player.fast_attack);
 
-            if (ImGui::Checkbox("No Clip", &g_settings->player.no_clip))
+            if (ImGui::Checkbox(BIG_TRANSLATE("No Clip"), &g_settings->player.no_clip))
                 movement::no_clip(g_settings->player.no_clip);
 
             if (ImGui::Checkbox("SSR Stealing", &g_settings->player.ssr_stuff))
@@ -74,26 +74,59 @@ namespace big
 
             ImGui::EndGroup();
 
-            if (ImGui::CollapsingHeader("Teleport Option"))
+            ImGui::BeginGroup();
+            if (ImGui::Button(BIG_TRANSLATE("AI Only PVP"), ImVec2(200, 0)))
+            {
+                unreal_engine::get_local_player()->m_player_controller->m_character->server_match_solo_league(true);
+            }
+
+            if (ImGui::Button(BIG_TRANSLATE("Auto Quest"), ImVec2(200, 0)))
+            {
+                THREAD_POOL_BEGIN()
+                {
+                    if (auto const self = unreal_engine::get_hotta_character(); self)
+                    {
+                        for (auto& quest : self->m_quest_component->quest_in_progress())
+                        {
+                            for (auto& objective : quest.object_progress())
+                            {
+                                self->m_server_quest_update_progress(quest.m_quest_id, objective.m_objective_id, objective.m_needed_amount, true);
+                            }
+
+                        }
+
+                        for (auto& quest : self->m_quest_component->accepted_quest())
+                        {
+                            for (auto& objective : quest.object_progress())
+                            {
+                                self->m_server_quest_update_progress(quest.m_quest_id, objective.m_objective_id, objective.m_needed_amount, true);
+                            }
+                        }
+                    }
+                } THREAD_POOL_END
+            }
+            ImGui::EndGroup();
+
+            if (ImGui::CollapsingHeader(BIG_TRANSLATE("Teleport Option")))
             {
                 auto teleport_locations = persist_teleport::list_locations();
                 static std::string selected_location;
                 static char teleport_name[50]{};
 
                 ImGui::PushItemWidth(200);
-                ImGui::InputText("Location Name", teleport_name, IM_ARRAYSIZE(teleport_name));
+                ImGui::InputText(BIG_TRANSLATE("Location Name"), teleport_name, IM_ARRAYSIZE(teleport_name));
                 ImGui::PopItemWidth();
 
                 ImGui::SameLine();
 
-                if (ImGui::Button("Save Location"))
+                if (ImGui::Button(BIG_TRANSLATE("Save Location")))
                 {
                     persist_teleport::save_location(*movement::get_entity_coords(), teleport_name);
                     ZeroMemory(teleport_name, sizeof(teleport_name));
                 }
 
                 ImGui::PushItemWidth(250);
-                ImGui::Text("Saved Locations");
+                ImGui::Text(BIG_TRANSLATE("Saved Locations"));
                 if (ImGui::ListBoxHeader("##empty", ImVec2(200, 200)))
                 {
                     for (auto pair : teleport_locations)
@@ -108,14 +141,14 @@ namespace big
                 ImGui::SameLine();
                 ImGui::BeginGroup();
 
-                if (ImGui::Button("Load Location"))
+                if (ImGui::Button(BIG_TRANSLATE("Load Location")))
                 {
                     if (!selected_location.empty())
                     {
                         persist_teleport::load_location(selected_location);
                     }
                 }
-                if (ImGui::Button("Delete Location"))
+                if (ImGui::Button(BIG_TRANSLATE("Delete Location")))
                 {
                     if (!selected_location.empty())
                     {

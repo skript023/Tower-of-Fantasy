@@ -11,7 +11,10 @@ namespace big
 
         auto model_attachment = locations[name].get<Vector3>();
 
-        movement::set_entity_coords(model_attachment);
+        if (auto self = unreal_engine::get_hotta_character(); self)
+        {
+            self->teleport_with_loading(model_attachment, Rotator(0, 0, 0));
+        }
     }
 
     void persist_teleport::delete_location(std::string name)

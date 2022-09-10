@@ -8,6 +8,7 @@
 #include "settings.hpp"
 #include "virtual_protect.hpp"
 #include "script_mgr.hpp"
+#include "translation.hpp"
 #include "utility/services/init_services.hpp"
 #include "native_invoker.hpp"
 
@@ -31,6 +32,10 @@ DWORD APIENTRY main_thread(LPVOID)
                                                                           __/ |
                                                                          |___/ 
 )kek");
+		auto translation_instance = std::make_unique<TranslationManager>();
+		g_translation_manager->load_translation("English");
+		g_logger->info("Translation initialized.");
+
 		auto settings_instance = std::make_unique<settings>();
 		g_settings->load();
 		g_logger->info("Settings initialized.");
@@ -97,6 +102,9 @@ DWORD APIENTRY main_thread(LPVOID)
 		g_settings->attempt_save();
 		settings_instance.reset();
 		g_logger->info("Settings saved and uninitialized.");
+
+		translation_instance.reset();
+		g_logger->info("Translation uninitialized.");
 	}
 	catch (std::exception const& ex)
 	{

@@ -13,6 +13,9 @@ namespace big
 {
 	#pragma pack(push, 1)
 
+	/**
+	* \brief class QRSLCharacter
+	*/
 	class Character : public UObject
 	{
 	public:
@@ -21,12 +24,15 @@ namespace big
 			if (!g_native_invoker->m_server_match_solo_league)
 				g_native_invoker->m_server_match_solo_league = g_native_invoker->get_native("Function QRSL.QRSLPlayerCharacter.Server_MatchSoloLeague");
 
-			g_native_invoker->m_server_match_solo_league_params.is_battle_ai = isBattleAI;
+			g_native_invoker->m_server_match_solo_league_params.m_is_battle_ai = isBattleAI;
 
 			process_event(g_native_invoker->m_server_match_solo_league, &g_native_invoker->m_server_match_solo_league_params);
 		}
 	};
 
+	/**
+	* \brief class AHottaCharacter
+	*/
 	class AcknowledgedPawn : public UObject
 	{
 	public:
@@ -34,22 +40,34 @@ namespace big
 		uint8_t no_clip; //0x0064
 		char pad_0065[0x3063]; //0x0065
 		class QuestComponent* m_quest_component; //0x30C8
-
+		char pad_30D0[0x2210]; //0x30D0
+		class AvatarUnlockDataArray* m_avatar_unlock; //0x52E0
 	public:
-		void m_server_quest_update_progress(int QuestID, int ObjectiveID, int progress, bool is_add)
+		void m_server_quest_update_progress(int64_t QuestID, int64_t ObjectiveID, int progress, bool is_add)
 		{
 			if (!g_native_invoker->m_server_quest_update_progress)
 				g_native_invoker->m_server_quest_update_progress = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.ServerQuestUpdateProgress");
 			
-			g_native_invoker->m_server_quest_update_progress_param.quest_id = QuestID;
-			g_native_invoker->m_server_quest_update_progress_param.objective_id = ObjectiveID;
-			g_native_invoker->m_server_quest_update_progress_param.progress = progress;
-			g_native_invoker->m_server_quest_update_progress_param.is_add = is_add;
+			g_native_invoker->m_server_quest_update_progress_param.m_quest_id = QuestID;
+			g_native_invoker->m_server_quest_update_progress_param.m_objective_id = ObjectiveID;
+			g_native_invoker->m_server_quest_update_progress_param.m_progress = progress;
+			g_native_invoker->m_server_quest_update_progress_param.m_is_add = is_add;
 
 			process_event(g_native_invoker->m_server_quest_update_progress, &g_native_invoker->m_server_quest_update_progress_param);
 		}
+
+		void teleport_with_loading(FVector dst, Rotator rot)
+		{
+			if (!g_native_invoker->m_teleport_with_loading)
+				g_native_invoker->m_teleport_with_loading = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.TeleportWithLoading");
+
+			g_native_invoker->m_teleport_with_loading_params.m_location = dst;
+			g_native_invoker->m_teleport_with_loading_params.m_rotator = rot;
+
+			process_event(g_native_invoker->m_teleport_with_loading, &g_native_invoker->m_teleport_with_loading_params);
+		}
 	};
-	static_assert(sizeof(AcknowledgedPawn) == 0x30D0);
+	static_assert(sizeof(AcknowledgedPawn) == 0x52E8);
 
 	class PlayerController : public UObject
 	{
@@ -68,13 +86,13 @@ namespace big
 			if (!g_native_invoker->m_world_to_screen)
 				g_native_invoker->m_world_to_screen = g_native_invoker->get_native("Function Engine.PlayerController.ProjectWorldLocationToScreen");
 			
-			g_native_invoker->m_world_to_screen_param.world_location = WorldLocation;
-			g_native_invoker->m_world_to_screen_param.screen_location = ScreenLocation;
+			g_native_invoker->m_world_to_screen_param.m_world_location = WorldLocation;
+			g_native_invoker->m_world_to_screen_param.m_screen_location = ScreenLocation;
 			g_native_invoker->m_world_to_screen_param.m_viewport_relative = bPlayerViewportRelative;
 
 			process_event(g_native_invoker->m_world_to_screen, &g_native_invoker->m_world_to_screen_param);
 
-			ScreenLocation = g_native_invoker->m_world_to_screen_param.screen_location;
+			ScreenLocation = g_native_invoker->m_world_to_screen_param.m_screen_location;
 			return g_native_invoker->m_world_to_screen_param.m_return;
 		}
 	};

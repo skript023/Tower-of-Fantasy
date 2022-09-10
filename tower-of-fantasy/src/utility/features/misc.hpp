@@ -38,20 +38,10 @@ namespace big::misc
 	{
 		if (activate && unreal_engine::game_state())
 		{
-			auto level_array = (*g_pointers->m_world)->m_level;
-
-			for (int j = 0; j < level_array.count(); j++)
+			for (auto& level_data : (*g_pointers->m_world)->m_level.to_vector())
 			{
-				auto level_data = level_array[j];
-				if (!level_array.valid(j)) continue;
-
-				auto actor_array = level_data->m_actor;
-
-				for (int i = 0; i < actor_array.count(); i++)
+				for (auto& actor : level_data->m_actor.to_vector())
 				{
-					auto actor = actor_array[i];
-					if (!actor_array.valid(i)) continue;
-
 					auto name = actor->get_name();
 
 					if (auto root_component = actor->root_component())

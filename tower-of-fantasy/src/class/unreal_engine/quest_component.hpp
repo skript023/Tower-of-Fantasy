@@ -80,13 +80,13 @@ namespace big
 	class CQuestInProgress
 	{
 	public:
-		int m_quest_id; //0x0000
+		int64_t m_quest_id; //0x0000
 		ObjectiveProgress* m_objective_progress; //0x0008
-		int m_num_objective;
-		int m_max_objective;
+		int m_num_objective; //0x0010
+		int m_max_objective; //0x0014
 		int m_quest_status; //0x0018
 		uint8_t m_need_remove; //0x0019
-		char pad_0020[0x57];
+		char pad_0020[0x53]; //0x0020
 	public:
 		std::vector<CObjectiveProgress> object_progress()
 		{
