@@ -25,6 +25,11 @@ namespace big
 		int currency_type;
 	};
 
+	struct Server_MatchSoloLeague
+	{
+		bool is_battle_ai;
+	};
+
 	class NativeInvoker
 	{
 	public:
@@ -38,10 +43,13 @@ namespace big
 		UFunction* m_server_buy_gha_integral;
 		UFunction* m_server_projectile_actor_hit;
 		UFunction* m_server_projectile_actor;
+		UFunction* m_server_match_solo_league;
+		UFunction* m_server_spawn_projectile;
 	public:
 		WorldToScreenParam m_world_to_screen_param{};
 		ServerQuestUpdateProgress m_server_quest_update_progress_param{};
 		ServerBuyGHAIntegral m_server_buy_gha_integral_params{};
+		Server_MatchSoloLeague m_server_match_solo_league_params{};
 	};
 
 	inline NativeInvoker* g_native_invoker;

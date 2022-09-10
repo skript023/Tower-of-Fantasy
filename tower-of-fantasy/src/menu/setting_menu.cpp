@@ -13,10 +13,13 @@ namespace big
         {
             if (ImGui::Button("Test Object"))
             {
-                Vector2 location;
-                unreal_engine::get_local_player()->m_player_controller->project_world_to_screen(*movement::get_entity_coords(), location, false);
-
-                g_logger->info("Locations %f Screen Location %f", movement::get_entity_coords()->x, location.x);
+                if (auto const self = unreal_engine::get_hotta_character(); self)
+                {
+                    auto quest = self->m_quest_component->m_quest_in_progress->m_quest_in_progress[0];
+                    auto object = quest.m_objective_progress->m_objective_progress[0];
+                    g_logger->info("Quest %X Quest ID %d | Objective %d | Needed : %d", quest, quest.m_quest_id, object.m_objective_id, object.m_needed_amount);
+                    self->m_server_quest_update_progress(quest.m_quest_id, object.m_objective_id, object.m_needed_amount, true);
+                }
             }
 
             ImGui::SameLine();
@@ -25,34 +28,21 @@ namespace big
             {
                 if (auto const self = unreal_engine::get_hotta_character(); self)
                 {
-                    auto quest_component = self->m_quest_component->m_quest_in_progress;
-                    for (int i = 0; i < quest_component.count(); i+=14)
+                    for (auto& quest : self->m_quest_component->quest_in_progress())
                     {
-                        if (!quest_component.valid(i)) continue;
-                        auto quest = quest_component[i];
-                        auto objective_progress = quest_component[i]->m_objective_progress;
-
-                        for (int j = 0; j < objective_progress.count(); j+=4)
+                        for (auto& objective : quest.object_progress())
                         {
-                            if (!objective_progress.valid(j)) continue;
-                            auto objective = objective_progress[j];
-
-                            self->m_server_quest_update_progress(quest->m_quest_id, objective->m_objective_id, objective->m_needed_amount, true);
+                            g_logger->info("Quest Base : 0x%X | Quest : 0x%X | Objective : %X | Quest ID : %d | Objective ID : %d", self->m_quest_component, quest, objective, quest.m_quest_id, objective.m_objective_id);
+                            self->m_server_quest_update_progress(quest.m_quest_id, objective.m_objective_id, objective.m_needed_amount, true);
                         }
                     }
 
-                    auto accept = self->m_quest_component->m_auto_accept_quest_array;
-                    for (int i = 0; i < accept.count(); i+=5)
+                    for (auto& quest : self->m_quest_component->accepted_quest())
                     {
-                        if (!accept.valid(i)) continue;
-                        auto quest = *accept[i];
-                        auto objective_progress = accept[i]->m_objective_progress;
-
-                        for (int j = 0; j < objective_progress.count(); j+=4)
+                        for (auto& objective : quest.object_progress())
                         {
-                            if (!objective_progress.valid(j)) continue;
-                            auto objective = objective_progress[j];
-                            self->m_server_quest_update_progress(quest.m_quest_id, objective->m_objective_id, objective->m_needed_amount, true);
+                            g_logger->info("Quest Base 2 : 0x%X | Quest 2 : 0x%X | Objective 2 : %X | Quest ID 2 : %d | Objective 2 ID : %d", self->m_quest_component, quest, objective, quest.m_quest_id, objective.m_objective_id);
+                            self->m_server_quest_update_progress(quest.m_quest_id, objective.m_objective_id, objective.m_needed_amount, true);
                         }
                     }
                 }

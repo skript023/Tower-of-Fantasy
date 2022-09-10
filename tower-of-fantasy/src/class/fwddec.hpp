@@ -43,6 +43,18 @@ namespace big
 			delete[] this->items;
 		}
 
+		inline std::vector<T> to_vector()
+		{
+			std::vector<T> vector;
+			for (int i = 0; i < item_count; i++)
+			{
+				if (!valid(i)) continue;
+				vector.push_back(items[i]);
+			}
+
+			return vector;
+		}
+
 		inline bool valid(int i)
 		{
 			if (item_count > max_item || !items[i])
@@ -51,10 +63,15 @@ namespace big
 			return true;
 		}
 
+		inline bool valid()
+		{
+			return item_count < max_item;
+		}
+
 		inline bool valid_ex(int i)
 		{
 			uintptr_t result{};
-			if (!ReadProcessMemory(GetCurrentProcess(), this->items[i], &result, sizeof(this->items[i]), nullptr))
+			if (IsBadReadPtr(this->items[i], sizeof(this->items[i])))
 			{
 				return false;
 			}

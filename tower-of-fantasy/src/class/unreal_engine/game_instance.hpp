@@ -13,13 +13,27 @@ namespace big
 {
 	#pragma pack(push, 1)
 
+	class Character : public UObject
+	{
+	public:
+		void server_match_solo_league(bool isBattleAI)
+		{
+			if (!g_native_invoker->m_server_match_solo_league)
+				g_native_invoker->m_server_match_solo_league = g_native_invoker->get_native("Function QRSL.QRSLPlayerCharacter.Server_MatchSoloLeague");
+
+			g_native_invoker->m_server_match_solo_league_params.is_battle_ai = isBattleAI;
+
+			process_event(g_native_invoker->m_server_match_solo_league, &g_native_invoker->m_server_match_solo_league_params);
+		}
+	};
+
 	class AcknowledgedPawn : public UObject
 	{
 	public:
 		char pad0028[0x3C]; //0x0000
 		uint8_t no_clip; //0x0064
 		char pad_0065[0x3063]; //0x0065
-		class QuestComponent* m_quest_component;
+		class QuestComponent* m_quest_component; //0x30C8
 
 	public:
 		void m_server_quest_update_progress(int QuestID, int ObjectiveID, int progress, bool is_add)
@@ -42,7 +56,9 @@ namespace big
 	public:
 		char pad_0028[0x238];
 		class Pawn* m_pawn; //0x260
-		char pad_0268[72]; //0x268
+		char pad_0268[8]; //0x268
+		Character* m_character; //0x270
+		char pad_0278[56]; //0x278
 		class AcknowledgedPawn* m_acknowledge_pawn; //0x2B0
 		char pad_2B8[16]; //0x2B8
 		class PlayerCameraManager* m_camera_manager; //0x2C8
@@ -64,12 +80,13 @@ namespace big
 	};
 	static_assert(sizeof(PlayerController) == 0x2D0);
 
-	class LocalPlayer
+	class LocalPlayer : public UObject
 	{
 	public:
-		char pad_0000[0x30];
+		char pad_0028[8];
 		class PlayerController* m_player_controller;
 	};
+	static_assert(sizeof(LocalPlayer) == 0x38);
 
 	class GameState
 	{

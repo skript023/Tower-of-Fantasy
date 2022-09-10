@@ -26,6 +26,9 @@ namespace big
 
             ImGui::Checkbox("ESP", &g_settings->player.esp);
 
+            if (ImGui::Checkbox(xorstr("AI Only PVP"), &g_settings->player.bot_pvp))
+                unreal_engine::get_local_player()->server_match_solo_league(g_settings->player.bot_pvp);
+
             ImGui::EndGroup();
 
             ImGui::SameLine(200);

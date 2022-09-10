@@ -5,6 +5,8 @@ Strictly for educational purposes.
 ## Features
 * ImGui–based user interface
 * Log console
+* Thread Pool Concept by [Yimura](https://github.com/Yimura)
+* Game Engine Function Access
 
 ## Building
 To build Tower of Fantasy Internal you need:

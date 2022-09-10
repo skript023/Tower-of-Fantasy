@@ -24,7 +24,8 @@ namespace big
 		float m_super_power_deff; //0x1630
 		float m_critical; //0x1634
 		float m_critical_deff; //0x1638
-		char pad_163C[0xC]; //0x163C
+		char pad_163C[0x8]; //0x163C
+		float m_mount_speed; //0x1644
 		float m_health; //0x1648
 		char pad_164C[0x4];
 		float m_energy; //0x1650
