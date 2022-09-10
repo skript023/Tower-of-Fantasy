@@ -95,9 +95,11 @@ namespace big
 		UFunction* m_server_spawn_extra_equiped_weapon;
 		UFunction* m_server_unlock_avatar;
 		UFunction* m_teleport_with_loading;
+		UFunction* m_client_teleport_to;
 		UFunction* m_client_add_tower_energy;
 		UFunction* m_spawn_artifact_arrow;
 		UFunction* m_update_cur_skill_evade_bean_count;
+		UFunction* m_server_reset_treasure_box;
 	public:
 		WorldToScreenParam m_world_to_screen_param{};
 		ServerQuestUpdateProgress m_server_quest_update_progress_param{};
