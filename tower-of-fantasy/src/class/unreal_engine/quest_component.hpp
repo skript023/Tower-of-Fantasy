@@ -8,8 +8,8 @@ namespace big
 	class CAcceptedObjectiveProgress
 	{
 	public:
-		int64_t m_quest_id; //0x0000
-		int64_t m_objective_id; //0x0008
+		FName m_quest_id; //0x0000
+		FName m_objective_id; //0x0008
 		bool m_is_completed; //0x0010
 		bool m_optional; //0x0011
 		int16_t m_is_failed;  //0x0012
@@ -23,8 +23,8 @@ namespace big
 	class CObjectiveProgress
 	{
 	public:
-		int64_t m_quest_id; //0x0000
-		int64_t m_objective_id; //0x0008
+		FName m_quest_id; //0x0000
+		FName m_objective_id; //0x0008
 		bool m_is_completed; //0x0010
 		bool m_optional; //0x0011
 		int16_t m_is_failed;  //0x0012
@@ -51,7 +51,7 @@ namespace big
 	class CAutoAcceptQuestArray
 	{
 	public:
-		int64_t m_quest_id; //0x0000
+		FName m_quest_id; //0x0000
 		int m_time_left; //0x0008
 		bool m_is_not_satisfy; //0x000C
 		bool m_has_accept; //0x000D
@@ -69,7 +69,7 @@ namespace big
 			for (int i = 0; i < m_num_objective; i++)
 			{
 				auto quest = this->m_objective_progress->m_accepted_objective[i];
-				if (!quest.m_quest_id) continue;
+				if (!quest.m_quest_id.m_comparison_index) continue;
 				vector.push_back(quest);
 			}
 			return vector;
@@ -80,7 +80,7 @@ namespace big
 	class CQuestInProgress
 	{
 	public:
-		int64_t m_quest_id; //0x0000
+		FName m_quest_id; //0x0000
 		ObjectiveProgress* m_objective_progress; //0x0008
 		int m_num_objective; //0x0010
 		int m_max_objective; //0x0014
@@ -94,7 +94,7 @@ namespace big
 			for (int i = 0; i < m_num_objective; i++)
 			{
 				auto quest = this->m_objective_progress->m_objective_progress[i];
-				if (!quest.m_quest_id) continue;
+				if (!quest.m_quest_id.m_comparison_index) continue;
 				vector.push_back(quest);
 			}
 			return vector;
@@ -137,7 +137,7 @@ namespace big
 			for (int i = 0; i < m_num_progress; i++)
 			{
 				auto quest = this->m_quest_in_progress->m_quest_in_progress[i];
-				if (!quest.m_quest_id) continue;
+				if (!quest.m_quest_id.m_comparison_index) continue;
 				vector.push_back(quest);
 			}
 			return vector;
@@ -149,7 +149,7 @@ namespace big
 			for (int i = 0; i < m_num_accepted_quest; i++)
 			{
 				auto quest = this->m_auto_accept_quest_array->m_auto_accept_quest[i];
-				if (!quest.m_quest_id) continue;
+				if (!quest.m_quest_id.m_comparison_index) continue;
 				vector.push_back(quest);
 			}
 			return vector;

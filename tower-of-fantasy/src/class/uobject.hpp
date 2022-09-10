@@ -167,6 +167,8 @@ namespace big
 
 		std::string get_fullname() const;
 
+		const char* get_name_ex() const;
+
 		const char* get_fullname_ex() const;
 
 		template<typename T>

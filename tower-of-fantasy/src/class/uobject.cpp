@@ -14,6 +14,11 @@ namespace big
 		return this->m_name.get_name();
     }
 
+	const char* UObject::get_name_ex() const
+	{
+		return this->m_name.get_name().c_str();
+	}
+
     std::string UObject::get_fullname() const
     {
 		std::string name;

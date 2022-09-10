@@ -36,15 +36,23 @@ namespace big::movement
 						}
 					}
 				}
+
+				if (auto self = unreal_engine::get_hotta_character(); self)
+				{
+					self->update_evade_count();
+				}
 			}
 		}
 	}
 
 	inline Vector3* get_entity_coords()
 	{
-		if (auto player_pos = unreal_engine::get_player_pos())
+		if (auto pawn = unreal_engine::get_pawn())
 		{
-			return &player_pos->m_position;
+			if (auto self = pawn->m_capsule_component)
+			{
+				return &self->m_position;
+			}
 		}
 
 		return nullptr;

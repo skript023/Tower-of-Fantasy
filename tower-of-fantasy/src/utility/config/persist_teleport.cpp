@@ -11,14 +11,13 @@ namespace big
             return;
 
         auto model_attachment = locations[name].get<Vector3>();
-
-        if (auto self = unreal_engine::get_hotta_character(); self)
+        THREAD_POOL_BEGIN(model_attachment)
         {
-            THREAD_POOL_BEGIN(=)
+            if (auto self = unreal_engine::get_hotta_character(); self)
             {
-                self->teleport_with_loading(model_attachment, Rotator(0, 0, 0));
-            } THREAD_POOL_END
-        }
+                self->teleport_with_loading(model_attachment, Rotator(1.f, 1.f, 1.f));
+            }
+        } THREAD_POOL_END
     }
 
     void persist_teleport::delete_location(std::string name)

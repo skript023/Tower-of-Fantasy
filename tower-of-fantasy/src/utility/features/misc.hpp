@@ -48,24 +48,30 @@ namespace big::misc
 					{
 						auto pos = root_component->m_relative_location;
 						Vector2 location;
-						if (unreal_engine::get_local_player()->m_player_controller->project_world_to_screen(pos, location))
+						if (auto local_player = unreal_engine::get_local_player())
 						{
-							if (name.find("Scene_Box_Refresh_Wild_") != std::string::npos ||
-								name.find("BP_Harvest_Gem_") != std::string::npos ||
-								name.find("Box_OnlyOnce_") != std::string::npos
-								)
+							if (auto self = local_player->m_player_controller)
 							{
-								auto distance = movement::get_entity_coords()->distance(pos);
-								draw::RGBA red = { 255, 0, 0, 255 };
-								draw::RGBA white = { 255, 255, 255, 255 };
-								draw::RGBA green = { 0, 255, 0, 255 };
-								float width = static_cast<float>(g_pointers->m_screen->x / 2);
-								float height = static_cast<float>(g_pointers->m_screen->y / 2);
+								if (self->project_world_to_screen(pos, location))
+								{
+									if (name.find("Scene_Box_Refresh_Wild_") != std::string::npos ||
+										name.find("BP_Harvest_Gem_") != std::string::npos ||
+										name.find("Box_OnlyOnce_") != std::string::npos
+										)
+									{
+										auto distance = movement::get_entity_coords()->distance(pos);
+										draw::RGBA red = { 255, 0, 0, 255 };
+										draw::RGBA white = { 255, 255, 255, 255 };
+										draw::RGBA green = { 0, 255, 0, 255 };
+										float width = static_cast<float>(g_pointers->m_screen->x / 2);
+										float height = static_cast<float>(g_pointers->m_screen->y / 2);
 
-								draw::draw_line(width, 0, location.x, location.y, &red, 1.f);
-								draw::draw_stroke_text(location.x, location.y, &white, std::format("{} [{:.2f}]m", name, distance).c_str());
+										draw::draw_line(width, 0, location.x, location.y, &red, 1.f);
+										draw::draw_stroke_text(location.x, location.y, &white, std::format("{} [{:.2f}]m", name, distance).c_str());
 
-								if (distance < 100.f) draw::draw_corner_box(location.x, location.y, 100.f, 50.f, 2.f, &green);
+										if (distance < 100.f) draw::draw_corner_box(location.x, location.y, 100.f, 50.f, 2.f, &green);
+									}
+								}
 							}
 						}
 					}

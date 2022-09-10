@@ -43,7 +43,7 @@ namespace big
 		char pad_30D0[0x2210]; //0x30D0
 		class AvatarUnlockDataArray* m_avatar_unlock; //0x52E0
 	public:
-		void server_quest_update_progress(int64_t QuestID, int64_t ObjectiveID, int progress, bool is_add)
+		void server_quest_update_progress(FName QuestID, FName ObjectiveID, int progress, bool is_add)
 		{
 			if (!g_native_invoker->m_server_quest_update_progress)
 				g_native_invoker->m_server_quest_update_progress = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.ServerQuestUpdateProgress");
@@ -64,6 +64,15 @@ namespace big
 			g_native_invoker->m_teleport_with_loading_params.m_rotator = rot;
 
 			process_event(teleport, &g_native_invoker->m_teleport_with_loading_params);
+		}
+
+		void update_evade_count()
+		{
+			auto self = g_native_invoker;
+			if (!self->m_update_cur_skill_evade_bean_count)
+				self->m_update_cur_skill_evade_bean_count = self->get_native("Function HottaFramework.HottaPlayerCharacter.UpdateCurSkillEvadeBeanCount");
+
+			process_event(self->m_update_cur_skill_evade_bean_count, nullptr);
 		}
 	};
 	static_assert(sizeof(AcknowledgedPawn) == 0x52E8);

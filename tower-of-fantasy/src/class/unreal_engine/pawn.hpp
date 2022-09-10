@@ -4,6 +4,12 @@
 namespace big
 {
 	#pragma pack(push, 1)
+	class CapsuleComponent
+	{
+	public:
+		char pad_0000[0x1E0];
+		Vector3 m_position;//0x1E0
+	};
 
 	class Pawn
 	{
@@ -12,7 +18,8 @@ namespace big
 		uint8_t m_godmode; //0x0061
 		char pad_0062[0x236]; //0x0062
 		class CharacterMovement* m_chara_movement; //0x0298
-		char pad_02A0[0xA0]; //0x02A0
+		class CapsuleComponent* m_capsule_component; //0x02A0
+		char pad_02A8[0x98]; //0x02A8
 		bool m_is_crouch; //0x0340
 		char pad_0341[0x17]; //0x0341
 		int m_jump_count; //0x0358

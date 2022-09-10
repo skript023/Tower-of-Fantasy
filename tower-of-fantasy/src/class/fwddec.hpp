@@ -46,10 +46,13 @@ namespace big
 		inline std::vector<T> to_vector()
 		{
 			std::vector<T> vector;
-			for (int i = 0; i < item_count; i++)
+			if (vector.empty() || vector.size() != item_count)
 			{
-				if (!valid(i)) continue;
-				vector.push_back(items[i]);
+				for (int i = 0; i < item_count; i++)
+				{
+					if (!valid(i)) continue;
+					vector.push_back(items[i]);
+				}
 			}
 
 			return vector;

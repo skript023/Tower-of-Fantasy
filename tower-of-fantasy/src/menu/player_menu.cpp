@@ -75,7 +75,7 @@ namespace big
             ImGui::EndGroup();
 
             ImGui::BeginGroup();
-            if (ImGui::Button(BIG_TRANSLATE("AI Only PVP"), ImVec2(200, 0)))
+            if (ImGui::Button(BIG_TRANSLATE("AI Only PVP"), ImVec2(120, 0)))
             {
                 unreal_engine::get_local_player()->m_player_controller->m_character->server_match_solo_league(true);
             }
@@ -86,30 +86,30 @@ namespace big
 
             ImGui::BeginGroup();
 
-            if (ImGui::Button(BIG_TRANSLATE("Auto Quest"), ImVec2(200, 0)))
+            if (ImGui::Button(BIG_TRANSLATE("Auto Quest"), ImVec2(120, 0)))
             {
                 g_thread_pool->push([]
+                {
+                    if (auto const self = unreal_engine::get_hotta_character(); self)
                     {
-                        if (auto const self = unreal_engine::get_hotta_character(); self)
+                        for (auto& quest : self->m_quest_component->quest_in_progress())
                         {
-                            for (auto& quest : self->m_quest_component->quest_in_progress())
+                            for (auto& objective : quest.object_progress())
                             {
-                                for (auto& objective : quest.object_progress())
-                                {
-                                    self->server_quest_update_progress(quest.m_quest_id, objective.m_objective_id, objective.m_needed_amount, true);
-                                }
-
+                                self->server_quest_update_progress(quest.m_quest_id, objective.m_objective_id, objective.m_needed_amount, true);
                             }
 
-                            for (auto& quest : self->m_quest_component->accepted_quest())
+                        }
+
+                        for (auto& quest : self->m_quest_component->accepted_quest())
+                        {
+                            for (auto& objective : quest.object_progress())
                             {
-                                for (auto& objective : quest.object_progress())
-                                {
-                                    self->server_quest_update_progress(quest.m_quest_id, objective.m_objective_id, objective.m_needed_amount, true);
-                                }
+                                self->server_quest_update_progress(quest.m_quest_id, objective.m_objective_id, objective.m_needed_amount, true);
                             }
                         }
-                    });
+                    }
+                });
             }
             
             ImGui::EndGroup();
@@ -118,8 +118,18 @@ namespace big
 
             ImGui::BeginGroup();
 
-            if (ImGui::Button(BIG_TRANSLATE("Auto 100% Exploration"), ImVec2(200, 0)))
+            if (ImGui::Button(BIG_TRANSLATE("Spawn Projectile"), ImVec2(120, 0)))
             {
+                THREAD_POOL_BEGIN()
+                {
+                    if (auto pawn = unreal_engine::get_pawn(); pawn)
+                    {
+                        if (auto self = pawn->m_skill_component; self)
+                        {
+                            self->spawn_artifac_arrow(100.f);
+                        }
+                    }
+                } THREAD_POOL_END
             }
 
             ImGui::EndGroup();

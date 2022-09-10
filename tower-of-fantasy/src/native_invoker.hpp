@@ -1,6 +1,7 @@
 #pragma once
 #include "class/fwddec.hpp"
 #include "class/vector.hpp"
+#include "class/fname_pool.hpp"
 
 namespace big
 {
@@ -14,8 +15,8 @@ namespace big
 
 	struct ServerQuestUpdateProgress
 	{
-		int64_t m_quest_id;
-		int64_t m_objective_id;
+		FName m_quest_id;
+		FName m_objective_id;
 		int m_progress;
 		bool m_is_add;
 	};
@@ -54,6 +55,24 @@ namespace big
 		Rotator m_rotator;
 	};
 
+	struct SpawnArtifactArrow
+	{
+		float m_duration_time;
+	};
+
+	struct ClientSetTreasureOpened
+	{
+		FName m_treasure_box_id;
+		bool m_static;
+		int64_t m_open_time;
+	};
+	
+	struct ServerResetTreasureBox
+	{
+		FName m_treasure_box_id;
+		bool m_static;
+	};
+
 	class NativeInvoker
 	{
 	public:
@@ -61,6 +80,7 @@ namespace big
 		~NativeInvoker();
 
 		UFunction* get_native(std::string name);
+		UFunction* get_native_ex(const char* name);
 	public:
 		UFunction* m_world_to_screen;
 		UFunction* m_server_quest_update_progress;
@@ -76,12 +96,17 @@ namespace big
 		UFunction* m_server_unlock_avatar;
 		UFunction* m_teleport_with_loading;
 		UFunction* m_client_add_tower_energy;
+		UFunction* m_spawn_artifact_arrow;
+		UFunction* m_update_cur_skill_evade_bean_count;
 	public:
 		WorldToScreenParam m_world_to_screen_param{};
 		ServerQuestUpdateProgress m_server_quest_update_progress_param{};
 		ServerBuyGHAIntegral m_server_buy_gha_integral_params{};
 		Server_MatchSoloLeague m_server_match_solo_league_params{};
 		TeleportWithLoading m_teleport_with_loading_params{};
+		SpawnArtifactArrow m_spawn_artifact_arrow_params{};
+		ClientSetTreasureOpened m_client_set_treasure_opened_params{};
+		ServerResetTreasureBox m_server_reset_treasure_box_params{};
 	};
 
 	inline NativeInvoker* g_native_invoker;

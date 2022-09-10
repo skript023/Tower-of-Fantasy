@@ -1,14 +1,15 @@
 #pragma once
 #include "../fwddec.hpp"
+#include "native_invoker.hpp"
 
 namespace big
 {
 	#pragma pack(push, 1)
 
-	class SkillComponent
+	class SkillComponent : public UObject
 	{
 	public:
-		char pad_0000[0x1600];
+		char pad_0028[0x15D8];
 		int m_weapon_type; //0x1600
 		float m_max_health; //0x1604
 		float m_max_energy; //0x1608
@@ -38,6 +39,17 @@ namespace big
 		float m_energy_recovery; //0x166C
 		char pad_1670[0x40]; //0x1670
 		float m_critical_rate; //0x16B0
+
+	public:
+		void spawn_artifac_arrow(float duration)
+		{
+			if (!g_native_invoker->m_spawn_artifact_arrow)
+				g_native_invoker->m_spawn_artifact_arrow = g_native_invoker->get_native("Function HottaFramework.HottaSkillSystemComponent.SpawnArtifactArrow");
+
+			g_native_invoker->m_spawn_artifact_arrow_params.m_duration_time = duration;
+
+			process_event(g_native_invoker->m_spawn_artifact_arrow, &g_native_invoker->m_spawn_artifact_arrow_params);
+		}
 	};
 	static_assert(sizeof(SkillComponent) == 0x16B4);
 

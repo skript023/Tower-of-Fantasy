@@ -17,7 +17,9 @@ namespace big
 		m_server_spawn_extra_equiped_weapon(get_native("Function HottaFramework.HottaPlayerCharacter.ServerSpawnExtraEquipedWeapon")),
 		m_server_unlock_avatar(get_native("Function HottaFramework.HottaPlayerCharacter.ServerUnlockAvatar")),
 		m_teleport_with_loading(get_native("Function HottaFramework.HottaPlayerCharacter.TeleportWithLoading")),
-		m_client_add_tower_energy(get_native("Function HottaFramework.HottaPlayerCharacter.ClientAddTowerEnergy"))
+		m_client_add_tower_energy(get_native("Function HottaFramework.HottaPlayerCharacter.ClientAddTowerEnergy")),
+		m_spawn_artifact_arrow(get_native("Function HottaFramework.HottaSkillSystemComponent.SpawnArtifactArrow")),
+		m_update_cur_skill_evade_bean_count(get_native("Function HottaFramework.HottaPlayerCharacter.UpdateCurSkillEvadeBeanCount"))
 	{
 		g_native_invoker = this;
 	}
@@ -36,4 +38,12 @@ namespace big
 		return nullptr;
 	}
 
+	UFunction* NativeInvoker::get_native_ex(const char* name)
+	{
+		if (auto function = UObject::find_object<UFunction*>(std::string(name)); function)
+		{
+			return function;
+		}
+		return nullptr;
+	}
 }
