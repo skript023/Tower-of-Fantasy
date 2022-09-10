@@ -80,31 +80,48 @@ namespace big
                 unreal_engine::get_local_player()->m_player_controller->m_character->server_match_solo_league(true);
             }
 
+            ImGui::EndGroup();
+
+            ImGui::SameLine();
+
+            ImGui::BeginGroup();
+
             if (ImGui::Button(BIG_TRANSLATE("Auto Quest"), ImVec2(200, 0)))
             {
-                THREAD_POOL_BEGIN()
-                {
-                    if (auto const self = unreal_engine::get_hotta_character(); self)
+                g_thread_pool->push([]
                     {
-                        for (auto& quest : self->m_quest_component->quest_in_progress())
+                        if (auto const self = unreal_engine::get_hotta_character(); self)
                         {
-                            for (auto& objective : quest.object_progress())
+                            for (auto& quest : self->m_quest_component->quest_in_progress())
                             {
-                                self->m_server_quest_update_progress(quest.m_quest_id, objective.m_objective_id, objective.m_needed_amount, true);
+                                for (auto& objective : quest.object_progress())
+                                {
+                                    self->server_quest_update_progress(quest.m_quest_id, objective.m_objective_id, objective.m_needed_amount, true);
+                                }
+
                             }
 
-                        }
-
-                        for (auto& quest : self->m_quest_component->accepted_quest())
-                        {
-                            for (auto& objective : quest.object_progress())
+                            for (auto& quest : self->m_quest_component->accepted_quest())
                             {
-                                self->m_server_quest_update_progress(quest.m_quest_id, objective.m_objective_id, objective.m_needed_amount, true);
+                                for (auto& objective : quest.object_progress())
+                                {
+                                    self->server_quest_update_progress(quest.m_quest_id, objective.m_objective_id, objective.m_needed_amount, true);
+                                }
                             }
                         }
-                    }
-                } THREAD_POOL_END
+                    });
             }
+            
+            ImGui::EndGroup();
+
+            ImGui::SameLine();
+
+            ImGui::BeginGroup();
+
+            if (ImGui::Button(BIG_TRANSLATE("Auto 100% Exploration"), ImVec2(200, 0)))
+            {
+            }
+
             ImGui::EndGroup();
 
             if (ImGui::CollapsingHeader(BIG_TRANSLATE("Teleport Option")))

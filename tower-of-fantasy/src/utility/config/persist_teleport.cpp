@@ -1,4 +1,5 @@
 #include "persist_teleport.h"
+#include "script.hpp"
 #include "utility/features/all.hpp"
 
 namespace big
@@ -13,7 +14,10 @@ namespace big
 
         if (auto self = unreal_engine::get_hotta_character(); self)
         {
-            self->teleport_with_loading(model_attachment, Rotator(0, 0, 0));
+            THREAD_POOL_BEGIN(=)
+            {
+                self->teleport_with_loading(model_attachment, Rotator(0, 0, 0));
+            } THREAD_POOL_END
         }
     }
 

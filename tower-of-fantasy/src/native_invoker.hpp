@@ -75,6 +75,7 @@ namespace big
 		UFunction* m_server_spawn_extra_equiped_weapon;
 		UFunction* m_server_unlock_avatar;
 		UFunction* m_teleport_with_loading;
+		UFunction* m_client_add_tower_energy;
 	public:
 		WorldToScreenParam m_world_to_screen_param{};
 		ServerQuestUpdateProgress m_server_quest_update_progress_param{};

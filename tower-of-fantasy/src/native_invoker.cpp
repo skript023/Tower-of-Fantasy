@@ -16,7 +16,8 @@ namespace big
 		m_server_pay_transfer_server_req(get_native("Function QRSL.QRSLPlayerCharacter.Server_PayTransferServerReq")),
 		m_server_spawn_extra_equiped_weapon(get_native("Function HottaFramework.HottaPlayerCharacter.ServerSpawnExtraEquipedWeapon")),
 		m_server_unlock_avatar(get_native("Function HottaFramework.HottaPlayerCharacter.ServerUnlockAvatar")),
-		m_teleport_with_loading(get_native("Function HottaFramework.HottaPlayerCharacter.TeleportWithLoading"))
+		m_teleport_with_loading(get_native("Function HottaFramework.HottaPlayerCharacter.TeleportWithLoading")),
+		m_client_add_tower_energy(get_native("Function HottaFramework.HottaPlayerCharacter.ClientAddTowerEnergy"))
 	{
 		g_native_invoker = this;
 	}

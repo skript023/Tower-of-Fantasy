@@ -43,7 +43,7 @@ namespace big
 		char pad_30D0[0x2210]; //0x30D0
 		class AvatarUnlockDataArray* m_avatar_unlock; //0x52E0
 	public:
-		void m_server_quest_update_progress(int64_t QuestID, int64_t ObjectiveID, int progress, bool is_add)
+		void server_quest_update_progress(int64_t QuestID, int64_t ObjectiveID, int progress, bool is_add)
 		{
 			if (!g_native_invoker->m_server_quest_update_progress)
 				g_native_invoker->m_server_quest_update_progress = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.ServerQuestUpdateProgress");
@@ -58,13 +58,12 @@ namespace big
 
 		void teleport_with_loading(FVector dst, Rotator rot)
 		{
-			if (!g_native_invoker->m_teleport_with_loading)
-				g_native_invoker->m_teleport_with_loading = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.TeleportWithLoading");
+			static auto teleport = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.TeleportWithLoading");
 
 			g_native_invoker->m_teleport_with_loading_params.m_location = dst;
 			g_native_invoker->m_teleport_with_loading_params.m_rotator = rot;
 
-			process_event(g_native_invoker->m_teleport_with_loading, &g_native_invoker->m_teleport_with_loading_params);
+			process_event(teleport, &g_native_invoker->m_teleport_with_loading_params);
 		}
 	};
 	static_assert(sizeof(AcknowledgedPawn) == 0x52E8);

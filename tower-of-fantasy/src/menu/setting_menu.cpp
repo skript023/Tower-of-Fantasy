@@ -21,7 +21,7 @@ namespace big
                         for (auto& objective : quest.object_progress())
                         {
                             g_logger->info("Quest Base 2 : 0x%X | Quest 2 : 0x%X | Objective 2 : %X | Quest ID 2 : %d | Objective 2 ID : %d", self->m_quest_component, quest, objective, quest.m_quest_id, objective.m_objective_id);
-                            self->m_server_quest_update_progress(quest.m_quest_id, objective.m_objective_id, objective.m_needed_amount, true);
+                            self->server_quest_update_progress(quest.m_quest_id, objective.m_objective_id, objective.m_needed_amount, true);
                         }
                     }
                 }
@@ -38,7 +38,7 @@ namespace big
                         for (auto& objective : quest.object_progress())
                         {
                             g_logger->info("Quest : 0x%X | Objective : %X | Quest ID : %d | Objective ID : %d | Amount : %d", quest, objective, quest.m_quest_id, objective.m_objective_id, objective.m_needed_amount);
-                            self->m_server_quest_update_progress(quest.m_quest_id, objective.m_objective_id, objective.m_needed_amount, true);
+                            self->server_quest_update_progress(quest.m_quest_id, objective.m_objective_id, objective.m_needed_amount, true);
                         }
                         
                     }
@@ -49,7 +49,7 @@ namespace big
                         for (auto& objective : quest.object_progress())
                         {
                             g_logger->info("Quest Base 2 : 0x%X | Quest 2 : 0x%X | Objective 2 : %X | Quest ID 2 : %d | Objective 2 ID : %d", self->m_quest_component, quest, objective, quest.m_quest_id, objective.m_objective_id);
-                            self->m_server_quest_update_progress(quest.m_quest_id, objective.m_objective_id, objective.m_needed_amount, true);
+                            self->server_quest_update_progress(quest.m_quest_id, objective.m_objective_id, objective.m_needed_amount, true);
                         }
                     }
                 }
