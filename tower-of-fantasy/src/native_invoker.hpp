@@ -79,6 +79,13 @@ namespace big
 		bool m_return_value;
 	};
 
+	struct ServerRecordAbnormalJumpSectionData
+	{
+		std::string m_collect_info;
+		std::string m_comment2;
+		uint8_t m_anti_type;
+	};
+
 	class NativeInvoker
 	{
 	public:
@@ -102,6 +109,7 @@ namespace big
 		UFunction* m_server_unlock_avatar;
 		UFunction* m_teleport_with_loading;
 		UFunction* m_server_teleport_with_loading;
+		UFunction* m_server_teleport_to;
 		UFunction* m_client_teleport_to;
 		UFunction* m_client_teleport_with_loading;
 		UFunction* m_client_add_tower_energy;

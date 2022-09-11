@@ -77,6 +77,17 @@ namespace big
 			process_event(g_native_invoker->m_server_teleport_with_loading, &g_native_invoker->m_teleport_with_loading_params);
 		}
 
+		void server_teleport_to(FVector dst, Rotator rot)
+		{
+			if (!g_native_invoker->m_server_teleport_to)
+				g_native_invoker->m_server_teleport_to = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.ServerTeleportTo");
+
+			g_native_invoker->m_teleport_with_loading_params.m_location = dst;
+			g_native_invoker->m_teleport_with_loading_params.m_rotator = rot;
+
+			process_event(g_native_invoker->m_server_teleport_to, &g_native_invoker->m_teleport_with_loading_params);
+		}
+
 		void client_teleport_to(FVector dst, Rotator rot)
 		{
 			if (!g_native_invoker->m_client_teleport_to)

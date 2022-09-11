@@ -18,6 +18,7 @@ namespace big
 		m_server_unlock_avatar(get_native("Function HottaFramework.HottaPlayerCharacter.ServerUnlockAvatar")),
 		m_teleport_with_loading(get_native("Function HottaFramework.HottaPlayerCharacter.TeleportWithLoading")),
 		m_server_teleport_with_loading(get_native("Function HottaFramework.HottaPlayerCharacter.ServerTeleportWithLoading")),
+		m_server_teleport_to(get_native("Function HottaFramework.HottaPlayerCharacter.ServerTeleportTo")),
 		m_client_teleport_to(get_native("Function HottaFramework.HottaPlayerCharacter.ClientTeleportTo")),
 		m_client_teleport_with_loading(get_native("Function HottaFramework.HottaPlayerCharacter.ClientTeleportWithLoading")),
 		m_client_add_tower_energy(get_native("Function HottaFramework.HottaPlayerCharacter.ClientAddTowerEnergy")),

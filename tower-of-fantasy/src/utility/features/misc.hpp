@@ -65,7 +65,7 @@ namespace big::misc
 								{
 									if (name.find("Scene_Box_Refresh_Wild_") != std::string::npos ||
 										name.find("BP_Harvest_Gem_") != std::string::npos ||
-										name.find("Box_OnlyOnce_") != std::string::npos
+										name.find("Scene_Box_OnceOnly_") != std::string::npos
 										)
 									{
 										auto distance = movement::get_entity_coords()->distance(pos);

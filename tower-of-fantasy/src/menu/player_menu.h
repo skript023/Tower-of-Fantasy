@@ -11,3 +11,13 @@ namespace big
 		static inline float m_exp_multiplier{};
 	};
 }
+/*
+if (g_settings->player.ssr_stuff)
+{
+	*g_pointers->m_ssr_stuff = 1;//APawn+0xCC8+0x810 APawn->CurrentWeapon->AWeaponBase : AItemActor.CanUseAutoPickUp
+}
+else if(!g_settings->player.ssr_stuff)
+{
+	*g_pointers->m_ssr_stuff = 2064;
+}
+*/

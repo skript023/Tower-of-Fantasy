@@ -45,8 +45,10 @@ namespace big
             if (ImGui::Checkbox("Freeze Mobs", &g_settings->player.freeze_mobs))
                 movement::freeze_mobs(g_settings->player.freeze_mobs);
 
-            if (ImGui::Checkbox("Skip Button", &g_settings->player.skip_button))
-                misc::skip_button(g_settings->player.skip_button);
+            ImGui::Checkbox(BIG_TRANSLATE("Rapid Shoot"), &g_settings->player.rapid_shoot);
+
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip(xorstr("For Projectile Weapon Only"));
 
             ImGui::EndGroup();
 
@@ -61,17 +63,7 @@ namespace big
             if (ImGui::Checkbox(BIG_TRANSLATE("No Clip"), &g_settings->player.no_clip))
                 movement::no_clip(g_settings->player.no_clip);
 
-            if (ImGui::Checkbox("SSR Stealing", &g_settings->player.ssr_stuff))
-            {
-                if (g_settings->player.ssr_stuff)
-                {
-                    *g_pointers->m_ssr_stuff = 1;//APawn+0xCC8+0x810 APawn->CurrentWeapon->AWeaponBase : AItemActor.CanUseAutoPickUp
-                }
-                else if(!g_settings->player.ssr_stuff)
-                {
-                    *g_pointers->m_ssr_stuff = 2064;
-                }
-            }
+            ImGui::Checkbox(BIG_TRANSLATE("Reset Box"), &g_settings->player.reset_box);
 
             ImGui::EndGroup();
 
@@ -141,7 +133,39 @@ namespace big
                 auto teleport_locations = persist_teleport::list_locations();
                 static std::string selected_location;
                 static char teleport_name[50]{};
-                ImGui::Text(std::format("Coordinates -> X : {:.2f} Y : {:.2f} Z : {:.2f}", movement::get_entity_coords()->x, movement::get_entity_coords()->y, movement::get_entity_coords()->z).c_str());
+                if (unreal_engine::game_state() && movement::get_entity_coords())
+                {
+                    ImGui::Text(std::format("Coordinates -> X : {:.2f} Y : {:.2f} Z : {:.2f}", movement::get_entity_coords()->x, movement::get_entity_coords()->y, movement::get_entity_coords()->z).c_str());
+                }
+
+                if (ImGui::Button(BIG_TRANSLATE("Teleport to Supply Pod"), ImVec2(160, 0)))
+                {
+                    g_thread_pool->push([]
+                    {
+                        for (auto level : (*g_pointers->m_world)->m_level.to_vector())
+                        {
+                            for (auto actor : level->m_actor.to_vector())
+                            {
+                                auto name = actor->get_name();
+
+                                if (name.find("Scene_Box_OnceOnly_") != std::string::npos)
+                                {
+                                    if (auto root_component = actor->root_component())
+                                    {
+                                        auto pos = root_component->m_relative_location;
+                                        auto distance = movement::get_entity_coords()->distance(pos);
+                                        if (distance < 650.f)
+                                        {
+                                            movement::set_entity_coords(pos);
+                                            g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near supply pods"));
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
 
                 ImGui::PushItemWidth(200);
                 ImGui::InputText(BIG_TRANSLATE("Location Name"), teleport_name, IM_ARRAYSIZE(teleport_name));

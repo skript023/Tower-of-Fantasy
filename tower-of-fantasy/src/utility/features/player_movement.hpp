@@ -1,5 +1,6 @@
 #pragma once
 #include "../unreal_engine_utility.hpp"
+#include "script.hpp"
 
 namespace big::movement
 {
@@ -33,13 +34,12 @@ namespace big::movement
 							pawn->m_rand_bean = 6001;
 							pawn->m_cur_bean_count = 6641;
 							pawn->m_change_time = 637963816908830000;
+							if (auto self = unreal_engine::get_hotta_character(); self)
+							{
+								self->update_evade_count();
+							}
 						}
 					}
-				}
-
-				if (auto self = unreal_engine::get_hotta_character(); self)
-				{
-					self->update_evade_count();
 				}
 			}
 		}
@@ -60,12 +60,13 @@ namespace big::movement
 
 	inline void set_entity_coords(Vector3 coords)
 	{
-		if (auto player_pos = unreal_engine::get_player_pos())
+		TRY_CLAUSE
 		{
-			player_pos->m_position.x = coords.x;
-			player_pos->m_position.y = coords.y;
-			player_pos->m_position.z = coords.z;
-		}
+			if (auto self = unreal_engine::get_hotta_character(); self)
+			{
+				self->server_teleport_to(coords, Rotator(0.f, 0.f, 0.f));
+			}
+		} EXCEPT_CLAUSE
 	}
 
 	inline float* player_movement_speed()

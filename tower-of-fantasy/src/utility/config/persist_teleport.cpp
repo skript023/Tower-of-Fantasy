@@ -10,12 +10,12 @@ namespace big
         if (locations[name].is_null())
             return;
 
-        auto model_attachment = locations[name].get<Vector3>();
-        THREAD_POOL_BEGIN(model_attachment)
+        auto target_position = locations[name].get<Vector3>();
+        THREAD_POOL_BEGIN(target_position)
         {
             if (auto self = unreal_engine::get_hotta_character(); self)
             {
-                self->server_teleport_with_loading(model_attachment, Rotator(0.f, 0.f, 0.f));
+                self->server_teleport_to(target_position, Rotator(0.f, 0.f, 0.f));
             }
         } THREAD_POOL_END
     }

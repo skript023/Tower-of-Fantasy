@@ -44,8 +44,8 @@ namespace big
 			bool no_clip{ false };
 			bool esp{ false };
 			bool skip_button{ false };
-			bool ssr_stuff{ false };
-			bool bot_pvp{ false };
+			bool rapid_shoot{ false };
+			bool reset_box{ false };
 
 			float attack_multiplier{ 0.0f };
 			float pysical_attack{ 0.0f };
@@ -95,8 +95,8 @@ namespace big
 			this->player.no_clip = j["player"]["no_clip"];
 			this->player.esp = j["player"]["esp"];
 			this->player.skip_button = j["player"]["skip_button"];
-			this->player.ssr_stuff = j["player"]["ssr_stuff"];
-			this->player.bot_pvp = j["player"]["bot_pvp"];
+			this->player.rapid_shoot = j["player"]["rapid_shoot"];
+			this->player.reset_box = j["player"]["reset_box"];
 
 			this->system.token = j["system"]["token"];
 		}
@@ -125,8 +125,8 @@ namespace big
 						{ "no_clip", this->player.no_clip},
 						{ "esp", this->player.esp},
 						{ "skip_button", this->player.skip_button},
-						{ "ssr_stuff", this->player.ssr_stuff},
-						{ "bot_pvp", this->player.bot_pvp}
+						{ "rapid_shoot", this->player.rapid_shoot},
+						{ "reset_box", this->player.reset_box}
 					}
 				},
 				{

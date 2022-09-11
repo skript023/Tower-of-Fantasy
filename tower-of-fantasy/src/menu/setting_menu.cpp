@@ -11,18 +11,13 @@ namespace big
     {
         if (ImGui::BeginTabItem("Setting"))
         {
-            if (ImGui::Button("Test Object"))
+            if (ImGui::Button("Get Entity List Name"))
             {
-                if (auto const self = unreal_engine::get_hotta_character(); self)
+                for (auto level : (*g_pointers->m_world)->m_level.to_vector())
                 {
-                    for (auto& quest : self->m_quest_component->accepted_quest())
+                    for (auto actor : level->m_actor.to_vector())
                     {
-                        g_logger->info("Quest Base : 0x%X | Quest : 0x%X | Quest ID : %d", self->m_quest_component, quest, quest.m_quest_id);
-                        for (auto& objective : quest.object_progress())
-                        {
-                            g_logger->info("Quest Base 2 : 0x%X | Quest 2 : 0x%X | Objective 2 : %X | Quest ID 2 : %d | Objective 2 ID : %d", self->m_quest_component, quest, objective, quest.m_quest_id, objective.m_objective_id);
-                            self->server_quest_update_progress(quest.m_quest_id, objective.m_objective_id, objective.m_needed_amount, true);
-                        }
+                        g_logger->info(actor->get_fullname().c_str());
                     }
                 }
             }

@@ -9,7 +9,57 @@ enum EFindName
 
 enum EHottaCurrencyType
 {
-
+	Gold,
+	FakeDiamond,
+	Diamond,
+	AchievementScore,
+	WormholeCoin,
+	Gem,
+	GuildContribution,
+	ArtifactCoin,
+	EquipFragment,
+	WormholeLuckyCoin,
+	SoloLeagueCoin,
+	Gem2,
+	Gem3,
+	LocalReputation1,
+	LocalReputation2,
+	LocalReputation3,
+	LocalReputation4,
+	LocalReputation5,
+	HookCloneAssistContribution,
+	Stamina,
+	PrimaryEnergy,
+	WeaponFragment,
+	GenePointAttack,
+	GuildCaption,
+	PrimaryEnergy2,
+	GuildMeritorious,
+	LifeCrystal,
+	HomeOre,
+	HomePumpkin,
+	HomeRattan,
+	HomeMeat,
+	HomeTwings,
+	HomeFish,
+	HomeFishBone,
+	HomeShellfish,
+	HomeShell,
+	GenePointAssist,
+	GenePointDef,
+	RegressionCoin,
+	PrimaryEnergy3,
+	PrimaryEnergy4,
+	MiniGameCoin,
+	HopkinsOrder1,
+	SharePhotoCoin,
+	WeaponFragmentUP1,
+	WeaponFramentUP2,
+	EquipFragmentUP1,
+	EquipFragmentUP2,
+	HopkinsOrder2,
+	IncarnationCoin,
+	WeaponFragmentUP3
 };
 
 enum ECharacterProficiencyType
@@ -65,6 +115,23 @@ enum ETowerExploreType
 	ETE_Type_Crazy,
 	ETE_Type_Unknown,
 	ETE_Type_MAX
+};
+
+enum class EAntiplugCode
+{
+	Unkown,
+	MontagePlayRate,
+	TickDeltaTime,
+	SkillFollow,
+	EvadeBean,
+	CheckSpeed,
+	CheckLocation,
+	GamePlayEvent,
+	JumpSection,
+	SendAttackTargetSpeed,
+	GamePlayEventCount,
+	SpawnActorRPC,
+	Max
 };
 
 struct HottaAwardProgressData
