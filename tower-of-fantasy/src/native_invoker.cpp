@@ -17,11 +17,14 @@ namespace big
 		m_server_spawn_extra_equiped_weapon(get_native("Function HottaFramework.HottaPlayerCharacter.ServerSpawnExtraEquipedWeapon")),
 		m_server_unlock_avatar(get_native("Function HottaFramework.HottaPlayerCharacter.ServerUnlockAvatar")),
 		m_teleport_with_loading(get_native("Function HottaFramework.HottaPlayerCharacter.TeleportWithLoading")),
+		m_server_teleport_with_loading(get_native("Function HottaFramework.HottaPlayerCharacter.ServerTeleportWithLoading")),
 		m_client_teleport_to(get_native("Function HottaFramework.HottaPlayerCharacter.ClientTeleportTo")),
+		m_client_teleport_with_loading(get_native("Function HottaFramework.HottaPlayerCharacter.ClientTeleportWithLoading")),
 		m_client_add_tower_energy(get_native("Function HottaFramework.HottaPlayerCharacter.ClientAddTowerEnergy")),
 		m_spawn_artifact_arrow(get_native("Function HottaFramework.HottaSkillSystemComponent.SpawnArtifactArrow")),
 		m_update_cur_skill_evade_bean_count(get_native("Function HottaFramework.HottaPlayerCharacter.UpdateCurSkillEvadeBeanCount")),
-		m_server_reset_treasure_box(get_native("Function HottaFramework.HottaPlayerStatusComponent.ServerResetTreasureBox"))
+		m_server_reset_treasure_box(get_native("Function HottaFramework.HottaPlayerStatusComponent.ServerResetTreasureBox")),
+		m_set_character_exp(get_native("Function HottaFramework.HottaPlayerCharacter.SetCharacterExp"))
 	{
 		g_native_invoker = this;
 	}

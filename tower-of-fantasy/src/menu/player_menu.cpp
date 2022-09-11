@@ -3,6 +3,7 @@
 #include "script.hpp"
 #include <translation.hpp>
 
+#include "utility/services/all.hpp"
 #include "utility/ecryption.h"
 #include "utility/features/all.hpp"
 #include "utility/config/persist_teleport.h"
@@ -96,6 +97,7 @@ namespace big
                         {
                             for (auto& objective : quest.object_progress())
                             {
+                                g_notification_service->success(xorstr("Ellohim Auto Quest"), std::format("{} Quest has been completed", quest.m_quest_id.get_name()));
                                 self->server_quest_update_progress(quest.m_quest_id, objective.m_objective_id, objective.m_needed_amount, true);
                             }
 
@@ -139,6 +141,7 @@ namespace big
                 auto teleport_locations = persist_teleport::list_locations();
                 static std::string selected_location;
                 static char teleport_name[50]{};
+                ImGui::Text(std::format("Coordinates -> X : {:.2f} Y : {:.2f} Z : {:.2f}", movement::get_entity_coords()->x, movement::get_entity_coords()->y, movement::get_entity_coords()->z).c_str());
 
                 ImGui::PushItemWidth(200);
                 ImGui::InputText(BIG_TRANSLATE("Location Name"), teleport_name, IM_ARRAYSIZE(teleport_name));

@@ -15,7 +15,7 @@ namespace big
         {
             if (auto self = unreal_engine::get_hotta_character(); self)
             {
-                self->client_teleport_to(model_attachment, Rotator(1.f, 1.f, 1.f));
+                self->server_teleport_with_loading(model_attachment, Rotator(0.f, 0.f, 0.f));
             }
         } THREAD_POOL_END
     }

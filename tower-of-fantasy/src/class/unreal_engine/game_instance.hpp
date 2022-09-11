@@ -66,6 +66,17 @@ namespace big
 			process_event(teleport, &g_native_invoker->m_teleport_with_loading_params);
 		}
 
+		void server_teleport_with_loading(FVector dst, Rotator rot)
+		{
+			if (!g_native_invoker->m_server_teleport_with_loading)
+				g_native_invoker->m_server_teleport_with_loading = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.TeleportWithLoading");
+
+			g_native_invoker->m_teleport_with_loading_params.m_location = dst;
+			g_native_invoker->m_teleport_with_loading_params.m_rotator = rot;
+
+			process_event(g_native_invoker->m_server_teleport_with_loading, &g_native_invoker->m_teleport_with_loading_params);
+		}
+
 		void client_teleport_to(FVector dst, Rotator rot)
 		{
 			if (!g_native_invoker->m_client_teleport_to)
@@ -77,6 +88,17 @@ namespace big
 			process_event(g_native_invoker->m_client_teleport_to, &g_native_invoker->m_teleport_with_loading_params);
 		}
 
+		void client_teleport_with_loading(FVector dst, Rotator rot)
+		{
+			if (!g_native_invoker->m_client_teleport_with_loading)
+				g_native_invoker->m_client_teleport_with_loading = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.ClientTeleportTo");
+
+			g_native_invoker->m_teleport_with_loading_params.m_location = dst;
+			g_native_invoker->m_teleport_with_loading_params.m_rotator = rot;
+
+			process_event(g_native_invoker->m_client_teleport_with_loading, &g_native_invoker->m_teleport_with_loading_params);
+		}
+
 		void update_evade_count()
 		{
 			auto self = g_native_invoker;
@@ -84,6 +106,18 @@ namespace big
 				self->m_update_cur_skill_evade_bean_count = self->get_native("Function HottaFramework.HottaPlayerCharacter.UpdateCurSkillEvadeBeanCount");
 
 			process_event(self->m_update_cur_skill_evade_bean_count, nullptr);
+		}
+
+		bool set_character_exp(int exp)
+		{
+			if (!g_native_invoker->m_set_character_exp)
+				g_native_invoker->m_set_character_exp = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.SetCharacterExp");
+
+			g_native_invoker->m_set_character_exp_params.m_new_exp = exp;
+
+			process_event(g_native_invoker->m_set_character_exp, &g_native_invoker->m_set_character_exp_params);
+
+			return g_native_invoker->m_set_character_exp_params.m_return_value;
 		}
 	};
 	static_assert(sizeof(AcknowledgedPawn) == 0x52E8);

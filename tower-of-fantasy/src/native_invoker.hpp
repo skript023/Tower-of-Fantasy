@@ -73,6 +73,12 @@ namespace big
 		bool m_static;
 	};
 
+	struct SetCharacterExp
+	{
+		int m_new_exp;
+		bool m_return_value;
+	};
+
 	class NativeInvoker
 	{
 	public:
@@ -95,11 +101,14 @@ namespace big
 		UFunction* m_server_spawn_extra_equiped_weapon;
 		UFunction* m_server_unlock_avatar;
 		UFunction* m_teleport_with_loading;
+		UFunction* m_server_teleport_with_loading;
 		UFunction* m_client_teleport_to;
+		UFunction* m_client_teleport_with_loading;
 		UFunction* m_client_add_tower_energy;
 		UFunction* m_spawn_artifact_arrow;
 		UFunction* m_update_cur_skill_evade_bean_count;
 		UFunction* m_server_reset_treasure_box;
+		UFunction* m_set_character_exp;
 	public:
 		WorldToScreenParam m_world_to_screen_param{};
 		ServerQuestUpdateProgress m_server_quest_update_progress_param{};
@@ -109,6 +118,7 @@ namespace big
 		SpawnArtifactArrow m_spawn_artifact_arrow_params{};
 		ClientSetTreasureOpened m_client_set_treasure_opened_params{};
 		ServerResetTreasureBox m_server_reset_treasure_box_params{};
+		SetCharacterExp m_set_character_exp_params{};
 	};
 
 	inline NativeInvoker* g_native_invoker;

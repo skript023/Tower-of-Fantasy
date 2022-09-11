@@ -21,7 +21,7 @@ namespace big
 
 				g_native_invoker->m_server_reset_treasure_box_params.m_static = params->m_static;
 				g_native_invoker->m_server_reset_treasure_box_params.m_treasure_box_id = params->m_treasure_box_id;
-				g_notification_service->success(xorstr("Ellohim Reset Chest"), xorstr("Chest Successully Reset"));
+				g_notification_service->success(xorstr("Ellohim Reset Chest"), std::format("{} Chest Successully Reset", params->m_treasure_box_id.get_name()));
 
 				return g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, g_native_invoker->m_server_reset_treasure_box, &g_native_invoker->m_server_reset_treasure_box_params);
 			}

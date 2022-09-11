@@ -55,11 +55,12 @@ namespace big::misc
 					if (auto root_component = actor->root_component())
 					{
 						auto pos = root_component->m_relative_location;
-						Vector2 location;
+						
 						if (auto local_player = unreal_engine::get_local_player())
 						{
 							if (auto self = local_player->m_player_controller)
 							{
+								Vector2 location;
 								if (self->project_world_to_screen(pos, location))
 								{
 									if (name.find("Scene_Box_Refresh_Wild_") != std::string::npos ||
