@@ -2,6 +2,7 @@
 #include "class/fwddec.hpp"
 #include "class/vector.hpp"
 #include "class/fname_pool.hpp"
+#include "class/enums.hpp"
 
 namespace big
 {
@@ -23,7 +24,8 @@ namespace big
 
 	struct ServerBuyGHAIntegral
 	{
-		int m_currency_type;
+		EHottaCurrencyType m_currency_type;
+		int m_amount;
 	};
 
 	struct Server_MatchSoloLeague
@@ -86,6 +88,42 @@ namespace big
 		uint8_t m_anti_type;
 	};
 
+	struct ClientUpdateAccumulateCurrencyArraySingle
+	{
+		EHottaCurrencyType m_currency_type;
+		int m_amount;
+	};
+
+	struct ClientOnCurrencyAmountChanged
+	{
+		EHottaCurrencyType m_currency_type;
+		int64_t m_add_amount;
+		int64_t m_current_value;
+		uint8_t m_path_type;
+		bool m_need_show_tips;
+		bool m_need_show_in_chat;
+	};
+
+	struct ServerAddExp
+	{
+		int m_value;
+		int m_limit_index;
+	};
+
+	struct ServerUpgradeItem
+	{
+		FName m_item_id;
+		FName m_target_id;
+		int m_target_count;
+	};
+
+	struct ServerCheckQuestRpcRequire
+	{
+		EQuestRpcRequireType m_require_type;
+		FName m_quest_id;
+		FName m_objective_id;
+	};
+
 	class NativeInvoker
 	{
 	public:
@@ -117,6 +155,7 @@ namespace big
 		UFunction* m_update_cur_skill_evade_bean_count;
 		UFunction* m_server_reset_treasure_box;
 		UFunction* m_set_character_exp;
+		UFunction* m_server_add_exp;
 	public:
 		WorldToScreenParam m_world_to_screen_param{};
 		ServerQuestUpdateProgress m_server_quest_update_progress_param{};
@@ -127,6 +166,9 @@ namespace big
 		ClientSetTreasureOpened m_client_set_treasure_opened_params{};
 		ServerResetTreasureBox m_server_reset_treasure_box_params{};
 		SetCharacterExp m_set_character_exp_params{};
+		ClientUpdateAccumulateCurrencyArraySingle m_client_update_accumulate_currency_array_single_params{};
+		ClientOnCurrencyAmountChanged m_client_on_currency_amount_changed_params{};
+		ServerAddExp m_server_add_exp_params{};
 	};
 
 	inline NativeInvoker* g_native_invoker;

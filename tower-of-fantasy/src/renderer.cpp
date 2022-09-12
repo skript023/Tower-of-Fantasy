@@ -66,7 +66,7 @@ namespace big
 		this->imgui_init();
 
 		this->m_init = true;
-		g_notification_service->success("Ellohim Private Cheat", "UI successfully running!");
+		g_notification_service->success("Ellohim Private Cheat", "Game Function Hooked Successfully!");
 
 		return true;
 	}

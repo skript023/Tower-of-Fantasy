@@ -36,7 +36,7 @@ namespace big
 				{
 					auto params = static_cast<ServerRecordAbnormalJumpSectionData*>(parms);
 
-					g_notification_service->success(xorstr("Ellohim Integrity Check"), std::format("Your action detected by anti-cheat -> Data Info : {} Comment Info : {} Type : {}", params->m_collect_info, params->m_comment2, params->m_anti_type));
+					g_notification_service->success(xorstr("Server Record Abnormal Jump Section Data"), std::format("Your action detected by anti-cheat -> Data Info : {} Comment Info : {} Type : {}", params->m_collect_info, params->m_comment2, params->m_anti_type));
 					
 					break;
 				}
@@ -51,9 +51,59 @@ namespace big
 					}
 					break;
 				}
-				case RAGE_JOAAT("OnTotalShieldHealthValueChange"):
+				case RAGE_JOAAT("ServerCheckQuestRpcRequire"):
 				{
+					auto params = static_cast<ServerCheckQuestRpcRequire*>(parms);
 
+					g_logger->info("Quest ID : %s Object ID : %s", params->m_quest_id.get_name().c_str(), params->m_objective_id.get_name().c_str());
+					break;
+				}
+				case RAGE_JOAAT("ClientUpdateAccumulateCurrencyArraySingle"):
+				{
+					auto params = static_cast<ClientUpdateAccumulateCurrencyArraySingle*>(parms);
+
+					if (params->m_amount < 0)
+					{
+						params->m_amount = 0;
+					}
+
+					if (params->m_currency_type == EHottaCurrencyType::FakeDiamond)
+					{
+						if (params->m_amount < 0)
+						{
+							params->m_currency_type = EHottaCurrencyType::Gold;
+						}
+					}
+
+					g_notification_service->success(xorstr("Ellohim Currency"), std::format("Currency Successullfy Accumulated {}", params->m_amount));
+
+					break;
+				}
+				case RAGE_JOAAT("ClientOnCurrencyAmountChanged"):
+				{
+					auto params = static_cast<ClientOnCurrencyAmountChanged*>(parms);
+
+					if (params->m_add_amount < 0)
+					{
+						params->m_add_amount = 0;
+					}
+
+					if (params->m_currency_type == EHottaCurrencyType::FakeDiamond)
+					{
+						if (params->m_add_amount < 0)
+						{
+							params->m_currency_type = EHottaCurrencyType::Gold;
+						}
+					}
+
+					g_notification_service->success(xorstr("Ellohim Currency"), std::format("Currency Successullfy Added {}", params->m_add_amount));
+
+					break;
+				}
+				case RAGE_JOAAT("ServerUpgradeItem"):
+				{
+					auto params = static_cast<ServerUpgradeItem*>(parms);
+					g_notification_service->success(xorstr("Ellohim Item Upgrade"), std::format("Item Upgrade {} Successfully {}", params->m_target_id.get_name(), params->m_target_count));
 					break;
 				}
 			}

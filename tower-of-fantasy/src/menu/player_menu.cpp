@@ -156,7 +156,7 @@ namespace big
                                         auto distance = movement::get_entity_coords()->distance(pos);
                                         if (distance < 650.f)
                                         {
-                                            movement::set_entity_coords(pos);
+                                            movement::teleport_to(pos);
                                             g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near supply pods"));
                                             break;
                                         }
@@ -195,13 +195,25 @@ namespace big
                 ImGui::SameLine();
                 ImGui::BeginGroup();
 
+                ImGui::Text("Teleport Method");
+                ImGui::Combo(xorstr("##Teleport Method"), &selected_method, method, IM_ARRAYSIZE(method));
+
                 if (ImGui::Button(BIG_TRANSLATE("Load Location")))
                 {
                     if (!selected_location.empty())
                     {
-                        persist_teleport::load_location(selected_location);
+                        switch (selected_method)
+                        {
+                        case 0:
+                            persist_teleport::load_location(selected_location);
+                            break;
+                        case 1:
+                            persist_teleport::load_location_with_loading(selected_location);
+                            break;
+                        }
                     }
                 }
+
                 if (ImGui::Button(BIG_TRANSLATE("Delete Location")))
                 {
                     if (!selected_location.empty())

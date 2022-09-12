@@ -6,7 +6,8 @@ namespace big
 	class persist_teleport
 	{
 	public:
-        
+		static void load_location_with_loading(std::string name);
+
 		static void load_location(std::string name);
 
 		static void delete_location(std::string name);

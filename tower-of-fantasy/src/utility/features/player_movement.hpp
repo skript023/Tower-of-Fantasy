@@ -58,13 +58,24 @@ namespace big::movement
 		return nullptr;
 	}
 
-	inline void set_entity_coords(Vector3 coords)
+	inline void teleport_to(Vector3 coords)
 	{
 		TRY_CLAUSE
 		{
 			if (auto self = unreal_engine::get_hotta_character(); self)
 			{
 				self->server_teleport_to(coords, Rotator(0.f, 0.f, 0.f));
+			}
+		} EXCEPT_CLAUSE
+	}
+
+	inline void teleport_with_loading(Vector3 coords)
+	{
+		TRY_CLAUSE
+		{
+			if (auto self = unreal_engine::get_hotta_character(); self)
+			{
+				self->server_teleport_with_loading(coords, Rotator(0.f, 0.f, 0.f));
 			}
 		} EXCEPT_CLAUSE
 	}

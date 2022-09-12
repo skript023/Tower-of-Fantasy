@@ -25,7 +25,8 @@ namespace big
 		m_spawn_artifact_arrow(get_native("Function HottaFramework.HottaSkillSystemComponent.SpawnArtifactArrow")),
 		m_update_cur_skill_evade_bean_count(get_native("Function HottaFramework.HottaPlayerCharacter.UpdateCurSkillEvadeBeanCount")),
 		m_server_reset_treasure_box(get_native("Function HottaFramework.HottaPlayerStatusComponent.ServerResetTreasureBox")),
-		m_set_character_exp(get_native("Function HottaFramework.HottaPlayerCharacter.SetCharacterExp"))
+		m_set_character_exp(get_native("Function HottaFramework.HottaPlayerCharacter.SetCharacterExp")),
+		m_server_add_exp(get_native("Function HottaFramework.HottaPlayerCharacter.ServerAddExp"))
 	{
 		g_native_invoker = this;
 	}
