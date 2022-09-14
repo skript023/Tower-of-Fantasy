@@ -9,7 +9,9 @@ namespace big
 	class SkillComponent : public UObject
 	{
 	public:
-		char pad_0028[0x15D8];
+		char pad_0028[0xD40];
+		int m_weapon_selected_index; //0x0D68
+		char pad_0D6C[2196]; //0x0D6C
 		int m_weapon_type; //0x1600
 		float m_max_health; //0x1604
 		float m_max_energy; //0x1608

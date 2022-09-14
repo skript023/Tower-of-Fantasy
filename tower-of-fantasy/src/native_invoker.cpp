@@ -53,4 +53,20 @@ namespace big
 		}
 		return nullptr;
 	}
+
+	std::string NativeInvoker::get_output_path_type(EHottaOutputPathType PathType)
+	{
+		switch (PathType)
+		{
+		case EHottaOutputPathType::OutputPathType_None:
+			return "OutputPathType_None";
+		case EHottaOutputPathType::OutputPathType_Notify:
+			return "OutputPathType_Notify";
+		case EHottaOutputPathType::OutputPathType_ConfigChange:
+			return "OutputPathType_ConfigChange";
+		case EHottaOutputPathType::OutputPathType_FromBag:
+			return "OutputPathType_FromBag";
+		}
+		return "None";
+	}
 }

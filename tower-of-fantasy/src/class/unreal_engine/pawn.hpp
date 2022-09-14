@@ -7,8 +7,11 @@ namespace big
 	class CapsuleComponent
 	{
 	public:
-		char pad_0000[0x1E0];
-		Vector3 m_position;//0x1E0
+		char pad_0000[0x124];
+		FVector m_position; //0x124
+		Rotator m_rotation; //0x138
+		char pad_144[156]; //0x144
+		Vector3 m_writable_position;//0x1E0
 	};
 
 	class Pawn

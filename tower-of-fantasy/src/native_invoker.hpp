@@ -99,7 +99,7 @@ namespace big
 		EHottaCurrencyType m_currency_type;
 		int64_t m_add_amount;
 		int64_t m_current_value;
-		uint8_t m_path_type;
+		EHottaOutputPathType m_path_type;
 		bool m_need_show_tips;
 		bool m_need_show_in_chat;
 	};
@@ -124,6 +124,31 @@ namespace big
 		FName m_objective_id;
 	};
 
+	struct ServerRecordExploreProgress
+	{
+		FName m_drop_id;
+		int m_drop_num;
+	};
+
+	struct ServerMatrixStrengthen
+	{
+		int m_slot_index;
+		uint8_t m_contain_type;
+	};
+
+	struct ServerUpgradeStarLevel
+	{
+		int m_choose_item_slot;
+		uint8_t m_contain_type;
+	};
+
+	struct ServerMatrixUnequiped
+	{
+		int m_weapon_slot;
+		uint8_t m_contain_type;
+		uint8_t m_matrix_slot;
+	};
+
 	class NativeInvoker
 	{
 	public:
@@ -132,6 +157,7 @@ namespace big
 
 		UFunction* get_native(std::string name);
 		UFunction* get_native_ex(const char* name);
+		std::string get_output_path_type(EHottaOutputPathType PathType);
 	public:
 		UFunction* m_world_to_screen;
 		UFunction* m_server_quest_update_progress;

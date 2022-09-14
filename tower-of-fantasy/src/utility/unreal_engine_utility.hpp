@@ -127,31 +127,8 @@ namespace big::unreal_engine
 		return ret;
 	}
 
-	inline uintptr_t read_pointer(uintptr_t base_address, std::vector<DWORD> offsets)
+	inline float degree_to_radian(float degs)
 	{
-		uintptr_t ptr = *(uintptr_t*)(base_address);
-		if (!ptr)
-		{
-
-			return NULL;
-		}
-		auto level = offsets.size();
-
-		for (auto i = 0; i < level; i++)
-		{
-			if (i == level - 1)
-			{
-				ptr += offsets[i];
-				if (!ptr) return NULL;
-				return ptr;
-			}
-			else
-			{
-				ptr = *(uint64_t*)(ptr + offsets[i]);
-				if (!ptr) return NULL;
-			}
-		}
-
-		return ptr;
+		return degs * 3.141592653589793f / 180.f;
 	}
 }

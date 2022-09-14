@@ -138,6 +138,13 @@ namespace big
                     ImGui::Text(std::format("Coordinates -> X : {:.2f} Y : {:.2f} Z : {:.2f}", movement::get_entity_coords()->x, movement::get_entity_coords()->y, movement::get_entity_coords()->z).c_str());
                 }
 
+                if (ImGui::Button(xorstr("Teleport Forward"), ImVec2(160, 0)))
+                {
+                    movement::teleport_forward();
+                }
+
+                ImGui::SameLine();
+
                 if (ImGui::Button(BIG_TRANSLATE("Teleport to Supply Pod"), ImVec2(160, 0)))
                 {
                     g_thread_pool->push([]
@@ -154,7 +161,7 @@ namespace big
                                     {
                                         auto pos = root_component->m_relative_location;
                                         auto distance = movement::get_entity_coords()->distance(pos);
-                                        if (distance < 650.f)
+                                        if (distance > 200.f)
                                         {
                                             movement::teleport_to(pos);
                                             g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near supply pods"));
@@ -165,6 +172,37 @@ namespace big
                             }
                         }
                     });
+                }
+
+                ImGui::SameLine();
+
+                if (ImGui::Button(BIG_TRANSLATE("Teleport to Supply Pod"), ImVec2(160, 0)))
+                {
+                    g_thread_pool->push([]
+                        {
+                            for (auto level : (*g_pointers->m_world)->m_level.to_vector())
+                            {
+                                for (auto actor : level->m_actor.to_vector())
+                                {
+                                    auto name = actor->get_name();
+
+                                    if (name.find("BP_Harvest_Gem_") != std::string::npos)
+                                    {
+                                        if (auto root_component = actor->root_component())
+                                        {
+                                            auto pos = root_component->m_relative_location;
+                                            auto distance = movement::get_entity_coords()->distance(pos);
+                                            if (distance > 250.f)
+                                            {
+                                                movement::teleport_to(pos);
+                                                g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near black nucleus"));
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
                 }
 
                 ImGui::PushItemWidth(200);
@@ -196,7 +234,10 @@ namespace big
                 ImGui::BeginGroup();
 
                 ImGui::Text("Teleport Method");
+
+                ImGui::PushItemWidth(150.f);
                 ImGui::Combo(xorstr("##Teleport Method"), &selected_method, method, IM_ARRAYSIZE(method));
+                ImGui::PopItemWidth();
 
                 if (ImGui::Button(BIG_TRANSLATE("Load Location")))
                 {

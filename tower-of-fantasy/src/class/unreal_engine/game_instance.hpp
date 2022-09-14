@@ -38,7 +38,9 @@ namespace big
 	public:
 		char pad0028[0x3C]; //0x0000
 		uint8_t no_clip; //0x0064
-		char pad_0065[0x3063]; //0x0065
+		char pad_0065[0x23B]; //0x0065
+		class CapsuleComponent* m_capsule_component; //0x02A0
+		char pad_02A8[0x2E20]; //0x02A8
 		class QuestComponent* m_quest_component; //0x30C8
 		char pad_30D0[0x2210]; //0x30D0
 		class AvatarUnlockDataArray* m_avatar_unlock; //0x52E0
@@ -60,7 +62,10 @@ namespace big
 		{
 			static auto teleport = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.TeleportWithLoading");
 
-			g_native_invoker->m_teleport_with_loading_params.m_location = dst;
+			g_native_invoker->m_teleport_with_loading_params.m_location.x = dst.x;
+			g_native_invoker->m_teleport_with_loading_params.m_location.y = dst.y;
+			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 10.f;
+
 			g_native_invoker->m_teleport_with_loading_params.m_rotator = rot;
 
 			process_event(teleport, &g_native_invoker->m_teleport_with_loading_params);
@@ -71,7 +76,10 @@ namespace big
 			if (!g_native_invoker->m_server_teleport_with_loading)
 				g_native_invoker->m_server_teleport_with_loading = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.TeleportWithLoading");
 
-			g_native_invoker->m_teleport_with_loading_params.m_location = dst;
+			g_native_invoker->m_teleport_with_loading_params.m_location.x = dst.x;
+			g_native_invoker->m_teleport_with_loading_params.m_location.y = dst.y;
+			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 10.f;
+
 			g_native_invoker->m_teleport_with_loading_params.m_rotator = rot;
 
 			process_event(g_native_invoker->m_server_teleport_with_loading, &g_native_invoker->m_teleport_with_loading_params);
@@ -82,7 +90,10 @@ namespace big
 			if (!g_native_invoker->m_server_teleport_to)
 				g_native_invoker->m_server_teleport_to = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.ServerTeleportTo");
 
-			g_native_invoker->m_teleport_with_loading_params.m_location = dst;
+			g_native_invoker->m_teleport_with_loading_params.m_location.x = dst.x;
+			g_native_invoker->m_teleport_with_loading_params.m_location.y = dst.y;
+			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 10.f;
+
 			g_native_invoker->m_teleport_with_loading_params.m_rotator = rot;
 
 			process_event(g_native_invoker->m_server_teleport_to, &g_native_invoker->m_teleport_with_loading_params);
@@ -93,7 +104,10 @@ namespace big
 			if (!g_native_invoker->m_client_teleport_to)
 				g_native_invoker->m_client_teleport_to = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.ClientTeleportTo");
 			
-			g_native_invoker->m_teleport_with_loading_params.m_location = dst;
+			g_native_invoker->m_teleport_with_loading_params.m_location.x = dst.x;
+			g_native_invoker->m_teleport_with_loading_params.m_location.y = dst.y;
+			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 10.f;
+
 			g_native_invoker->m_teleport_with_loading_params.m_rotator = rot;
 
 			process_event(g_native_invoker->m_client_teleport_to, &g_native_invoker->m_teleport_with_loading_params);
@@ -104,7 +118,10 @@ namespace big
 			if (!g_native_invoker->m_client_teleport_with_loading)
 				g_native_invoker->m_client_teleport_with_loading = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.ClientTeleportTo");
 
-			g_native_invoker->m_teleport_with_loading_params.m_location = dst;
+			g_native_invoker->m_teleport_with_loading_params.m_location.x = dst.x;
+			g_native_invoker->m_teleport_with_loading_params.m_location.y = dst.y;
+			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 10.f;
+
 			g_native_invoker->m_teleport_with_loading_params.m_rotator = rot;
 
 			process_event(g_native_invoker->m_client_teleport_with_loading, &g_native_invoker->m_teleport_with_loading_params);

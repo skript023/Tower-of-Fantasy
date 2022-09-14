@@ -122,6 +122,7 @@ namespace big
 
 	class AcknowledgedPawn;
 	class QuestComponent;
+	class CapsuleComponent;
 
 	class Navigation;
 	class FNamePool;

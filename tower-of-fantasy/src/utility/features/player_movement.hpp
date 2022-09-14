@@ -58,6 +58,24 @@ namespace big::movement
 		return nullptr;
 	}
 
+	inline void teleport_forward()
+	{
+		THREAD_POOL_BEGIN()
+		{
+			if (auto self = unreal_engine::get_hotta_character(); self)
+			{
+				constexpr int forward = 20;
+				auto pos = self->m_capsule_component->m_position;
+				auto rot = self->m_capsule_component->m_rotation;
+
+				pos.x += forward * sin(unreal_engine::degree_to_radian(rot.yaw)) * -1.5f;
+				pos.y += forward * cos(unreal_engine::degree_to_radian(rot.yaw));
+
+				self->server_teleport_to(pos, rot);
+			}
+		} THREAD_POOL_END
+	}
+
 	inline void teleport_to(Vector3 coords)
 	{
 		TRY_CLAUSE

@@ -22,6 +22,7 @@ namespace big
 	public:
 		ImFont* m_font;
 		ImFont* m_monospace_font;
+		bool m_is_mouse_clicked;
 
 		HWND m_window = NULL;
 	private:

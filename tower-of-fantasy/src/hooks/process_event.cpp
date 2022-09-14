@@ -6,6 +6,7 @@
 #include "utility/services/all.hpp"
 #include <utility/ecryption.h>
 #include "utility/joaat.hpp"
+#include "renderer.hpp"
 
 namespace big
 {
@@ -36,13 +37,17 @@ namespace big
 				{
 					auto params = static_cast<ServerRecordAbnormalJumpSectionData*>(parms);
 
-					g_notification_service->success(xorstr("Server Record Abnormal Jump Section Data"), std::format("Your action detected by anti-cheat -> Data Info : {} Comment Info : {} Type : {}", params->m_collect_info, params->m_comment2, params->m_anti_type));
+					g_notification_service->success(xorstr("Server Record Abnormal Jump Section Data"), 
+						std::format("Your action detected by anti-cheat -> Data Info : {} Comment Info : {} Type : {}", 
+							params->m_collect_info, 
+							params->m_comment2, 
+							params->m_anti_type));
 					
 					break;
 				}
 				case RAGE_JOAAT("Server_ProjectileActorHit"):
 				{
-					if (g_settings->player.rapid_shoot)
+					if (g_settings->player.rapid_shoot && g_renderer->m_is_mouse_clicked)
 					{
 						for (int i = 0; i <= 100; i++)
 						{
@@ -60,6 +65,7 @@ namespace big
 				}
 				case RAGE_JOAAT("ClientUpdateAccumulateCurrencyArraySingle"):
 				{
+					/*
 					auto params = static_cast<ClientUpdateAccumulateCurrencyArraySingle*>(parms);
 
 					if (params->m_amount < 0)
@@ -74,9 +80,10 @@ namespace big
 							params->m_currency_type = EHottaCurrencyType::Gold;
 						}
 					}
+					
 
 					g_notification_service->success(xorstr("Ellohim Currency"), std::format("Currency Successullfy Accumulated {}", params->m_amount));
-
+					*/
 					break;
 				}
 				case RAGE_JOAAT("ClientOnCurrencyAmountChanged"):
@@ -85,25 +92,103 @@ namespace big
 
 					if (params->m_add_amount < 0)
 					{
-						params->m_add_amount = 0;
+						params->m_add_amount = 1000000;
+						params->m_path_type = EHottaOutputPathType::Add_Rewared;
+
+						g_notification_service->success(xorstr("Ellohim Currency"), xorstr("No currency used"));
+
+						return;
 					}
 
-					if (params->m_currency_type == EHottaCurrencyType::FakeDiamond)
-					{
-						if (params->m_add_amount < 0)
-						{
-							params->m_currency_type = EHottaCurrencyType::Gold;
-						}
-					}
-
-					g_notification_service->success(xorstr("Ellohim Currency"), std::format("Currency Successullfy Added {}", params->m_add_amount));
+					g_notification_service->success(xorstr("Ellohim Currency"), 
+						std::format("Currency Successullfy Added {}", 
+							params->m_add_amount));
 
 					break;
 				}
 				case RAGE_JOAAT("ServerUpgradeItem"):
 				{
 					auto params = static_cast<ServerUpgradeItem*>(parms);
-					g_notification_service->success(xorstr("Ellohim Item Upgrade"), std::format("Item Upgrade {} Successfully {}", params->m_target_id.get_name(), params->m_target_count));
+					g_notification_service->success(xorstr("Ellohim Item Upgrade"), 
+						std::format("Item Upgrade {} Successfully {}", 
+							params->m_target_id.get_name(), 
+							params->m_target_count));
+
+					break;
+				}
+				case RAGE_JOAAT("ServerMatrixUnequiped"):
+				{
+					auto params = static_cast<ServerMatrixUnequiped*>(parms);
+					for (int i = 0; i <= 20; i++)
+					{
+						g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
+					}
+					g_notification_service->success(xorstr("Ellohim Matrix Unequiped"),
+						std::format("Matrix unequiped slot index {} successfull contain type {} weapon slot {}",
+							params->m_matrix_slot, params->m_contain_type, params->m_weapon_slot));
+
+					break;
+				}
+				case RAGE_JOAAT("ServerUpgradeStarLevel"):
+				{
+					auto params = static_cast<ServerUpgradeStarLevel*>(parms);
+					for (int i = 0; i <= 6; i++)
+					{
+						g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
+					}
+
+					g_notification_service->success(xorstr("Ellohim Star Upgrade"),
+						std::format("Star upgrade slot index {} successfull contain type {}",
+							params->m_choose_item_slot, params->m_contain_type));
+
+					break;
+				}
+				case RAGE_JOAAT("ServerMatrixUpgradeStar"):
+				{
+					auto params = static_cast<ServerMatrixStrengthen*>(parms);
+					for (int i = 0; i <= 6; i++)
+					{
+						g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
+					}
+					g_notification_service->success(xorstr("Ellohim Matrix Star Upgrade"),
+						std::format("Matrix star upgrade slot index {} successfull contain type {}",
+							params->m_slot_index, params->m_contain_type));
+					break;
+				}
+				case RAGE_JOAAT("ServerMatrixStrengthen"):
+				{
+					for (int i = 0; i <= 10; i++)
+					{
+						g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
+					}
+					break;
+				}
+				case RAGE_JOAAT("ServerEquipStrengthen"):
+				{
+					for (int i = 0; i <= 10; i++)
+					{
+						g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
+					}
+					break;
+				}
+				case RAGE_JOAAT("ServerEquipWeapon"):
+				{
+					for (int i = 0; i <= 10; i++)
+					{
+						g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
+					}
+					g_notification_service->success(xorstr("Ellohim Matrix Star Upgrade"), xorstr("ServerEquipWeapon"));
+					break;
+				}
+				case RAGE_JOAAT("ServerRecordExploreProgress"):
+				{
+					auto params = static_cast<ServerRecordExploreProgress*>(parms);
+					g_notification_service->success(xorstr("Ellohim Exploration Progress"), 
+						std::format("Item name {} quantity {}", 
+							params->m_drop_id.get_name(), params->m_drop_num));
+
+					params->m_drop_num = 100;
+
 					break;
 				}
 			}
