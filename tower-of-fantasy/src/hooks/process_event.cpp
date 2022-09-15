@@ -19,6 +19,10 @@ namespace big
 				g_logger->info("Function name %s", function->get_fullname().c_str());
 			}
 
+			if (function->get_name() == "ReceiveTick")
+			{
+				g_script_mgr.tick();
+			}
 			if (function->get_name() == "ClientSetTreasureOpened")
 			{
 				if (g_settings->player.reset_box)
@@ -44,34 +48,6 @@ namespace big
 						params->m_collect_info,
 						params->m_comment2,
 						params->m_anti_type));
-			}
-			if (function->get_name() == "Server_ProjectileActorHit")
-			{
-				constexpr auto times = 100;
-				if (g_settings->player.rapid_shoot)
-				{
-					auto params = static_cast<Server_ProjectileActorHit*>(parms);
-					static auto fn = g_native_invoker->get_native("Function HottaFramework.ProjectileBase.SetProjectileTrackActor");
-
-					g_native_invoker->m_set_projectile_track_actor_params.m_actor = params->m_target;
-
-					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, fn, &g_native_invoker->m_set_projectile_track_actor_params);
-				}
-
-				g_notification_service->success(xorstr("Ellohim Projectile Hit"), std::format("Projectile sent succesfully {} times", times));
-			}
-			if (function->get_name() == "Server_ProjectileActorHitClientActor")
-			{
-				constexpr auto times = 100;
-				if (g_settings->player.rapid_shoot)
-				{
-					for (int i = 0; i <= times; i++)
-					{
-						g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
-					}
-				}
-
-				g_notification_service->success(xorstr("Ellohim Projectile Hit"), std::format("Projectile sent succesfully {} times", times));
 			}
 			if (function->get_name() == "ServerCheckQuestRpcRequire")
 			{

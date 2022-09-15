@@ -4,6 +4,7 @@
 #include "thread_pool.hpp"
 #include <script.hpp>
 #include <gui.hpp>
+#include <utility/ecryption.h>
 
 namespace big
 {
@@ -11,6 +12,8 @@ namespace big
     {
         if (ImGui::BeginTabItem("Setting"))
         {
+            ImGui::Checkbox(xorstr("Log Process Event"), &g_settings->system.log_process_event);
+
             if (ImGui::Button("Get Entity List Name"))
             {
                 for (auto level : (*g_pointers->m_world)->m_level.to_vector())

@@ -37,6 +37,7 @@ namespace big
 	{
 		if (activate && unreal_engine::game_state())
 		{
+			m_entity_list.clear();
 			for (auto level : (*g_pointers->m_world)->m_level.to_vector())
 			{
 				for (auto actor : level->m_actor.to_vector())

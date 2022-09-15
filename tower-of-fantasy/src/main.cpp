@@ -53,6 +53,9 @@ DWORD APIENTRY main_thread(LPVOID)
 		auto hooking_instance = std::make_unique<hooking>();
 		g_logger->info("Hooking initialized.");
 
+		auto fiber_instance = std::make_unique<fiber_pool>(10);
+		g_logger->info("Fiber Pool initialized.");
+
 		auto thread_pool_instance = std::make_unique<thread_pool>();
 		g_logger->info("Thread Pool initialized.");
 
@@ -83,6 +86,9 @@ DWORD APIENTRY main_thread(LPVOID)
 
 		thread_pool_instance.reset();
 		g_logger->info("Thread Pool uninitialized.");
+
+		fiber_instance.reset();
+		g_logger->info("Fiber Pool uninitialized.");
 
 		native_instance.reset();
 		g_logger->info("Native Function uninitialized.");

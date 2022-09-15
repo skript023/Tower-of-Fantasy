@@ -85,7 +85,9 @@ namespace big
 			{
 				if (auto self = unreal_engine::get_hotta_character(); self)
 				{
-					self->server_teleport_to(coords, Rotator(0.f, 0.f, 0.f));
+					self->client_teleport_to(coords, self->m_capsule_component->m_rotation);
+					self->server_teleport_to(coords, self->m_capsule_component->m_rotation);
+					self->teleport_with_loading(coords, self->m_capsule_component->m_rotation);
 				}
 			} EXCEPT_CLAUSE
 		}
@@ -96,7 +98,8 @@ namespace big
 			{
 				if (auto self = unreal_engine::get_hotta_character(); self)
 				{
-					self->server_teleport_with_loading(coords, Rotator(0.f, 0.f, 0.f));
+					self->server_teleport_with_loading(coords, self->m_capsule_component->m_rotation);
+					self->client_teleport_with_loading(coords, self->m_capsule_component->m_rotation);
 				}
 			} EXCEPT_CLAUSE
 		}
