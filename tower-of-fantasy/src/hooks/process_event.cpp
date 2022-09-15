@@ -44,7 +44,7 @@ namespace big
 				auto params = static_cast<ServerRecordAbnormalJumpSectionData*>(parms);
 
 				g_notification_service->success(xorstr("Server Record Abnormal Jump Section Data"),
-					std::format("Your action detected by anti-cheat -> Data Info : {} Comment Info : {} Type : {}",
+					std::format("Your action suspected as tempering => Data Info : {} Comment Info : {} Type : {}",
 						params->m_collect_info,
 						params->m_comment2,
 						params->m_anti_type));
@@ -54,28 +54,6 @@ namespace big
 				auto params = static_cast<ServerCheckQuestRpcRequire*>(parms);
 
 				g_logger->info("Quest ID : %s Object ID : %s", params->m_quest_id.get_name().c_str(), params->m_objective_id.get_name().c_str());
-			}
-			if (function->get_name() == "ClientUpdateAccumulateCurrencyArraySingle")
-			{
-				/*
-				auto params = static_cast<ClientUpdateAccumulateCurrencyArraySingle*>(parms);
-
-				if (params->m_amount < 0)
-				{
-					params->m_amount = 0;
-				}
-
-				if (params->m_currency_type == EHottaCurrencyType::FakeDiamond)
-				{
-					if (params->m_amount < 0)
-					{
-						params->m_currency_type = EHottaCurrencyType::Gold;
-					}
-				}
-
-
-				g_notification_service->success(xorstr("Ellohim Currency"), std::format("Currency Successullfy Accumulated {}", params->m_amount));
-				*/
 			}
 			if (function->get_name() == "ClientOnCurrencyAmountChanged")
 			{

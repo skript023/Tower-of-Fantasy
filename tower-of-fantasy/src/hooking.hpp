@@ -18,6 +18,7 @@ namespace big
 
 		static LRESULT wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 		static BOOL set_cursor_pos(int x, int y);
+		static void* convert_thread_to_fiber(void* param);
 
 		static void APIENTRY process_event(UObject* _this, UFunction* function, void* parms);
 	};
@@ -43,6 +44,7 @@ namespace big
 
 		WNDPROC m_og_wndproc;
 
+		detour_hook m_convert_thread_to_fiber_hook;
 		detour_hook m_swapchain_present_hook;
 		detour_hook m_swapchain_resizebuffers_hook;
 		detour_hook m_set_cursor_pos_hook;

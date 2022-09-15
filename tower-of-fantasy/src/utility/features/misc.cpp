@@ -35,7 +35,9 @@ namespace big
 	}
 	void MiscOption::get_entity_list(bool activate)
 	{
-		if (activate && unreal_engine::game_state())
+		static auto start = std::chrono::high_resolution_clock::now();
+		bool first = true;
+		if (activate && unreal_engine::game_state() && ((std::chrono::high_resolution_clock::now() - start).count() <= std::chrono::seconds(10).count() || first))
 		{
 			m_entity_list.clear();
 			for (auto level : (*g_pointers->m_world)->m_level.to_vector())
@@ -57,21 +59,20 @@ namespace big
 								Vector2 location;
 								if (self->project_world_to_screen(pos, location))
 								{
-									if (m_entity_list.size() < (*g_pointers->m_world)->m_level.max_num())
-									{
-										m_entity_list.push_back({ location, pos, name });
-									}
+									m_entity_list.push_back({ location, pos, name});
 								}
 							}
 						}
 					}
 				}
 			}
+			start = std::chrono::high_resolution_clock::now();
+			first = false;
 		}
 	}
 	void MiscOption::render_esp(bool activate)
 	{
-		if (activate)
+		if (activate && !m_entity_list.empty())
 		{
 			for (auto entity : m_entity_list)
 			{

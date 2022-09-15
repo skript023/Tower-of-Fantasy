@@ -71,7 +71,7 @@ namespace big
 					auto pos = self->m_capsule_component->m_position;
 					auto rot = self->m_capsule_component->m_rotation;
 
-					pos.x += forward * sin(unreal_engine::degree_to_radian(rot.yaw)) * -1.5f;
+					pos.x += forward * sin(unreal_engine::degree_to_radian(rot.yaw));
 					pos.y += forward * cos(unreal_engine::degree_to_radian(rot.yaw));
 
 					self->server_teleport_to(pos, rot);
@@ -87,7 +87,6 @@ namespace big
 				{
 					self->client_teleport_to(coords, self->m_capsule_component->m_rotation);
 					self->server_teleport_to(coords, self->m_capsule_component->m_rotation);
-					self->teleport_with_loading(coords, self->m_capsule_component->m_rotation);
 				}
 			} EXCEPT_CLAUSE
 		}
@@ -100,6 +99,7 @@ namespace big
 				{
 					self->server_teleport_with_loading(coords, self->m_capsule_component->m_rotation);
 					self->client_teleport_with_loading(coords, self->m_capsule_component->m_rotation);
+					self->teleport_with_loading(coords, self->m_capsule_component->m_rotation);
 				}
 			} EXCEPT_CLAUSE
 		}

@@ -81,7 +81,7 @@ namespace big
 
             if (ImGui::Button(BIG_TRANSLATE("Auto Quest"), ImVec2(120, 0)))
             {
-                g_thread_pool->push([]
+                g_fiber_pool->queue_job([]
                 {
                     if (auto const self = unreal_engine::get_hotta_character(); self)
                     {
@@ -157,7 +157,7 @@ namespace big
 
                                 if (name.find("Scene_Box_OnceOnly_") != std::string::npos)
                                 {
-                                    if (!actor->harvested())
+                                    if (actor->harvested())
                                     {
                                         if (auto root_component = actor->root_component())
                                         {

@@ -15,6 +15,7 @@ namespace big
 		m_swapchain_present_hook("SwapChainPresent", g_pointers->m_swapchain_methods[hooks::swapchain_present_index], &hooks::swapchain_present),
 		m_swapchain_resizebuffers_hook("SwapChainResizeBuffers", g_pointers->m_swapchain_methods[hooks::swapchain_resizebuffers_index], &hooks::swapchain_resizebuffers),
 		m_set_cursor_pos_hook("SetCursorPos", memory::module("user32.dll").get_export("SetCursorPos").as<void*>(), &hooks::set_cursor_pos),
+		m_convert_thread_to_fiber_hook("ConvertThreadToFiber", memory::module("kernel32.dll").get_export("ConvertThreadToFiber").as<void*>(), &hooks::convert_thread_to_fiber),
 		m_process_event_hook("Process Event", g_pointers->m_process_event, &hooks::process_event)
 	{
 		g_hooking = this;
@@ -34,6 +35,7 @@ namespace big
 		m_swapchain_resizebuffers_hook.enable();
 		m_og_wndproc = reinterpret_cast<WNDPROC>(SetWindowLongPtrW(g_pointers->m_hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&hooks::wndproc)));
 		m_set_cursor_pos_hook.enable();
+		m_convert_thread_to_fiber_hook.enable();
 
 		m_process_event_hook.enable();
 		m_enabled = true;
@@ -48,6 +50,7 @@ namespace big
 		*g_pointers->m_skip_button = 0x74;
 		m_process_event_hook.disable();
 
+		m_convert_thread_to_fiber_hook.disable();
 		m_set_cursor_pos_hook.disable();
 		SetWindowLongPtrW(g_pointers->m_hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(m_og_wndproc));
 		m_swapchain_resizebuffers_hook.disable();
@@ -63,6 +66,16 @@ namespace big
 	minhook_keepalive::~minhook_keepalive()
 	{
 		MH_Uninitialize();
+	}
+
+	void* hooks::convert_thread_to_fiber(void* param)
+	{
+		if (IsThreadAFiber())
+		{
+			return GetCurrentFiber();
+		}
+
+		return g_hooking->m_convert_thread_to_fiber_hook.get_original<decltype(&convert_thread_to_fiber)>()(param);
 	}
 
 	LRESULT hooks::wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
