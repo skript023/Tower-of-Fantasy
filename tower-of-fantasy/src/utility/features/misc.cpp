@@ -72,7 +72,7 @@ namespace big
 	}
 	void MiscOption::render_esp(bool activate)
 	{
-		if (activate && !m_entity_list.empty())
+		if (activate)
 		{
 			for (auto entity : m_entity_list)
 			{

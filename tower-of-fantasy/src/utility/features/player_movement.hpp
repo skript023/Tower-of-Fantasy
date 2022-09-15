@@ -81,27 +81,26 @@ namespace big
 
 		inline void teleport_to(Vector3 coords)
 		{
-			TRY_CLAUSE
+			QUEUE_JOB_BEGIN_CLAUSE(coords)
 			{
 				if (auto self = unreal_engine::get_hotta_character(); self)
 				{
-					self->client_teleport_to(coords, self->m_capsule_component->m_rotation);
 					self->server_teleport_to(coords, self->m_capsule_component->m_rotation);
 				}
-			} EXCEPT_CLAUSE
+			} QUEUE_JOB_END_CLAUSE
 		}
 
 		inline void teleport_with_loading(Vector3 coords)
 		{
-			TRY_CLAUSE
+			QUEUE_JOB_BEGIN_CLAUSE(coords)
 			{
 				if (auto self = unreal_engine::get_hotta_character(); self)
 				{
 					self->server_teleport_with_loading(coords, self->m_capsule_component->m_rotation);
-					self->client_teleport_with_loading(coords, self->m_capsule_component->m_rotation);
 					self->teleport_with_loading(coords, self->m_capsule_component->m_rotation);
+					self->client_teleport_with_loading(coords, self->m_capsule_component->m_rotation);
 				}
-			} EXCEPT_CLAUSE
+			} QUEUE_JOB_END_CLAUSE
 		}
 
 		inline float* player_movement_speed()

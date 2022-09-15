@@ -141,7 +141,7 @@ namespace big
 				{
 					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
 				}
-				g_notification_service->success(xorstr("Ellohim equipment strengthen"), xorstr("Weapon upgrade successfull"));
+				g_notification_service->success(xorstr("Ellohim equipment strengthen"), xorstr("Equipment upgrade successfull"));
 			}
 			if (function->get_name() == "ServerEquipWeapon")
 			{

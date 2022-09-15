@@ -11,13 +11,7 @@ namespace big
             return;
 
         auto target_position = locations[name].get<Vector3>();
-        THREAD_POOL_BEGIN(target_position)
-        {
-            if (auto self = unreal_engine::get_hotta_character(); self)
-            {
-                self->server_teleport_with_loading(target_position, Rotator(0.f, 0.f, 0.f));
-            }
-        } THREAD_POOL_END
+        g_features->movement.teleport_with_loading(target_position);
     }
 
     void persist_teleport::load_location(std::string name)
@@ -27,13 +21,7 @@ namespace big
             return;
 
         auto target_position = locations[name].get<Vector3>();
-        THREAD_POOL_BEGIN(target_position)
-        {
-            if (auto self = unreal_engine::get_hotta_character(); self)
-            {
-                self->server_teleport_to(target_position, Rotator(0.f, 0.f, 0.f));
-            }
-        } THREAD_POOL_END
+        g_features->movement.teleport_to(target_position);
     }
 
     void persist_teleport::delete_location(std::string name)

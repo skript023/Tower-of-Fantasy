@@ -70,7 +70,9 @@ namespace big
             ImGui::BeginGroup();
             if (ImGui::Button(BIG_TRANSLATE("AI Only PVP"), ImVec2(120, 0)))
             {
-                unreal_engine::get_local_player()->m_player_controller->m_character->server_match_solo_league(true);
+                g_fiber_pool->queue_job([] {
+                    unreal_engine::get_local_player()->m_player_controller->m_character->server_match_solo_league(true);
+                });
             }
 
             ImGui::EndGroup();
@@ -157,7 +159,7 @@ namespace big
 
                                 if (name.find("Scene_Box_OnceOnly_") != std::string::npos)
                                 {
-                                    if (actor->harvested())
+                                    if (!actor->harvested() && actor->allow_pick())
                                     {
                                         if (auto root_component = actor->root_component())
                                         {
@@ -181,31 +183,31 @@ namespace big
 
                 if (ImGui::Button(BIG_TRANSLATE("Teleport to black nucleus"), ImVec2(160, 0)))
                 {
-                    g_thread_pool->push([]
+                    g_fiber_pool->queue_job([]
+                    {
+                        for (auto level : (*g_pointers->m_world)->m_level.to_vector())
                         {
-                            for (auto level : (*g_pointers->m_world)->m_level.to_vector())
+                            for (auto actor : level->m_actor.to_vector())
                             {
-                                for (auto actor : level->m_actor.to_vector())
-                                {
-                                    auto name = actor->get_name();
+                                auto name = actor->get_name();
 
-                                    if (name.find("BP_Harvest_Gem_") != std::string::npos)
+                                if (name.find("BP_Harvest_Gem_") != std::string::npos)
+                                {
+                                    if (auto root_component = actor->root_component())
                                     {
-                                        if (auto root_component = actor->root_component())
+                                        auto pos = root_component->m_relative_location;
+                                        auto distance = g_features->movement.get_entity_coords()->distance(pos);
+                                        if (distance > 150.f && distance < 700.f)
                                         {
-                                            auto pos = root_component->m_relative_location;
-                                            auto distance = g_features->movement.get_entity_coords()->distance(pos);
-                                            if (distance > 150.f && distance < 700.f)
-                                            {
-                                                g_features->movement.teleport_to(pos);
-                                                g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near black nucleus"));
-                                                return;
-                                            }
+                                            g_features->movement.teleport_to(pos);
+                                            g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near black nucleus"));
+                                            return;
                                         }
                                     }
                                 }
                             }
-                        });
+                        }
+                    });
                 }
 
                 ImGui::PushItemWidth(200);
