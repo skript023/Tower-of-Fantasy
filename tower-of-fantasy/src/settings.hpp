@@ -29,6 +29,7 @@ namespace big
 		struct system
 		{
 			int token { g_settings->get_token() };
+			bool log_process_event{ false };
 		};
 
 		struct player_option
@@ -99,6 +100,7 @@ namespace big
 			this->player.reset_box = j["player"]["reset_box"];
 
 			this->system.token = j["system"]["token"];
+			this->system.log_process_event = j["system"]["log_process_event"];
 		}
 
 		nlohmann::json to_json()
@@ -114,24 +116,25 @@ namespace big
 						{ "movement_speed", this->player.movement_speed },
 						{ "crouch_speed", this->player.crouch_speed },
 						{ "no_cooldown", this->player.no_cooldown },
-						{ "freeze_entity", this->player.freeze_entity},
-						{ "no_fall_damage", this->player.no_fall_damage},
-						{ "player_level", this->player.player_level},
-						{ "swim_speed", this->player.swim_speed},
-						{ "gravity", this->player.gravity},
-						{ "freeze_mobs", this->player.freeze_mobs},
-						{ "infinite_dodge", this->player.infinite_dodge},
-						{ "fast_attack", this->player.fast_attack},
-						{ "no_clip", this->player.no_clip},
-						{ "esp", this->player.esp},
-						{ "skip_button", this->player.skip_button},
-						{ "rapid_shoot", this->player.rapid_shoot},
-						{ "reset_box", this->player.reset_box}
+						{ "freeze_entity", this->player.freeze_entity },
+						{ "no_fall_damage", this->player.no_fall_damage },
+						{ "player_level", this->player.player_level },
+						{ "swim_speed", this->player.swim_speed },
+						{ "gravity", this->player.gravity },
+						{ "freeze_mobs", this->player.freeze_mobs },
+						{ "infinite_dodge", this->player.infinite_dodge },
+						{ "fast_attack", this->player.fast_attack },
+						{ "no_clip", this->player.no_clip },
+						{ "esp", this->player.esp },
+						{ "skip_button", this->player.skip_button },
+						{ "rapid_shoot", this->player.rapid_shoot },
+						{ "reset_box", this->player.reset_box }
 					}
 				},
 				{
 					"system",{
-						{ "token", this->system.token}
+						{ "token", this->system.token},
+						{ "log_process_event", this->system.log_process_event }
 					}
 				}
 			};

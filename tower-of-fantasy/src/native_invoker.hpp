@@ -149,6 +149,26 @@ namespace big
 		uint8_t m_matrix_slot;
 	};
 
+	struct Conv_TextToString
+	{
+		struct FText m_in_text;
+		struct FString m_return_value;
+	};
+
+	struct Server_ProjectileActorHit
+	{
+		void* m_self;
+		void* m_target;
+		struct SimpleHit* m_simple_hit;
+		char padding[88];
+		struct PredictionKey* m_prediction_key;
+	};
+
+	struct SetProjectileTrackActor
+	{
+		void* m_actor;
+	};
+
 	class NativeInvoker
 	{
 	public:
@@ -156,6 +176,9 @@ namespace big
 		~NativeInvoker();
 
 		UFunction* get_native(std::string name);
+
+		template <typename T>
+		T get_class(std::string name);
 		UFunction* get_native_ex(const char* name);
 		std::string get_output_path_type(EHottaOutputPathType PathType);
 	public:
@@ -183,6 +206,8 @@ namespace big
 		UFunction* m_set_character_exp;
 		UFunction* m_server_add_exp;
 	public:
+		UClass* m_kismet_text_library;
+	public:
 		WorldToScreenParam m_world_to_screen_param{};
 		ServerQuestUpdateProgress m_server_quest_update_progress_param{};
 		ServerBuyGHAIntegral m_server_buy_gha_integral_params{};
@@ -195,6 +220,8 @@ namespace big
 		ClientUpdateAccumulateCurrencyArraySingle m_client_update_accumulate_currency_array_single_params{};
 		ClientOnCurrencyAmountChanged m_client_on_currency_amount_changed_params{};
 		ServerAddExp m_server_add_exp_params{};
+		Conv_TextToString m_convert_text_to_string_params{};
+		SetProjectileTrackActor m_set_projectile_track_actor_params{};
 	};
 
 	inline NativeInvoker* g_native_invoker;

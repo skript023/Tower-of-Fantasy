@@ -21,12 +21,12 @@ namespace big
 
             ImGui::BeginGroup();
             if (ImGui::Checkbox(BIG_TRANSLATE("Godmode"), &g_settings->player.godmode))
-                defense::godmode(g_settings->player.godmode);
+                g_features->defense.godmode(g_settings->player.godmode);
 
             ImGui::Checkbox(BIG_TRANSLATE("Infinite Jump"), &g_settings->player.infinite_jump);
 
             if (ImGui::Checkbox(BIG_TRANSLATE("No Cooldown"), &g_settings->player.no_cooldown))
-                attack::remove_cooldown(g_settings->player.no_cooldown);
+                g_features->attack.remove_cooldown(g_settings->player.no_cooldown);
 
             ImGui::Checkbox(BIG_TRANSLATE("ESP"), &g_settings->player.esp);
 
@@ -37,13 +37,13 @@ namespace big
             ImGui::BeginGroup();
 
             if (ImGui::Checkbox("No Fall Damage", &g_settings->player.no_fall_damage))
-                defense::remove_fall_damage(g_settings->player.no_fall_damage);
+                g_features->defense.remove_fall_damage(g_settings->player.no_fall_damage);
 
             if (ImGui::Checkbox("Freeze Player", &g_settings->player.freeze_entity))
-                movement::freeze_entity(g_settings->player.freeze_entity);
+                g_features->movement.freeze_entity(g_settings->player.freeze_entity);
 
             if (ImGui::Checkbox("Freeze Mobs", &g_settings->player.freeze_mobs))
-                movement::freeze_mobs(g_settings->player.freeze_mobs);
+                g_features->movement.freeze_mobs(g_settings->player.freeze_mobs);
 
             ImGui::Checkbox(BIG_TRANSLATE("Rapid Shoot"), &g_settings->player.rapid_shoot);
 
@@ -61,7 +61,7 @@ namespace big
             ImGui::Checkbox(BIG_TRANSLATE("Rapid Attack"), &g_settings->player.fast_attack);
 
             if (ImGui::Checkbox(BIG_TRANSLATE("No Clip"), &g_settings->player.no_clip))
-                movement::no_clip(g_settings->player.no_clip);
+                g_features->movement.no_clip(g_settings->player.no_clip);
 
             ImGui::Checkbox(BIG_TRANSLATE("Reset Box"), &g_settings->player.reset_box);
 
@@ -133,19 +133,19 @@ namespace big
                 auto teleport_locations = persist_teleport::list_locations();
                 static std::string selected_location;
                 static char teleport_name[50]{};
-                if (unreal_engine::game_state() && movement::get_entity_coords())
+                if (unreal_engine::game_state() && g_features->movement.get_entity_coords())
                 {
-                    ImGui::Text(std::format("Coordinates -> X : {:.2f} Y : {:.2f} Z : {:.2f}", movement::get_entity_coords()->x, movement::get_entity_coords()->y, movement::get_entity_coords()->z).c_str());
+                    ImGui::Text(std::format("Coordinates -> X : {:.2f} Y : {:.2f} Z : {:.2f}", g_features->movement.get_entity_coords()->x, g_features->movement.get_entity_coords()->y, g_features->movement.get_entity_coords()->z).c_str());
                 }
 
                 if (ImGui::Button(xorstr("Teleport Forward"), ImVec2(160, 0)))
                 {
-                    movement::teleport_forward();
+                    g_features->movement.teleport_forward();
                 }
 
                 ImGui::SameLine();
 
-                if (ImGui::Button(BIG_TRANSLATE("Teleport to Supply Pod"), ImVec2(160, 0)))
+                if (ImGui::Button(BIG_TRANSLATE("Teleport to supply pod"), ImVec2(160, 0)))
                 {
                     g_thread_pool->push([]
                     {
@@ -157,15 +157,18 @@ namespace big
 
                                 if (name.find("Scene_Box_OnceOnly_") != std::string::npos)
                                 {
-                                    if (auto root_component = actor->root_component())
+                                    if (!actor->harvested())
                                     {
-                                        auto pos = root_component->m_relative_location;
-                                        auto distance = movement::get_entity_coords()->distance(pos);
-                                        if (distance > 200.f)
+                                        if (auto root_component = actor->root_component())
                                         {
-                                            movement::teleport_to(pos);
-                                            g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near supply pods"));
-                                            break;
+                                            auto pos = root_component->m_relative_location;
+                                            auto distance = g_features->movement.get_entity_coords()->distance(pos);
+                                            if (distance > 150.f && distance < 700.f)
+                                            {
+                                                g_features->movement.teleport_to(pos);
+                                                g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near supply pods"));
+                                                return;
+                                            }
                                         }
                                     }
                                 }
@@ -176,7 +179,7 @@ namespace big
 
                 ImGui::SameLine();
 
-                if (ImGui::Button(BIG_TRANSLATE("Teleport to Supply Pod"), ImVec2(160, 0)))
+                if (ImGui::Button(BIG_TRANSLATE("Teleport to black nucleus"), ImVec2(160, 0)))
                 {
                     g_thread_pool->push([]
                         {
@@ -191,12 +194,12 @@ namespace big
                                         if (auto root_component = actor->root_component())
                                         {
                                             auto pos = root_component->m_relative_location;
-                                            auto distance = movement::get_entity_coords()->distance(pos);
-                                            if (distance > 250.f)
+                                            auto distance = g_features->movement.get_entity_coords()->distance(pos);
+                                            if (distance > 150.f && distance < 700.f)
                                             {
-                                                movement::teleport_to(pos);
+                                                g_features->movement.teleport_to(pos);
                                                 g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near black nucleus"));
-                                                break;
+                                                return;
                                             }
                                         }
                                     }
@@ -213,7 +216,7 @@ namespace big
 
                 if (ImGui::Button(BIG_TRANSLATE("Save Location")))
                 {
-                    persist_teleport::save_location(*movement::get_entity_coords(), teleport_name);
+                    persist_teleport::save_location(*g_features->movement.get_entity_coords(), teleport_name);
                     ZeroMemory(teleport_name, sizeof(teleport_name));
                 }
 

@@ -1,6 +1,6 @@
 #pragma once
 
-enum EFindName
+enum class EFindName
 {
     FNAME_Find,
     FNAME_Add,
@@ -568,6 +568,19 @@ enum class EHottaScoreModuleType
 	Matrix,
 	Max
 };
+
+enum class EElementalType
+{
+	ELEMENTAL_TYPE_NONE,
+	ELEMENTAL_TYPE_PHY,
+	ELEMENTAL_TYPE_FIRE,
+	ELEMENTAL_TYPE_THUNDER,
+	ELEMENTAL_TYPE_ICE,
+	ELEMENTAL_TYPE_SUPERPOWER,
+	ELEMENTAL_TYPE_BLEND,
+	ELEMENTAL_TYPE_MAX
+};
+
 struct HottaAwardProgressData
 {
 	int64_t m_award_id;

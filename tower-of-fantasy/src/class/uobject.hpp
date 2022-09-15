@@ -23,11 +23,6 @@ namespace big
 		return reinterpret_cast<Fn>(vtable[index]);
 	}
 
-	struct FText
-	{
-		char m_unknown_data[0x18];
-	};
-
 	class FUObjectItem
 	{
 	public:
@@ -208,7 +203,7 @@ namespace big
 			return static_cast<T*>(CreateDefaultObject());
 		}
 
-		inline static UClass* StaticClass()
+		inline static UClass* static_class()
 		{
 			static auto ptr = UObject::find_class("Class CoreUObject.Object");
 			return ptr;

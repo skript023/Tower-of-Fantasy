@@ -75,9 +75,14 @@ namespace big
 			m_task_queue = ptr.as<decltype(m_task_queue)>();
 		});
 
-		main_batch.add("GetFName", "48 89 5C 24 ? 57 48 83 EC 30 48 8B D9 48 89 54 24 ? 33 C9 41 8B F8 4C 8B CA 48 85 D2 74 15 48 C7 C0", [this](memory::handle ptr)
+		main_batch.add("FindName", "48 89 5C 24 ? 57 48 83 EC 30 48 8B D9 48 89 54 24 ? 33 C9 41 8B F8 4C 8B CA 48 85 D2 74 15 48 C7 C0", [this](memory::handle ptr)
 		{
-			
+			m_fname = ptr.as<decltype(m_fname)>();
+		});
+
+		main_batch.add("FTextToFString", "E8 ? ? ? ? 83 78 08 00 74 05 48 8B 18 EB 07 48 8D 1D ? ? ? ? 48 8B 0D", [this](memory::handle ptr)
+		{
+			m_text_to_string = ptr.as<decltype(m_text_to_string)>();
 		});
 
 		main_batch.add("Get Bone Matrix", "E8 ? ? ? ? 48 8B CB 0F 10 00 0F 11 83 ? ? ? ? 0F 10 48 10 0F 11 8B ? ? ? ? 0F 10 40 20 0F 11 83", [this](memory::handle ptr)

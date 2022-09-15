@@ -111,7 +111,7 @@ namespace big
 			sprintf(fps, "Overlay FPS: %0.f", ImGui::GetIO().Framerate);
 			draw::RGBA white = { 255,255,255,255 };
 			draw::draw_stroke_text(30.f, 44.f, &white, fps);
-			misc::render_esp(g_settings->player.esp);
+			g_features->misc.render_esp(g_settings->player.esp);
 
 			notify::notifications();
 		}
@@ -130,10 +130,11 @@ namespace big
 		{
 			TRY_CLAUSE
 			{
-				attack::rapid_attack(g_settings->player.fast_attack);
+				g_features->attack.rapid_attack(g_settings->player.fast_attack);
 				
-				movement::infinite_jump(g_settings->player.infinite_jump);
-				movement::infinite_dodge(g_settings->player.infinite_dodge);
+				g_features->movement.infinite_jump(g_settings->player.infinite_jump);
+				g_features->movement.infinite_dodge(g_settings->player.infinite_dodge);
+				g_features->misc.get_entity_list(g_settings->player.esp);
 			} EXCEPT_CLAUSE
 		}
 	}

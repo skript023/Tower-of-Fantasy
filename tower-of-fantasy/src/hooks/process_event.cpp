@@ -14,183 +14,197 @@ namespace big
 	{
 		if (g_running)
 		{
-			switch (rage::joaat(function->get_name()))
+			if (g_settings->system.log_process_event)
 			{
-				case RAGE_JOAAT("ClientSetTreasureOpened"):
+				g_logger->info("Function name %s", function->get_fullname().c_str());
+			}
+
+			if (function->get_name() == "ClientSetTreasureOpened")
+			{
+				if (g_settings->player.reset_box)
 				{
-					if (g_settings->player.reset_box)
+					auto params = static_cast<ClientSetTreasureOpened*>(parms);
+
+					if (!g_native_invoker->m_server_reset_treasure_box)
+						g_native_invoker->m_server_reset_treasure_box = g_native_invoker->get_native("Function HottaFramework.HottaPlayerStatusComponent.ServerResetTreasureBox");
+
+					g_native_invoker->m_server_reset_treasure_box_params.m_static = params->m_static;
+					g_native_invoker->m_server_reset_treasure_box_params.m_treasure_box_id = params->m_treasure_box_id;
+					g_notification_service->success(xorstr("Ellohim Reset Chest"), std::format("{} Chest Successully Reset", params->m_treasure_box_id.get_name()));
+
+					return g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, g_native_invoker->m_server_reset_treasure_box, &g_native_invoker->m_server_reset_treasure_box_params);
+				}
+			}
+			if (function->get_name() == "ServerRecordAbnormalJumpSectionData")
+			{
+				auto params = static_cast<ServerRecordAbnormalJumpSectionData*>(parms);
+
+				g_notification_service->success(xorstr("Server Record Abnormal Jump Section Data"),
+					std::format("Your action detected by anti-cheat -> Data Info : {} Comment Info : {} Type : {}",
+						params->m_collect_info,
+						params->m_comment2,
+						params->m_anti_type));
+			}
+			if (function->get_name() == "Server_ProjectileActorHit")
+			{
+				constexpr auto times = 100;
+				if (g_settings->player.rapid_shoot)
+				{
+					auto params = static_cast<Server_ProjectileActorHit*>(parms);
+					static auto fn = g_native_invoker->get_native("Function HottaFramework.ProjectileBase.SetProjectileTrackActor");
+
+					g_native_invoker->m_set_projectile_track_actor_params.m_actor = params->m_target;
+
+					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, fn, &g_native_invoker->m_set_projectile_track_actor_params);
+				}
+
+				g_notification_service->success(xorstr("Ellohim Projectile Hit"), std::format("Projectile sent succesfully {} times", times));
+			}
+			if (function->get_name() == "Server_ProjectileActorHitClientActor")
+			{
+				constexpr auto times = 100;
+				if (g_settings->player.rapid_shoot)
+				{
+					for (int i = 0; i <= times; i++)
 					{
-						auto params = static_cast<ClientSetTreasureOpened*>(parms);
-
-						if (!g_native_invoker->m_server_reset_treasure_box)
-							g_native_invoker->m_server_reset_treasure_box = g_native_invoker->get_native("Function HottaFramework.HottaPlayerStatusComponent.ServerResetTreasureBox");
-
-						g_native_invoker->m_server_reset_treasure_box_params.m_static = params->m_static;
-						g_native_invoker->m_server_reset_treasure_box_params.m_treasure_box_id = params->m_treasure_box_id;
-						g_notification_service->success(xorstr("Ellohim Reset Chest"), std::format("{} Chest Successully Reset", params->m_treasure_box_id.get_name()));
-
-						return g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, g_native_invoker->m_server_reset_treasure_box, &g_native_invoker->m_server_reset_treasure_box_params);
+						g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
 					}
-					break;
 				}
-				case RAGE_JOAAT("ServerRecordAbnormalJumpSectionData"):
-				{
-					auto params = static_cast<ServerRecordAbnormalJumpSectionData*>(parms);
 
-					g_notification_service->success(xorstr("Server Record Abnormal Jump Section Data"), 
-						std::format("Your action detected by anti-cheat -> Data Info : {} Comment Info : {} Type : {}", 
-							params->m_collect_info, 
-							params->m_comment2, 
-							params->m_anti_type));
-					
-					break;
-				}
-				case RAGE_JOAAT("Server_ProjectileActorHit"):
-				{
-					if (g_settings->player.rapid_shoot && g_renderer->m_is_mouse_clicked)
-					{
-						for (int i = 0; i <= 100; i++)
-						{
-							g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
-						}
-					}
-					break;
-				}
-				case RAGE_JOAAT("ServerCheckQuestRpcRequire"):
-				{
-					auto params = static_cast<ServerCheckQuestRpcRequire*>(parms);
+				g_notification_service->success(xorstr("Ellohim Projectile Hit"), std::format("Projectile sent succesfully {} times", times));
+			}
+			if (function->get_name() == "ServerCheckQuestRpcRequire")
+			{
+				auto params = static_cast<ServerCheckQuestRpcRequire*>(parms);
 
-					g_logger->info("Quest ID : %s Object ID : %s", params->m_quest_id.get_name().c_str(), params->m_objective_id.get_name().c_str());
-					break;
-				}
-				case RAGE_JOAAT("ClientUpdateAccumulateCurrencyArraySingle"):
-				{
-					/*
-					auto params = static_cast<ClientUpdateAccumulateCurrencyArraySingle*>(parms);
+				g_logger->info("Quest ID : %s Object ID : %s", params->m_quest_id.get_name().c_str(), params->m_objective_id.get_name().c_str());
+			}
+			if (function->get_name() == "ClientUpdateAccumulateCurrencyArraySingle")
+			{
+				/*
+				auto params = static_cast<ClientUpdateAccumulateCurrencyArraySingle*>(parms);
 
+				if (params->m_amount < 0)
+				{
+					params->m_amount = 0;
+				}
+
+				if (params->m_currency_type == EHottaCurrencyType::FakeDiamond)
+				{
 					if (params->m_amount < 0)
 					{
-						params->m_amount = 0;
+						params->m_currency_type = EHottaCurrencyType::Gold;
 					}
-
-					if (params->m_currency_type == EHottaCurrencyType::FakeDiamond)
-					{
-						if (params->m_amount < 0)
-						{
-							params->m_currency_type = EHottaCurrencyType::Gold;
-						}
-					}
-					
-
-					g_notification_service->success(xorstr("Ellohim Currency"), std::format("Currency Successullfy Accumulated {}", params->m_amount));
-					*/
-					break;
 				}
-				case RAGE_JOAAT("ClientOnCurrencyAmountChanged"):
+
+
+				g_notification_service->success(xorstr("Ellohim Currency"), std::format("Currency Successullfy Accumulated {}", params->m_amount));
+				*/
+			}
+			if (function->get_name() == "ClientOnCurrencyAmountChanged")
+			{
+				auto params = static_cast<ClientOnCurrencyAmountChanged*>(parms);
+
+				if (params->m_add_amount < 0)
 				{
-					auto params = static_cast<ClientOnCurrencyAmountChanged*>(parms);
+					params->m_add_amount = 1000000;
+					params->m_path_type = EHottaOutputPathType::Add_Rewared;
 
-					if (params->m_add_amount < 0)
-					{
-						params->m_add_amount = 1000000;
-						params->m_path_type = EHottaOutputPathType::Add_Rewared;
+					g_notification_service->success(xorstr("Ellohim Currency"), xorstr("No currency used"));
 
-						g_notification_service->success(xorstr("Ellohim Currency"), xorstr("No currency used"));
-
-						return;
-					}
-
-					g_notification_service->success(xorstr("Ellohim Currency"), 
-						std::format("Currency Successullfy Added {}", 
-							params->m_add_amount));
-
-					break;
+					return;
 				}
-				case RAGE_JOAAT("ServerUpgradeItem"):
+
+				g_notification_service->success(xorstr("Ellohim Currency"),
+					std::format("Currency Successullfy Added {}",
+						params->m_add_amount));
+			}
+			if (function->get_name() == "ServerUpgradeItem")
+			{
+				auto params = static_cast<ServerUpgradeItem*>(parms);
+				g_notification_service->success(xorstr("Ellohim Item Upgrade"),
+					std::format("Item Upgrade {} Successfully {}",
+						params->m_target_id.get_name(),
+						params->m_target_count));
+
+			}
+			if (function->get_name() == "ServerMatrixUnequiped")
+			{
+				auto params = static_cast<ServerMatrixUnequiped*>(parms);
+				for (int i = 0; i <= 20; i++)
 				{
-					auto params = static_cast<ServerUpgradeItem*>(parms);
-					g_notification_service->success(xorstr("Ellohim Item Upgrade"), 
-						std::format("Item Upgrade {} Successfully {}", 
-							params->m_target_id.get_name(), 
-							params->m_target_count));
+					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
+				}
+				g_notification_service->success(xorstr("Ellohim Matrix Unequiped"),
+					std::format("Matrix unequiped slot index {} successfull contain type {} weapon slot {}",
+						params->m_matrix_slot, params->m_contain_type, params->m_weapon_slot));
+			}
+			if (function->get_name() == "ServerUpgradeStarLevel")
+			{
+				auto params = static_cast<ServerUpgradeStarLevel*>(parms);
+				for (int i = 0; i <= 6; i++)
+				{
+					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
+				}
 
-					break;
-				}
-				case RAGE_JOAAT("ServerMatrixUnequiped"):
+				g_notification_service->success(xorstr("Ellohim Star Upgrade"),
+					std::format("Star upgrade slot index {} successfull contain type {}",
+						params->m_choose_item_slot, params->m_contain_type));
+			}
+			if (function->get_name() == "ServerMatrixUpgradeStar")
+			{
+				auto params = static_cast<ServerMatrixStrengthen*>(parms);
+				for (int i = 0; i <= 6; i++)
 				{
-					auto params = static_cast<ServerMatrixUnequiped*>(parms);
-					for (int i = 0; i <= 20; i++)
-					{
-						g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
-					}
-					g_notification_service->success(xorstr("Ellohim Matrix Unequiped"),
-						std::format("Matrix unequiped slot index {} successfull contain type {} weapon slot {}",
-							params->m_matrix_slot, params->m_contain_type, params->m_weapon_slot));
+					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
+				}
+				g_notification_service->success(xorstr("Ellohim Matrix Star Upgrade"),
+					std::format("Matrix star upgrade slot index {} successfull contain type {}",
+						params->m_slot_index, params->m_contain_type));
+			}
+			if (function->get_name() == "ServerMatrixUpgradeStar")
+			{
+				auto params = static_cast<ServerMatrixStrengthen*>(parms);
+				for (int i = 0; i <= 6; i++)
+				{
+					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
+				}
+				g_notification_service->success(xorstr("Ellohim Matrix Star Upgrade"),
+					std::format("Matrix star upgrade slot index {} successfull contain type {}",
+						params->m_slot_index, params->m_contain_type));
+			}
+			if (function->get_name() == "ServerMatrixStrengthen")
+			{
+				for (int i = 0; i <= 15; i++)
+				{
+					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
+				}
+				g_notification_service->success(xorstr("Ellohim matrix upgrade"), xorstr("Matrix upgrade successfully multiplied 15 times"));
+			}
+			if (function->get_name() == "ServerEquipStrengthen")
+			{
+				for (int i = 0; i <= 10; i++)
+				{
+					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
+				}
+				g_notification_service->success(xorstr("Ellohim equipment strengthen"), xorstr("Weapon upgrade successfull"));
+			}
+			if (function->get_name() == "ServerEquipWeapon")
+			{
+				for (int i = 0; i <= 10; i++)
+				{
+					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
+				}
+				g_notification_service->success(xorstr("Ellohim equipment"), xorstr("Weapon equiped succesfully"));
+			}
+			if (function->get_name() == "ServerRecordExploreProgress")
+			{
+				auto params = static_cast<ServerRecordExploreProgress*>(parms);
+				g_notification_service->success(xorstr("Ellohim Exploration Progress"),
+					std::format("Item name {} quantity {}",
+						params->m_drop_id.get_name(), params->m_drop_num));
 
-					break;
-				}
-				case RAGE_JOAAT("ServerUpgradeStarLevel"):
-				{
-					auto params = static_cast<ServerUpgradeStarLevel*>(parms);
-					for (int i = 0; i <= 6; i++)
-					{
-						g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
-					}
-
-					g_notification_service->success(xorstr("Ellohim Star Upgrade"),
-						std::format("Star upgrade slot index {} successfull contain type {}",
-							params->m_choose_item_slot, params->m_contain_type));
-
-					break;
-				}
-				case RAGE_JOAAT("ServerMatrixUpgradeStar"):
-				{
-					auto params = static_cast<ServerMatrixStrengthen*>(parms);
-					for (int i = 0; i <= 6; i++)
-					{
-						g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
-					}
-					g_notification_service->success(xorstr("Ellohim Matrix Star Upgrade"),
-						std::format("Matrix star upgrade slot index {} successfull contain type {}",
-							params->m_slot_index, params->m_contain_type));
-					break;
-				}
-				case RAGE_JOAAT("ServerMatrixStrengthen"):
-				{
-					for (int i = 0; i <= 10; i++)
-					{
-						g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
-					}
-					break;
-				}
-				case RAGE_JOAAT("ServerEquipStrengthen"):
-				{
-					for (int i = 0; i <= 10; i++)
-					{
-						g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
-					}
-					break;
-				}
-				case RAGE_JOAAT("ServerEquipWeapon"):
-				{
-					for (int i = 0; i <= 10; i++)
-					{
-						g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
-					}
-					g_notification_service->success(xorstr("Ellohim Matrix Star Upgrade"), xorstr("ServerEquipWeapon"));
-					break;
-				}
-				case RAGE_JOAAT("ServerRecordExploreProgress"):
-				{
-					auto params = static_cast<ServerRecordExploreProgress*>(parms);
-					g_notification_service->success(xorstr("Ellohim Exploration Progress"), 
-						std::format("Item name {} quantity {}", 
-							params->m_drop_id.get_name(), params->m_drop_num));
-
-					params->m_drop_num = 100;
-
-					break;
-				}
+				params->m_drop_num = 10000;
 			}
 		}
 

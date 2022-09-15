@@ -1,5 +1,6 @@
 #pragma once
 #include "notification/notification_service.hpp"
+#include <utility/features/all.hpp>
 
 namespace big
 {
@@ -12,6 +13,7 @@ namespace big
 		explicit init_service()
 		{
 			notification = std::make_unique<notification_service>();
+			features = std::make_unique<Features>();
 
 			g_service = this;
 		}
@@ -19,11 +21,13 @@ namespace big
 		~init_service()
 		{
 			notification.reset();
+			features.reset();
 
 			g_service = nullptr;
 		}
 
 	private:
 		std::unique_ptr<notification_service> notification;
+		std::unique_ptr<Features> features;
 	};
 }

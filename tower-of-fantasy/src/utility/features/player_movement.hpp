@@ -2,216 +2,220 @@
 #include "../unreal_engine_utility.hpp"
 #include "script.hpp"
 
-namespace big::movement
+namespace big
 {
-	inline void no_clip(bool activate)
+	class MovementOption
 	{
-		if (auto player = unreal_engine::get_local_player())
+	public:
+		inline void no_clip(bool activate)
+		{
+			if (auto player = unreal_engine::get_local_player())
+			{
+				if (activate)
+				{
+					player->m_player_controller->m_acknowledge_pawn->no_clip = 0x40;
+				}
+				else
+				{
+					player->m_player_controller->m_acknowledge_pawn->no_clip = 0x44;
+				}
+			}
+		}
+
+		inline void infinite_dodge(bool activate)
 		{
 			if (activate)
 			{
-				player->m_player_controller->m_acknowledge_pawn->no_clip = 0x40;
-			}
-			else
-			{
-				player->m_player_controller->m_acknowledge_pawn->no_clip = 0x44;
-			}
-		}
-	}
-
-	inline void infinite_dodge(bool activate)
-	{
-		if (activate)
-		{
-			if (GetAsyncKeyState(VK_LSHIFT) & 0x1)
-			{
-				if (auto player = unreal_engine::get_local_player())
+				if (GetAsyncKeyState(VK_LSHIFT) & 0x1)
 				{
-					if (auto controller = player->m_player_controller)
+					if (auto player = unreal_engine::get_local_player())
 					{
-						if (auto pawn = controller->m_pawn)
+						if (auto controller = player->m_player_controller)
 						{
-							pawn->m_rand_bean = 6001;
-							pawn->m_cur_bean_count = 6641;
-							pawn->m_change_time = 637963816908830000;
-							if (auto self = unreal_engine::get_hotta_character(); self)
+							if (auto pawn = controller->m_pawn)
 							{
-								self->update_evade_count();
+								pawn->m_rand_bean = 6001;
+								pawn->m_cur_bean_count = 6641;
+								pawn->m_change_time = 637963816908830000;
+								if (auto self = unreal_engine::get_hotta_character(); self)
+								{
+									self->update_evade_count();
+								}
 							}
 						}
 					}
 				}
 			}
 		}
-	}
 
-	inline Vector3* get_entity_coords()
-	{
-		if (auto pawn = unreal_engine::get_pawn())
+		inline Vector3* get_entity_coords()
 		{
-			if (auto self = pawn->m_capsule_component)
+			if (auto pawn = unreal_engine::get_pawn())
 			{
-				return &self->m_position;
+				if (auto self = pawn->m_capsule_component)
+				{
+					return &self->m_position;
+				}
 			}
+
+			return nullptr;
 		}
 
-		return nullptr;
-	}
-
-	inline void teleport_forward()
-	{
-		THREAD_POOL_BEGIN()
+		inline void teleport_forward()
 		{
-			if (auto self = unreal_engine::get_hotta_character(); self)
+			THREAD_POOL_BEGIN()
 			{
-				constexpr int forward = 20;
-				auto pos = self->m_capsule_component->m_position;
-				auto rot = self->m_capsule_component->m_rotation;
-
-				pos.x += forward * sin(unreal_engine::degree_to_radian(rot.yaw)) * -1.5f;
-				pos.y += forward * cos(unreal_engine::degree_to_radian(rot.yaw));
-
-				self->server_teleport_to(pos, rot);
-			}
-		} THREAD_POOL_END
-	}
-
-	inline void teleport_to(Vector3 coords)
-	{
-		TRY_CLAUSE
-		{
-			if (auto self = unreal_engine::get_hotta_character(); self)
-			{
-				self->server_teleport_to(coords, Rotator(0.f, 0.f, 0.f));
-			}
-		} EXCEPT_CLAUSE
-	}
-
-	inline void teleport_with_loading(Vector3 coords)
-	{
-		TRY_CLAUSE
-		{
-			if (auto self = unreal_engine::get_hotta_character(); self)
-			{
-				self->server_teleport_with_loading(coords, Rotator(0.f, 0.f, 0.f));
-			}
-		} EXCEPT_CLAUSE
-	}
-
-	inline float* player_movement_speed()
-	{
-		if (auto player = unreal_engine::get_local_player())
-			return &player->m_player_controller->m_pawn->m_chara_movement->m_movement_speed;
-
-		return nullptr;
-	}
-
-	inline float* player_crouch_speed()
-	{
-		if (auto player = unreal_engine::get_local_player())
-			return &player->m_player_controller->m_pawn->m_chara_movement->m_crouch_speed;
-
-		return nullptr;
-	}
-
-	inline float* player_swim_speed()
-	{
-		if (auto player = unreal_engine::get_local_player())
-			return &player->m_player_controller->m_pawn->m_max_swim_speed;
-
-		return nullptr;
-	}
-
-	inline float* player_fly_speed()
-	{
-		if (auto player = unreal_engine::get_local_player())
-			return &player->m_player_controller->m_pawn->m_chara_movement->m_fly_speed;
-
-		return nullptr;
-	}
-
-	inline float* player_gravity()
-	{
-		if (auto player = unreal_engine::get_local_player())
-			return &player->m_player_controller->m_pawn->m_gravity;
-
-		return nullptr;
-	}
-
-	inline void infinite_jump(bool activate)
-	{
-		if (activate)
-		{
-			if (GetAsyncKeyState(VK_SPACE) & 0x1)
-			{
-				if (auto player = unreal_engine::get_local_player())
+				if (auto self = unreal_engine::get_hotta_character(); self)
 				{
-					if (auto controller = player->m_player_controller)
+					constexpr auto forward = 1000.f;
+					auto pos = self->m_capsule_component->m_position;
+					auto rot = self->m_capsule_component->m_rotation;
+
+					pos.x += forward * sin(unreal_engine::degree_to_radian(rot.yaw)) * -1.5f;
+					pos.y += forward * cos(unreal_engine::degree_to_radian(rot.yaw));
+
+					self->server_teleport_to(pos, rot);
+				}
+			} THREAD_POOL_END
+		}
+
+		inline void teleport_to(Vector3 coords)
+		{
+			TRY_CLAUSE
+			{
+				if (auto self = unreal_engine::get_hotta_character(); self)
+				{
+					self->server_teleport_to(coords, Rotator(0.f, 0.f, 0.f));
+				}
+			} EXCEPT_CLAUSE
+		}
+
+		inline void teleport_with_loading(Vector3 coords)
+		{
+			TRY_CLAUSE
+			{
+				if (auto self = unreal_engine::get_hotta_character(); self)
+				{
+					self->server_teleport_with_loading(coords, Rotator(0.f, 0.f, 0.f));
+				}
+			} EXCEPT_CLAUSE
+		}
+
+		inline float* player_movement_speed()
+		{
+			if (auto player = unreal_engine::get_local_player())
+				return &player->m_player_controller->m_pawn->m_chara_movement->m_movement_speed;
+
+			return nullptr;
+		}
+
+		inline float* player_crouch_speed()
+		{
+			if (auto player = unreal_engine::get_local_player())
+				return &player->m_player_controller->m_pawn->m_chara_movement->m_crouch_speed;
+
+			return nullptr;
+		}
+
+		inline float* player_swim_speed()
+		{
+			if (auto player = unreal_engine::get_local_player())
+				return &player->m_player_controller->m_pawn->m_max_swim_speed;
+
+			return nullptr;
+		}
+
+		inline float* player_fly_speed()
+		{
+			if (auto player = unreal_engine::get_local_player())
+				return &player->m_player_controller->m_pawn->m_chara_movement->m_fly_speed;
+
+			return nullptr;
+		}
+
+		inline float* player_gravity()
+		{
+			if (auto player = unreal_engine::get_local_player())
+				return &player->m_player_controller->m_pawn->m_gravity;
+
+			return nullptr;
+		}
+
+		inline void infinite_jump(bool activate)
+		{
+			if (activate)
+			{
+				if (GetAsyncKeyState(VK_SPACE) & 0x1)
+				{
+					if (auto player = unreal_engine::get_local_player())
 					{
-						if (auto actor_pawn = controller->m_pawn)
+						if (auto controller = player->m_player_controller)
 						{
-							actor_pawn->m_jump_count = 0;
+							if (auto actor_pawn = controller->m_pawn)
+							{
+								actor_pawn->m_jump_count = 0;
+							}
 						}
 					}
 				}
 			}
 		}
-	}
 
-	inline bool is_crouch()
-	{
-		if (auto player = unreal_engine::get_local_player())
-			return player->m_player_controller->m_pawn->m_is_crouch;
-
-		return false;
-	}
-
-	inline bool is_armor_broken()
-	{
-		if (auto player = unreal_engine::get_local_player())
-			return player->m_player_controller->m_pawn->m_is_armor_break;
-
-		return false;
-	}
-
-	inline float* game_speed()
-	{
-		if (auto player = unreal_engine::get_local_player())
+		inline bool is_crouch()
 		{
-			return &player->m_player_controller->m_pawn->m_game_speed;
+			if (auto player = unreal_engine::get_local_player())
+				return player->m_player_controller->m_pawn->m_is_crouch;
+
+			return false;
 		}
 
-		return nullptr;
-	}
-
-	inline void freeze_mobs(bool activate)
-	{
-		if (auto player = unreal_engine::get_local_player())
+		inline bool is_armor_broken()
 		{
-			uint8_t freeze_status = player->m_player_controller->m_pawn->m_freeze_mobs;
-			if (activate && !freeze_status)
+			if (auto player = unreal_engine::get_local_player())
+				return player->m_player_controller->m_pawn->m_is_armor_break;
+
+			return false;
+		}
+
+		inline float* game_speed()
+		{
+			if (auto player = unreal_engine::get_local_player())
 			{
-				player->m_player_controller->m_pawn->m_freeze_mobs = true;
+				return &player->m_player_controller->m_pawn->m_game_speed;
 			}
-			else if (activate && freeze_status)
+
+			return nullptr;
+		}
+
+		inline void freeze_mobs(bool activate)
+		{
+			if (auto player = unreal_engine::get_local_player())
 			{
-				player->m_player_controller->m_pawn->m_freeze_mobs = false;
+				uint8_t freeze_status = player->m_player_controller->m_pawn->m_freeze_mobs;
+				if (activate && !freeze_status)
+				{
+					player->m_player_controller->m_pawn->m_freeze_mobs = true;
+				}
+				else if (activate && freeze_status)
+				{
+					player->m_player_controller->m_pawn->m_freeze_mobs = false;
+				}
 			}
 		}
-	}
 
-	inline void freeze_entity(bool activate)
-	{
-		if (auto player = unreal_engine::get_local_player())
+		inline void freeze_entity(bool activate)
 		{
-			if (activate)
+			if (auto player = unreal_engine::get_local_player())
 			{
-				player->m_player_controller->m_pawn->m_chara_movement->m_freeze_entity = false;
-			}
-			else
-			{
-				player->m_player_controller->m_pawn->m_chara_movement->m_freeze_entity = true;
+				if (activate)
+				{
+					player->m_player_controller->m_pawn->m_chara_movement->m_freeze_entity = false;
+				}
+				else
+				{
+					player->m_player_controller->m_pawn->m_chara_movement->m_freeze_entity = true;
+				}
 			}
 		}
-	}
+	};
 }

@@ -24,34 +24,17 @@ namespace big
 	template <typename T>
 	struct TArray
 	{
-		inline T& operator[](const int i) { return items[i]; }
-
-		inline const T& operator[](const int i) const { return items[i]; }
-
-		inline static TArray<T> init(const std::vector<T>& items)
-		{
-			TArray<T> ret;
-			ret.item_count = ret.max_item = items.size();
-			ret.items = new T[ret.item_count];
-			for (int i = 0; i < ret.item_count; i++)
-				ret.items[i] = items[i];
-			return ret;
-		}
-
-		inline void uninit()
-		{
-			delete[] this->items;
-		}
+		friend struct FString;
 
 		inline std::vector<T> to_vector()
 		{
 			std::vector<T> vector;
-			if (vector.empty() || vector.size() != item_count)
+			if (vector.empty() || vector.size() != num())
 			{
-				for (int i = 0; i < item_count; i++)
+				for (int i = 0; i < num(); i++)
 				{
 					if (!valid(i)) continue;
-					vector.push_back(items[i]);
+					vector.push_back(data[i]);
 				}
 			}
 
@@ -60,53 +43,111 @@ namespace big
 
 		inline bool valid(int i)
 		{
-			if (item_count > max_item || !items[i])
+			if (num() > max_num() || !data[i])
 				return false;
 
 			return true;
 		}
 
-		inline bool valid()
+		inline bool is_valid_index(int index)
 		{
-			return item_count < max_item;
+			return index < num();
+		}
+
+		inline const T& at(int index) const
+		{
+			return this->data[index];
+		}
+
+		inline bool is_valid_data() const
+		{
+			return this->data != nullptr;
 		}
 
 		inline bool valid_ex(int i)
 		{
 			uintptr_t result{};
-			if (IsBadReadPtr(this->items[i], sizeof(this->items[i])))
+			if (IsBadReadPtr(this->data[i], sizeof(this->data[i])))
 			{
 				return false;
 			}
 			return true;
 		}
 
-		inline int count()
+		inline int num()
 		{
-			return item_count;
+			return count;
 		}
 
-		inline int max_count()
+		inline int max_num()
 		{
-			return max_item;
+			return max;
 		}
 
-		T* items = nullptr;
-		int item_count = 0;
-		int max_item = 0;
+		void add(T InputData)
+		{
+			data = (T*)realloc(data, sizeof(T) * (count + 1));
+			data[count++] = InputData;
+			max = count;
+		};
+
+		void clear()
+		{
+			free(data);
+			count = max = 0;
+		};
+
+		inline T& operator[](const int i) { return data[i]; }
+		inline const T& operator[](const int i) const { return data[i]; }
+	private:
+		T* data = nullptr;
+		int count = 0;
+		int max = 0;
 	};
 
-	struct FString : public TArray<wchar_t>
+	struct FString : private TArray<wchar_t>
 	{
-		inline wchar_t* get_wstring() { return this->items; }
+		inline std::wstring get_wstring() { return std::wstring(this->data); }
+
+		inline wchar_t* c_str() { return this->data; }
+
+		inline std::string to_string() const
+		{
+			auto length = std::wcslen(this->data);
+
+			std::string str(length, '\0');
+
+			std::use_facet<std::ctype<wchar_t>>(std::locale()).narrow(this->data, this->data + length, '?', &str[0]);
+
+			return str;
+		}
 
 		inline std::string get_string()
 		{
 
-			int size = WideCharToMultiByte(CP_UTF8, 0, items, item_count, nullptr, 0, nullptr, nullptr);
-			std::string str(size, 0);
-			WideCharToMultiByte(CP_UTF8, 0, items, item_count, &str[0], size, nullptr, nullptr);
+			auto length = this->num();
+
+			std::string str(length, '\0');
+
+			std::use_facet<std::ctype<wchar_t>>(std::locale()).narrow(this->data, this->data + length, '?', &str[0]);
+
+			std::string search = "\x0A";
+
+			for (int i = str.find(search); i >= 0; i = str.find(search))
+				str.replace(i, search.size(), " ");
+
 			return str;
+		}
+	};
+
+	struct FText
+	{
+		FString* m_text;
+		char m_unknown_data[0x30];
+
+		inline wchar_t* c_str() const
+		{
+			return m_text->c_str();
 		}
 	};
 

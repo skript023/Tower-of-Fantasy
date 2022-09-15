@@ -26,7 +26,8 @@ namespace big
 		m_update_cur_skill_evade_bean_count(get_native("Function HottaFramework.HottaPlayerCharacter.UpdateCurSkillEvadeBeanCount")),
 		m_server_reset_treasure_box(get_native("Function HottaFramework.HottaPlayerStatusComponent.ServerResetTreasureBox")),
 		m_set_character_exp(get_native("Function HottaFramework.HottaPlayerCharacter.SetCharacterExp")),
-		m_server_add_exp(get_native("Function HottaFramework.HottaPlayerCharacter.ServerAddExp"))
+		m_server_add_exp(get_native("Function HottaFramework.HottaPlayerCharacter.ServerAddExp")),
+		m_kismet_text_library(get_class<UClass*>("Class Engine.KismetTextLibrary"))
 	{
 		g_native_invoker = this;
 	}
@@ -68,5 +69,16 @@ namespace big
 			return "OutputPathType_FromBag";
 		}
 		return "None";
+	}
+
+	template <typename T>
+	T NativeInvoker::get_class(std::string name)
+	{
+		if (auto uclass = UObject::find_class(name))
+		{
+			return static_cast<T>(uclass);
+		}
+
+		return nullptr;
 	}
 }

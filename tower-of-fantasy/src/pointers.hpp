@@ -25,6 +25,8 @@ namespace big
 		uintptr_t** m_view_matrix{};
 		Navigation** m_player_nav{};
 		functions::process_event_t m_process_event{};
+		functions::ftext_to_fstring_t m_text_to_string{};
+		functions::fname_t m_fname{};
 
 		iVector2* m_screen{};
 
