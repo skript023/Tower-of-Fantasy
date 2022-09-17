@@ -35,18 +35,14 @@ namespace big
 	}
 	void MiscOption::get_entity_list(bool activate)
 	{
-		static auto start = std::chrono::high_resolution_clock::now();
-		bool first = true;
-		if (activate && unreal_engine::game_state() && ((std::chrono::high_resolution_clock::now() - start).count() <= std::chrono::seconds(10).count() || first))
+		if (activate && unreal_engine::game_state())
 		{
 			m_entity_list.clear();
 			for (auto level : (*g_pointers->m_world)->m_level.to_vector())
 			{
 				for (auto actor : level->m_actor.to_vector())
 				{
-					if (!actor->owner()) continue;
 					auto name = actor->get_name();
-					auto owner = actor->owner();
 
 					if (auto root_component = actor->root_component())
 					{
@@ -59,20 +55,18 @@ namespace big
 								Vector2 location;
 								if (self->project_world_to_screen(pos, location))
 								{
-									m_entity_list.push_back({ location, pos, name});
+									m_entity_list.push_back({ location, pos, name, actor});
 								}
 							}
 						}
 					}
 				}
 			}
-			start = std::chrono::high_resolution_clock::now();
-			first = false;
 		}
 	}
 	void MiscOption::render_esp(bool activate)
 	{
-		if (activate)
+		if (activate && unreal_engine::game_state())
 		{
 			for (auto entity : m_entity_list)
 			{
@@ -88,10 +82,13 @@ namespace big
 					float width = static_cast<float>(g_pointers->m_screen->x / 2);
 					float height = static_cast<float>(g_pointers->m_screen->y / 2);
 
-					draw::draw_line(width, 0, entity.m_position.x, entity.m_position.y, &red, 1.f);
-					draw::draw_stroke_text(entity.m_position.x, entity.m_position.y, &white, std::format("{} [{:.2f}]m", entity.name, distance).c_str());
+					if (!entity.m_actor->harvested() && entity.m_actor->allow_pick())
+					{
+						draw::draw_line(width, 0, entity.m_position.x, entity.m_position.y, &red, 1.f);
+						draw::draw_stroke_text(entity.m_position.x, entity.m_position.y, &white, std::format("{} [{:.2f}]m", entity.name, distance).c_str());
 
-					if (distance < 100.f) draw::draw_corner_box(entity.m_position.x, entity.m_position.y, 100.f, 50.f, 2.f, &green);
+						if (distance < 100.f) draw::draw_corner_box(entity.m_position.x, entity.m_position.y, 100.f, 50.f, 2.f, &green);
+					}
 				}
 			}
 		}

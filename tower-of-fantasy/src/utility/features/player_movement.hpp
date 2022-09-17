@@ -13,11 +13,11 @@ namespace big
 			{
 				if (activate)
 				{
-					player->m_player_controller->m_acknowledge_pawn->no_clip = 0x40;
+					player->m_player_controller->m_acknowledge_pawn->m_is_actor_enable_collision = 0x40;
 				}
 				else
 				{
-					player->m_player_controller->m_acknowledge_pawn->no_clip = 0x44;
+					player->m_player_controller->m_acknowledge_pawn->m_is_actor_enable_collision = 0x44;
 				}
 			}
 		}
@@ -71,10 +71,11 @@ namespace big
 					auto pos = self->m_capsule_component->m_position;
 					auto rot = self->m_capsule_component->m_rotation;
 
-					pos.x += forward * sin(unreal_engine::degree_to_radian(rot.yaw));
+					pos.x += forward * sin(unreal_engine::degree_to_radian(rot.yaw)) * -1.500f;
 					pos.y += forward * cos(unreal_engine::degree_to_radian(rot.yaw));
 
 					self->server_teleport_to(pos, rot);
+					self->client_teleport_to(pos, rot);
 				}
 			} THREAD_POOL_END
 		}
@@ -86,6 +87,7 @@ namespace big
 				if (auto self = unreal_engine::get_hotta_character(); self)
 				{
 					self->server_teleport_to(coords, self->m_capsule_component->m_rotation);
+					self->client_teleport_to(coords, self->m_capsule_component->m_rotation);
 				}
 			} QUEUE_JOB_END_CLAUSE
 		}

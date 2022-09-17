@@ -7,6 +7,15 @@ enum class EFindName
     FNAME_Replace_Not_Safe_For_Threading,
 };
 
+enum class EDamageReason : uint8_t
+{
+	Normal,
+	Drowning,
+	Falling,
+	Eroding,
+	Max
+};
+
 enum class EHottaCurrencyType
 {
 	Gold,

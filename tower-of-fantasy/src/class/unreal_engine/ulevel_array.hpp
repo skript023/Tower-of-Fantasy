@@ -53,20 +53,20 @@ namespace big
 
 		bool harvested()
 		{
-			if (!IsBadReadPtr(&this->m_has_harvested, sizeof(&this->m_has_harvested)))
+			if (IsBadReadPtr(&this->m_has_harvested, sizeof(&this->m_has_harvested)))
 			{
-				return this->m_has_harvested;
+				return false;
 			}
-			return false;
+			return this->m_has_harvested;
 		}
 
 		bool allow_pick()
 		{
-			if (!IsBadReadPtr(&this->m_is_allow_pick, sizeof(&this->m_is_allow_pick)))
+			if (IsBadReadPtr(&this->m_is_allow_pick, sizeof(&this->m_is_allow_pick)))
 			{
-				return this->m_is_allow_pick;
+				return false;
 			}
-			return false;
+			return this->m_is_allow_pick;
 		}
 	};
 	const auto test = sizeof(AActor);

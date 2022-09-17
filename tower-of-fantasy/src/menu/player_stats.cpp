@@ -1,6 +1,7 @@
 #include "player_stats.h"
 #include "imgui.h"
 #include "utility/features/all.hpp"
+#include <utility/ecryption.h>
 
 namespace big
 {
@@ -8,14 +9,13 @@ namespace big
 	{
         if (ImGui::BeginTabItem("Player Stats"))
         {
-            static int level_exp = 0;
-            ImGui::InputInt("Player EXP", &level_exp);
-            if (ImGui::Button("Add EXP"))
+            static int level = 0;
+            ImGui::InputInt("Player Level", &level);
+            if (ImGui::Button(xorstr("Set Level")))
             {
-                if (auto self = unreal_engine::get_hotta_character(); self)
-                {
-                    self->set_character_exp(level_exp);
-                }
+                g_native_invoker->m_server_set_character_level_params.m_level = level;
+
+                NativeInvoker::execute_native_function("Class HottaFramework.HottaCharacter", "Function HottaFramework.HottaCharacter.ServerSetCharacterLevel", &g_native_invoker->m_server_set_character_level_params);
             }
 
             if (ImGui::CollapsingHeader("Player Stats"))

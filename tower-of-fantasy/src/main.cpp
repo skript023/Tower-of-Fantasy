@@ -9,8 +9,9 @@
 #include "virtual_protect.hpp"
 #include "script_mgr.hpp"
 #include "translation.hpp"
-#include "utility/services/init_services.hpp"
 #include "native_invoker.hpp"
+#include "directx_pool.hpp"
+#include "utility/services/init_services.hpp"
 
 DWORD APIENTRY main_thread(LPVOID)
 {
@@ -48,6 +49,7 @@ DWORD APIENTRY main_thread(LPVOID)
 		g_logger->info("Virtual Protect initialized.");
 
 		auto renderer_instance = std::make_unique<renderer>();
+		auto directx_warper = std::make_unique<directx_pool>();
 		g_logger->info("Renderer initialized.");
 
 		auto hooking_instance = std::make_unique<hooking>();

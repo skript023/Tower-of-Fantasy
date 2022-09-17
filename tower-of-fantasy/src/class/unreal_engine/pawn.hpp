@@ -1,9 +1,10 @@
 #pragma once
 #include "../fwddec.hpp"
+#include "native_invoker.hpp"
 
 namespace big
 {
-	#pragma pack(push, 1)
+#pragma pack(push, 1)
 	class CapsuleComponent
 	{
 	public:
@@ -14,10 +15,10 @@ namespace big
 		Vector3 m_writable_position;//0x1E0
 	};
 
-	class Pawn
+	class Pawn : public UObject
 	{
 	public:
-		char pad_0000[0x61]; //0x0000
+		char pad_0028[57]; //0x0000
 		uint8_t m_godmode; //0x0061
 		char pad_0062[0x236]; //0x0062
 		class CharacterMovement* m_chara_movement; //0x0298
@@ -97,8 +98,29 @@ namespace big
 		float m_min_gliding_height; //0x55F4
 		float m_jump_height; //0x55F8
 		bool m_gliding_sprinted; //0x55FC
+
+		void server_set_health(float health, EDamageReason damageReason)
+		{
+			if (!g_native_invoker->m_server_set_health)
+				g_native_invoker->m_server_set_health = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.ServerSetHP");
+
+			g_native_invoker->m_server_set_health_params.m_health = health;
+			g_native_invoker->m_server_set_health_params.m_damage_reason = damageReason;
+
+			process_event(g_native_invoker->m_server_set_health, &g_native_invoker->m_server_set_health_params);
+		}
+
+		void server_set_character_level(int level)
+		{
+			if (!g_native_invoker->m_server_set_character_level)
+				g_native_invoker->m_server_set_character_level = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.ServerSetCharacterLevel");
+
+			g_native_invoker->m_server_set_character_level_params.m_level = level;
+
+			process_event(g_native_invoker->m_server_set_character_level, &g_native_invoker->m_server_set_character_level_params);
+		}
 	};
 	static_assert(sizeof(Pawn) == 0x55FD);
 
-	#pragma pack(pop)
+#pragma pack(pop)
 }

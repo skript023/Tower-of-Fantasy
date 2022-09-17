@@ -37,8 +37,43 @@ namespace big
 	{
 	public:
 		char pad0028[0x3C]; //0x0000
-		uint8_t no_clip; //0x0064
-		char pad_0065[0x23B]; //0x0065
+		uint8_t m_is_actor_enable_collision; //0x0064
+		uint8_t m_update_overlap_method_during_level_streaming; //0x0065
+		uint8_t m_default_update_overlaps_method_during_level_streaming; //0x0066
+		uint8_t m_remote_role; //0x0067
+		FVector m_linear_velocity; //0x0068
+		FVector m_angular_velocity; //0x0074
+		FVector m_location; //0x0080
+		Rotator m_rotation; //0x008C
+		uint8_t m_simulate_pysic_sleep; //0x0098
+		char pad_0099[3]; //0x0099
+		int m_initial_life_span; //0x009C
+		float m_custom_dilation; //0x00A0
+		char pad_00A4[68]; //0x00A4
+		class Owner* m_owner; //0x00E8
+		int64_t m_net_driver_name; //0x00F0
+		uint8_t m_role; //0x00F8
+		uint8_t m_net_dormancy; //0x00F9
+		uint8_t m_spawn_collision_handling; //0x00FA
+		uint8_t m_auto_receive_input; //0x00FB
+		int m_input_priority; //0x00FC
+		class InputComponent* m_input_component; //0x0100
+		int m_net_cull_distance_squared;//0x0108
+		int m_net_tag; //0x010C
+		int m_net_update_frequency; //0x0110
+		int m_min_net_update_frequency; //0x0114
+		int m_net_priority; //0x0118
+		int m_padding; //0x011C
+		class Instigator* m_instigator; //0x0120
+		TArray<class Children*> m_children; //0x0128
+		class RootComponent* m_root_component; //0x0138
+		TArray<class ControllingMatineeActors*> m_controller_matinee_actors; //0x0140
+		char pad_0150[8]; //0x0150
+		TArray<class Layers*> m_layers; //0x0158
+		int m_parent_componen; //0x0168
+		char pad_016C[12]; //0x016C
+		TArray<class Tags*> m_tags; //0x0178
+		char pad_0188[280]; //0x0188
 		class CapsuleComponent* m_capsule_component; //0x02A0
 		char pad_02A8[0x2E20]; //0x02A8
 		class QuestComponent* m_quest_component; //0x30C8
@@ -64,7 +99,7 @@ namespace big
 
 			g_native_invoker->m_teleport_with_loading_params.m_location.x = dst.x;
 			g_native_invoker->m_teleport_with_loading_params.m_location.y = dst.y;
-			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 10.f;
+			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 1000.f;
 
 			g_native_invoker->m_teleport_with_loading_params.m_rotator = rot;
 
@@ -78,7 +113,7 @@ namespace big
 
 			g_native_invoker->m_teleport_with_loading_params.m_location.x = dst.x;
 			g_native_invoker->m_teleport_with_loading_params.m_location.y = dst.y;
-			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 10.f;
+			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 1000.f;
 
 			g_native_invoker->m_teleport_with_loading_params.m_rotator = rot;
 
@@ -92,7 +127,7 @@ namespace big
 
 			g_native_invoker->m_teleport_with_loading_params.m_location.x = dst.x;
 			g_native_invoker->m_teleport_with_loading_params.m_location.y = dst.y;
-			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 10.f;
+			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 1000.f;
 
 			g_native_invoker->m_teleport_with_loading_params.m_rotator = rot;
 
@@ -106,7 +141,7 @@ namespace big
 			
 			g_native_invoker->m_teleport_with_loading_params.m_location.x = dst.x;
 			g_native_invoker->m_teleport_with_loading_params.m_location.y = dst.y;
-			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 10.f;
+			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 1000.f;
 
 			g_native_invoker->m_teleport_with_loading_params.m_rotator = rot;
 
@@ -120,7 +155,7 @@ namespace big
 
 			g_native_invoker->m_teleport_with_loading_params.m_location.x = dst.x;
 			g_native_invoker->m_teleport_with_loading_params.m_location.y = dst.y;
-			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 10.f;
+			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 1000.f;
 
 			g_native_invoker->m_teleport_with_loading_params.m_rotator = rot;
 

@@ -27,10 +27,10 @@ namespace big
 		FMinimalViewInfo m_view_info; // 0x1B00
 
 	public:
-		bool project_world_to_screen(Vector3 location, Vector2& m_screen_location)
+		Vector2 project_world_to_screen(Vector3 location)
 		{
+			Vector2 m_screen_location;
 			Matrix m_matrix = this->m_view_info.m_rotation;
-
 			Vector3 axisX, axisY, axisZ;
 
 			axisX = Vector3(m_matrix.m[0][0], m_matrix.m[0][1], m_matrix.m[0][2]);
@@ -40,12 +40,14 @@ namespace big
 			Vector3 v_delta = location - this->m_view_info.m_location;
 			Vector3 v_transformed(v_delta.dot(axisY), v_delta.dot(axisZ), v_delta.dot(axisX));
 
-			Vector2 m_screen_center(float(g_pointers->m_screen->x / 2), float(g_pointers->m_screen->y / 2));
-			float fov_angle = this->m_view_info.m_aspect_ratio / (16.0f / 9.0f) * tanf(this->m_view_info.m_field_of_view * (float)M_PI / 360.f);
+			if (v_transformed.z < 1.f) v_transformed.z = 1.f;
 
-			m_screen_location.x = m_screen_center.x + v_transformed.x * (m_screen_center.x / fov_angle) / v_transformed.z;
-			m_screen_location.y = m_screen_center.y - v_transformed.y * (m_screen_center.y / fov_angle) / v_transformed.z;
-			return true; 
+			Vector2 m_screen_center(float(g_pointers->m_screen->x / 2), float(g_pointers->m_screen->y / 2));
+			float fov_angle = (g_pointers->m_screen->x / g_pointers->m_screen->y) / (16.0f / 9.0f) * tanf(this->m_view_info.m_field_of_view * (float)M_PI / 360.f);
+
+			m_screen_location.x = ((float)g_pointers->m_screen->x * .5f) + v_transformed.x * ((float)g_pointers->m_screen->x * .5f) / fov_angle / v_transformed.z;
+			m_screen_location.y = ((float)g_pointers->m_screen->y * .5f) - v_transformed.y * ((float)g_pointers->m_screen->x * .5f) / fov_angle / v_transformed.z;
+			return m_screen_location;
 		}
 
 	private:

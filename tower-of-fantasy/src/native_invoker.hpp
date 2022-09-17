@@ -68,7 +68,7 @@ namespace big
 		bool m_static;
 		int64_t m_open_time;
 	};
-	
+
 	struct ServerResetTreasureBox
 	{
 		FName m_treasure_box_id;
@@ -169,6 +169,29 @@ namespace big
 		void* m_actor;
 	};
 
+	struct ServerSetHP
+	{
+		float m_health;
+		EDamageReason m_damage_reason;
+	};
+
+	struct ServerSetCharacterLevel
+	{
+		int m_level;
+	};
+
+	struct ServerSetLocationAndRotation
+	{
+		FVector m_location;
+		Rotator m_rotation;
+		bool m_close_server_accept_client_authoritative_position;
+	};
+
+	struct ServerSetHaveFallDamage
+	{
+		bool m_in_have_fall_damage;
+	};
+
 	class NativeInvoker
 	{
 	public:
@@ -176,10 +199,11 @@ namespace big
 		~NativeInvoker();
 
 		UFunction* get_native(std::string name);
+		static void execute_native_function(std::string className, std::string functionName, void* parameters);
 
 		template <typename T>
 		T get_class(std::string name);
-		UFunction* get_native_ex(const char* name);
+
 		std::string get_output_path_type(EHottaOutputPathType PathType);
 	public:
 		UFunction* m_world_to_screen;
@@ -205,6 +229,9 @@ namespace big
 		UFunction* m_server_reset_treasure_box;
 		UFunction* m_set_character_exp;
 		UFunction* m_server_add_exp;
+		UFunction* m_server_set_health;
+		UFunction* m_server_set_character_level;
+		UFunction* m_server_set_location_and_rotation;
 	public:
 		UClass* m_kismet_text_library;
 	public:
@@ -222,6 +249,12 @@ namespace big
 		ServerAddExp m_server_add_exp_params{};
 		Conv_TextToString m_convert_text_to_string_params{};
 		SetProjectileTrackActor m_set_projectile_track_actor_params{};
+		ServerSetHP m_server_set_health_params{};
+		ServerSetCharacterLevel m_server_set_character_level_params{};
+		ServerSetLocationAndRotation m_server_set_location_and_rotation_params{};
+	private:
+		inline static UFunction* m_function;
+		inline static UClass* m_class;
 	};
 
 	inline NativeInvoker* g_native_invoker;

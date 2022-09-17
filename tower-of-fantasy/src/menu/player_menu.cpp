@@ -159,18 +159,18 @@ namespace big
 
                                 if (name.find("Scene_Box_OnceOnly_") != std::string::npos)
                                 {
-                                    if (!actor->harvested() && actor->allow_pick())
+                                    if (auto root_component = actor->root_component())
                                     {
-                                        if (auto root_component = actor->root_component())
+                                        auto pos = root_component->m_relative_location;
+                                        auto distance = g_features->movement.get_entity_coords()->distance(pos);
+                                        if (distance > 150.f && distance < 700.f)
                                         {
-                                            auto pos = root_component->m_relative_location;
-                                            auto distance = g_features->movement.get_entity_coords()->distance(pos);
-                                            if (distance > 150.f && distance < 700.f)
+                                            if (!actor->harvested() && actor->allow_pick())
                                             {
                                                 g_features->movement.teleport_to(pos);
                                                 g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near supply pods"));
-                                                return;
                                             }
+                                            return;
                                         }
                                     }
                                 }

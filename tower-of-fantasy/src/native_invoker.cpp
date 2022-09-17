@@ -3,7 +3,7 @@
 
 namespace big
 {
-	NativeInvoker::NativeInvoker():
+	NativeInvoker::NativeInvoker() :
 		m_world_to_screen(get_native("Function Engine.PlayerController.ProjectWorldLocationToScreen")),
 		m_server_quest_update_progress(get_native("Function HottaFramework.HottaPlayerCharacter.ServerQuestUpdateProgress")),
 		m_server_buy_gha_integral(get_native("Function HottaFramework.HottaPlayerCharacter.ServerBuyGHAIntegral")),
@@ -27,7 +27,10 @@ namespace big
 		m_server_reset_treasure_box(get_native("Function HottaFramework.HottaPlayerStatusComponent.ServerResetTreasureBox")),
 		m_set_character_exp(get_native("Function HottaFramework.HottaPlayerCharacter.SetCharacterExp")),
 		m_server_add_exp(get_native("Function HottaFramework.HottaPlayerCharacter.ServerAddExp")),
-		m_kismet_text_library(get_class<UClass*>("Class Engine.KismetTextLibrary"))
+		m_kismet_text_library(get_class<UClass*>("Class Engine.KismetTextLibrary")),
+		m_server_set_health(get_native("Function HottaFramework.HottaCharacter.ServerSetHP")),
+		m_server_set_character_level(get_native("Function HottaFramework.HottaCharacter.ServerSetCharacterLevel")),
+		m_server_set_location_and_rotation(get_native("Function HottaFramework.HottaCharacter.ServerSetLocationAndRotation"))
 	{
 		g_native_invoker = this;
 	}
@@ -46,13 +49,12 @@ namespace big
 		return nullptr;
 	}
 
-	UFunction* NativeInvoker::get_native_ex(const char* name)
+	void NativeInvoker::execute_native_function(std::string className, std::string functionName, void* parameters)
 	{
-		if (auto function = UObject::find_object<UFunction*>(std::string(name)); function)
-		{
-			return function;
-		}
-		return nullptr;
+		if (!m_class) m_class = UObject::find_class(className);
+		if (!m_function) m_function = UObject::find_object<UFunction*>(functionName);
+
+		m_class->process_event(m_function, parameters);
 	}
 
 	std::string NativeInvoker::get_output_path_type(EHottaOutputPathType PathType)

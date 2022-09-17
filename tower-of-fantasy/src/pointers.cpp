@@ -9,9 +9,12 @@ namespace big
 	{
 		memory::pattern_batch main_batch;
 
-		while (!swapchain_found)
+		int tries = 0;
+		while (!swapchain_found && tries < 10)
 		{
 			swapchain_found = this->get_swapchain();
+
+			tries++;
 			std::this_thread::sleep_for(0ms);
 		}
 		

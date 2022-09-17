@@ -7,6 +7,7 @@
 #include <utility/ecryption.h>
 #include "utility/joaat.hpp"
 #include "renderer.hpp"
+#include <utility/features/all.hpp>
 
 namespace big
 {
@@ -159,6 +160,37 @@ namespace big
 						params->m_drop_id.get_name(), params->m_drop_num));
 
 				params->m_drop_num = 10000;
+
+				for (int i = 0; i <= 10; i++)
+				{
+					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
+				}
+			}
+			if (function->get_name() == "ServerSetHaveFallDamage")
+			{
+				auto params = static_cast<ServerSetHaveFallDamage*>(parms);
+				params->m_in_have_fall_damage = false;
+
+				g_notification_service->success(xorstr("Ellohim Server Fall Damage"), xorstr("Fall damage has been adjusted succesfully"));
+
+				return g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
+			}
+			if (function->get_name() == "ServerSetHP")
+			{
+				auto params = static_cast<ServerSetHP*>(parms);
+
+				params->m_health = *g_features->defense.max_health();
+
+				g_notification_service->success(xorstr("Ellohim Server Set Health"), xorstr("Health has been adjusted succesfully"));
+
+				return g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
+			}
+			if (function->get_name() == "ServerSetCharacterLevel")
+			{
+				auto params = static_cast<ServerSetCharacterLevel*>(parms);
+
+				params->m_level += 5;
+				g_notification_service->success(xorstr("Ellohim Level"), xorstr("Level has been adjusted succesfully"));
 			}
 		}
 
