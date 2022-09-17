@@ -30,7 +30,8 @@ namespace big
 		m_kismet_text_library(get_class<UClass*>("Class Engine.KismetTextLibrary")),
 		m_server_set_health(get_native("Function HottaFramework.HottaCharacter.ServerSetHP")),
 		m_server_set_character_level(get_native("Function HottaFramework.HottaCharacter.ServerSetCharacterLevel")),
-		m_server_set_location_and_rotation(get_native("Function HottaFramework.HottaCharacter.ServerSetLocationAndRotation"))
+		m_server_set_location_and_rotation(get_native("Function HottaFramework.HottaCharacter.ServerSetLocationAndRotation")),
+		m_server_kick_player(get_native("Function HottaFramework.HottaPlayerCharacter.ServerKickPlayer"))
 	{
 		g_native_invoker = this;
 	}

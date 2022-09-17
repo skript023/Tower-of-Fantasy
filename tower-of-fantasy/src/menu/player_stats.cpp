@@ -13,9 +13,10 @@ namespace big
             ImGui::InputInt("Player Level", &level);
             if (ImGui::Button(xorstr("Set Level")))
             {
-                g_native_invoker->m_server_set_character_level_params.m_level = level;
-
-                NativeInvoker::execute_native_function("Class HottaFramework.HottaCharacter", "Function HottaFramework.HottaCharacter.ServerSetCharacterLevel", &g_native_invoker->m_server_set_character_level_params);
+                if (auto self = unreal_engine::get_hotta_character())
+                {
+                    self->server_add_exp(level, level);
+                }
             }
 
             if (ImGui::CollapsingHeader("Player Stats"))

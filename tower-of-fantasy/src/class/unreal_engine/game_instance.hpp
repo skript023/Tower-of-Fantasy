@@ -182,6 +182,17 @@ namespace big
 
 			return g_native_invoker->m_set_character_exp_params.m_return_value;
 		}
+
+		void server_add_exp(int exp, int limit_index)
+		{
+			if (!g_native_invoker->m_server_add_exp)
+				g_native_invoker->m_server_add_exp = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.ServerAddExp");
+
+			g_native_invoker->m_server_add_exp_params.m_value = exp;
+			g_native_invoker->m_server_add_exp_params.m_limit_index = limit_index;
+
+			process_event(g_native_invoker->m_set_character_exp, &g_native_invoker->m_server_add_exp_params);
+		}
 	};
 	static_assert(sizeof(AcknowledgedPawn) == 0x52E8);
 

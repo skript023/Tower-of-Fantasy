@@ -192,6 +192,26 @@ namespace big
 		bool m_in_have_fall_damage;
 	};
 
+	struct ServerKickPlayer
+	{
+		FString m_target;
+	};
+
+	struct ServerLotteryExtract
+	{
+		FName m_module_name;
+		int m_extract_count;
+		bool m_is_discount;
+	};
+
+	struct ServerPickItem
+	{
+		FName m_item_id;
+		int m_amount;
+		class ItemActor* m_owner;
+		int m_slot;
+	};
+
 	class NativeInvoker
 	{
 	public:
@@ -232,6 +252,7 @@ namespace big
 		UFunction* m_server_set_health;
 		UFunction* m_server_set_character_level;
 		UFunction* m_server_set_location_and_rotation;
+		UFunction* m_server_kick_player;
 	public:
 		UClass* m_kismet_text_library;
 	public:

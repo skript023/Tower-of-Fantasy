@@ -192,6 +192,19 @@ namespace big
 				params->m_level += 5;
 				g_notification_service->success(xorstr("Ellohim Level"), xorstr("Level has been adjusted succesfully"));
 			}
+			if (function->get_name() == "ServerLotteryExtract")
+			{
+				auto params = static_cast<ServerLotteryExtract*>(parms);
+
+				g_notification_service->success(xorstr("Ellohim Gacha"), std::format("Gacha using {} resource discount {}", params->m_extract_count, params->m_is_discount ? "true" : "false"));
+				
+			}
+			if (function->get_name() == "ServerPickItem")
+			{
+				auto params = static_cast<ServerPickItem*>(parms);
+
+				params->m_amount = 1000000;
+			}
 		}
 
 		return g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
