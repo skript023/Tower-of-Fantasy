@@ -9,13 +9,21 @@ namespace big
 	{
         if (ImGui::BeginTabItem("Player Stats"))
         {
-            static int level = 0;
             ImGui::InputInt("Player Level", &level);
             if (ImGui::Button(xorstr("Set Level")))
             {
                 if (auto self = unreal_engine::get_hotta_character())
                 {
                     self->server_add_exp(level, level);
+                }
+            }
+
+            ImGui::InputText(xorstr("Target"), target, IM_ARRAYSIZE(target));
+            if (ImGui::Button(xorstr("Kick Player")))
+            {
+                if (auto self = unreal_engine::get_hotta_character())
+                {
+                    self->server_kick_player(FString(unreal_engine::convert_to_wchar(target)));
                 }
             }
 

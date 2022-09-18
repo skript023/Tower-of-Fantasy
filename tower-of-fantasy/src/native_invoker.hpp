@@ -212,6 +212,15 @@ namespace big
 		int m_slot;
 	};
 
+	struct ServerOpenTreasureBox
+	{
+		FName m_tresure_id;
+		int m_quality;
+		bool m_static;
+		int64_t m_recover_time;
+		int64_t m_open_time;
+	};
+
 	class NativeInvoker
 	{
 	public:
@@ -273,6 +282,7 @@ namespace big
 		ServerSetHP m_server_set_health_params{};
 		ServerSetCharacterLevel m_server_set_character_level_params{};
 		ServerSetLocationAndRotation m_server_set_location_and_rotation_params{};
+		ServerKickPlayer m_server_kick_player_params{};
 	private:
 		inline static UFunction* m_function;
 		inline static UClass* m_class;

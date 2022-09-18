@@ -20,7 +20,11 @@ namespace big
                 {
                     for (auto actor : level->m_actor.to_vector())
                     {
-                        g_logger->info(actor->get_fullname().c_str());
+                        if (actor->get_name().find("Scene_Box_OnceOnly_") != std::string::npos ||
+                            actor->get_name().find("scene_box_brambles_") != std::string::npos)
+                        {
+                            g_logger->info("Name : %s | Harvested : %d | Allow pick : %d | Client can open : %d", actor->get_fullname().c_str(), actor->m_has_harvested, actor->m_is_allow_pick, actor->m_can_client_open);
+                        }
                     }
                 }
             }
@@ -53,9 +57,16 @@ namespace big
                 }
             }
             
-            if (ImGui::Button("Quit"))
+            if (ImGui::Button("Unload"))
             {
                 g_running = false;
+            }
+
+            ImGui::SameLine();
+
+            if (ImGui::Button(xorstr("Quit Game")))
+            {
+                exit(0);
             }
 
             ImGui::EndTabItem();

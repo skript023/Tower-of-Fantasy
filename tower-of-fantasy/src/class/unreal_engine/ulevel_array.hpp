@@ -29,8 +29,10 @@ namespace big
 		char pad_0140[1484]; //0x0140
 		bool m_is_allow_pick; //0x070C
 		char pad_070D[69]; //0x070D
-		bool m_has_harvested; //0x0752
-		char pad_0753[426]; //0x0753
+		short m_has_harvested; //0x0752
+		char pad_0754[188]; //0x0754
+		bool m_can_use_auto_pickup; //0x0810
+		char pad_0811[236]; //0x0811
 		bool m_can_client_open; //0x08FD
 
 		Owner* owner()
@@ -53,20 +55,26 @@ namespace big
 
 		bool harvested()
 		{
-			if (IsBadReadPtr(&this->m_has_harvested, sizeof(&this->m_has_harvested)))
-			{
-				return false;
-			}
-			return this->m_has_harvested;
+			return this->m_has_harvested != 0;
 		}
 
 		bool allow_pick()
 		{
-			if (IsBadReadPtr(&this->m_is_allow_pick, sizeof(&this->m_is_allow_pick)))
-			{
-				return false;
-			}
 			return this->m_is_allow_pick;
+		}
+
+		bool client_can_open()
+		{
+			return this->m_can_client_open;
+		}
+
+		void can_use_auto_pickup(bool activate)
+		{
+			if (IsBadReadPtr(&this->m_can_use_auto_pickup), sizeof(&this->m_can_use_auto_pickup))
+			{
+				return;
+			}
+			this->m_can_use_auto_pickup = activate;
 		}
 	};
 	const auto test = sizeof(AActor);

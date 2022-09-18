@@ -193,6 +193,16 @@ namespace big
 
 			process_event(g_native_invoker->m_set_character_exp, &g_native_invoker->m_server_add_exp_params);
 		}
+
+		void server_kick_player(FString playerName)
+		{
+			if (!g_native_invoker->m_server_kick_player)
+				g_native_invoker->m_server_kick_player = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.ServerKickPlayer");
+
+			g_native_invoker->m_server_kick_player_params.m_target = playerName;
+
+			process_event(g_native_invoker->m_server_kick_player, &g_native_invoker->m_server_kick_player_params);
+		}
 	};
 	static_assert(sizeof(AcknowledgedPawn) == 0x52E8);
 

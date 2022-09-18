@@ -45,10 +45,14 @@ namespace big
             if (ImGui::Checkbox("Freeze Mobs", &g_settings->player.freeze_mobs))
                 g_features->movement.freeze_mobs(g_settings->player.freeze_mobs);
 
-            ImGui::Checkbox(BIG_TRANSLATE("Rapid Shoot"), &g_settings->player.rapid_shoot);
+            if (ImGui::Checkbox(BIG_TRANSLATE("Skateboard"), &g_settings->player.skateboard))
+            {
+                unreal_engine::get_pawn()->m_skateboard_starting = g_settings->player.skateboard;
+                unreal_engine::get_pawn()->m_skateboard_sliding = g_settings->player.skateboard;
+            }
 
             if (ImGui::IsItemHovered())
-                ImGui::SetTooltip(xorstr("For Projectile Weapon Only"));
+                ImGui::SetTooltip(xorstr("Enable skateboard relic"));
 
             ImGui::EndGroup();
 
@@ -58,7 +62,8 @@ namespace big
 
             ImGui::Checkbox(BIG_TRANSLATE("Infinite Dodge"), &g_settings->player.infinite_dodge);
 
-            ImGui::Checkbox(BIG_TRANSLATE("Rapid Attack"), &g_settings->player.fast_attack);
+            if (ImGui::Checkbox(BIG_TRANSLATE("Can't jump"), &g_settings->player.cant_jump))
+                unreal_engine::get_pawn()->m_cant_jump = g_settings->player.cant_jump;
 
             if (ImGui::Checkbox(BIG_TRANSLATE("No Clip"), &g_settings->player.no_clip))
                 g_features->movement.no_clip(g_settings->player.no_clip);
@@ -157,20 +162,20 @@ namespace big
                             {
                                 auto name = actor->get_name();
 
-                                if (name.find("Scene_Box_OnceOnly_") != std::string::npos)
+                                if (name.find("Scene_Box_OnceOnly_") != std::string::npos || name.find("scene_box_brambles_") != std::string::npos)
                                 {
                                     if (auto root_component = actor->root_component())
                                     {
                                         auto pos = root_component->m_relative_location;
                                         auto distance = g_features->movement.get_entity_coords()->distance(pos);
-                                        if (distance > 150.f && distance < 700.f)
+                                        if (distance > 100.f && distance < 2500.f)
                                         {
                                             if (!actor->harvested() && actor->allow_pick())
                                             {
-                                                g_features->movement.teleport_to(pos);
+                                                g_features->movement.teleport_with_loading(pos);
                                                 g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near supply pods"));
+                                                return;
                                             }
-                                            return;
                                         }
                                     }
                                 }
@@ -196,18 +201,107 @@ namespace big
                                     if (auto root_component = actor->root_component())
                                     {
                                         auto pos = root_component->m_relative_location;
+                                        g_features->movement.teleport_with_loading(pos);
+                                        g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near black nucleus"));
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                if (ImGui::Button(xorstr("Teleport to Fire Link"), ImVec2(160, 0)))
+                {
+                    g_fiber_pool->queue_job([]
+                    {
+                        for (auto level : (*g_pointers->m_world)->m_level.to_vector())
+                        {
+                            for (auto actor : level->m_actor.to_vector())
+                            {
+                                auto name = actor->get_name();
+
+                                if (name.find("BP_FireLink_Minigame") != std::string::npos)
+                                {
+                                    if (auto root_component = actor->root_component())
+                                    {
+                                        auto pos = root_component->m_relative_location;
                                         auto distance = g_features->movement.get_entity_coords()->distance(pos);
-                                        if (distance > 150.f && distance < 700.f)
+                                        if (distance > 500.f && distance < 2500.f)
                                         {
-                                            g_features->movement.teleport_to(pos);
-                                            g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near black nucleus"));
-                                            return;
+                                            if (!actor->harvested())
+                                            {
+                                                g_features->movement.teleport_with_loading(pos);
+                                                g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near fire link"));
+                                                return;
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
                     });
+                }
+
+                ImGui::SameLine();
+
+                if (ImGui::Button(xorstr("Teleport to Flower Throw"), ImVec2(160, 0)))
+                {
+                    g_fiber_pool->queue_job([]
+                        {
+                            for (auto level : (*g_pointers->m_world)->m_level.to_vector())
+                            {
+                                for (auto actor : level->m_actor.to_vector())
+                                {
+                                    auto name = actor->get_name();
+
+                                    if (name.find("BP_MiniGame_ThrowFlower_") != std::string::npos)
+                                    {
+                                        if (auto root_component = actor->root_component())
+                                        {
+                                            auto pos = root_component->m_relative_location;
+                                            auto distance = g_features->movement.get_entity_coords()->distance(pos);
+                                            if (distance > 500.f && distance < 2500.f)
+                                            {
+                                                if (!actor->harvested())
+                                                {
+                                                    g_features->movement.teleport_with_loading(pos);
+                                                    g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near flower"));
+                                                    return;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                }
+
+                ImGui::SameLine();
+
+                if (ImGui::Button(xorstr("Teleport to Chest Box"), ImVec2(160, 0)))
+                {
+                    g_fiber_pool->queue_job([]
+                        {
+                            for (auto level : (*g_pointers->m_world)->m_level.to_vector())
+                            {
+                                for (auto actor : level->m_actor.to_vector())
+                                {
+                                    auto name = actor->get_name();
+
+                                    if (name.find("Scene_Box_Refresh_Wild_") != std::string::npos)
+                                    {
+                                        if (auto root_component = actor->root_component())
+                                        {
+                                            auto pos = root_component->m_relative_location;
+                                            g_features->movement.teleport_with_loading(pos);
+                                            g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near chest"));
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                        });
                 }
 
                 ImGui::PushItemWidth(200);

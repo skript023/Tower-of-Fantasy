@@ -41,11 +41,11 @@ namespace big
 			bool no_fall_damage{ false };
 			bool freeze_mobs{ false };
 			bool infinite_dodge{ false };
-			bool fast_attack{ false };
+			bool cant_jump{ false };
 			bool no_clip{ false };
 			bool esp{ false };
 			bool skip_button{ false };
-			bool rapid_shoot{ false };
+			bool skateboard{ false };
 			bool reset_box{ false };
 
 			float attack_multiplier{ 0.0f };
@@ -92,11 +92,11 @@ namespace big
 			this->player.gravity = j["player"]["gravity"];
 			this->player.freeze_mobs = j["player"]["freeze_mobs"];
 			this->player.infinite_dodge = j["player"]["infinite_dodge"];
-			this->player.fast_attack = j["player"]["fast_attack"];
+			this->player.cant_jump = j["player"]["cant_jump"];
 			this->player.no_clip = j["player"]["no_clip"];
 			this->player.esp = j["player"]["esp"];
 			this->player.skip_button = j["player"]["skip_button"];
-			this->player.rapid_shoot = j["player"]["rapid_shoot"];
+			this->player.skateboard = j["player"]["skateboard"];
 			this->player.reset_box = j["player"]["reset_box"];
 
 			this->system.token = j["system"]["token"];
@@ -123,11 +123,11 @@ namespace big
 						{ "gravity", this->player.gravity },
 						{ "freeze_mobs", this->player.freeze_mobs },
 						{ "infinite_dodge", this->player.infinite_dodge },
-						{ "fast_attack", this->player.fast_attack },
+						{ "cant_jump", this->player.cant_jump },
 						{ "no_clip", this->player.no_clip },
 						{ "esp", this->player.esp },
 						{ "skip_button", this->player.skip_button },
-						{ "rapid_shoot", this->player.rapid_shoot },
+						{ "skateboard", this->player.skateboard },
 						{ "reset_box", this->player.reset_box }
 					}
 				},

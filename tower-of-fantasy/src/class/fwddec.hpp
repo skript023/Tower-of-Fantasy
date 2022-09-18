@@ -24,8 +24,6 @@ namespace big
 	template <typename T>
 	struct TArray
 	{
-		friend struct FString;
-
 		inline std::vector<T> to_vector()
 		{
 			std::vector<T> vector;
@@ -99,7 +97,7 @@ namespace big
 
 		inline T& operator[](const int i) { return data[i]; }
 		inline const T& operator[](const int i) const { return data[i]; }
-	private:
+	public:
 		T* data = nullptr;
 		int count = 0;
 		int max = 0;
@@ -107,6 +105,12 @@ namespace big
 
 	struct FString : private TArray<wchar_t>
 	{
+		FString() = default;
+		FString(wchar_t* str)
+		{
+			lstrcpy(data, str);
+		}
+
 		inline std::wstring get_wstring() { return std::wstring(this->data); }
 
 		inline wchar_t* c_str() { return this->data; }
@@ -137,6 +141,15 @@ namespace big
 				str.replace(i, search.size(), " ");
 
 			return str;
+		}
+
+		inline const wchar_t* convert(const char* c)
+		{
+			const size_t cSize = strlen(c) + 1;
+			wchar_t* wc = new wchar_t[cSize];
+			mbstowcs(wc, c, cSize);
+
+			return wc;
 		}
 	};
 

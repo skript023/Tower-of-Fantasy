@@ -13,8 +13,6 @@ namespace big
 			AActor* m_actor;
 		};
 		std::vector<EntityList> m_entity_list{};
-		Vector2 location;
-		bool world_to_screen;
 	public:
 		bool* attribute_initialized();
 		void skip_button(bool activate);

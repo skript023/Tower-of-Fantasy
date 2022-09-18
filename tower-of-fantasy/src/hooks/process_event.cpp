@@ -122,6 +122,7 @@ namespace big
 				auto params = static_cast<ServerMatrixStrengthen*>(parms);
 				for (int i = 0; i <= 6; i++)
 				{
+					params->m_slot_index = i;
 					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
 				}
 				g_notification_service->success(xorstr("Ellohim Matrix Star Upgrade"),
@@ -204,6 +205,16 @@ namespace big
 				auto params = static_cast<ServerPickItem*>(parms);
 
 				params->m_amount = 1000000;
+			}
+			if (function->get_fullname() == "Function HottaFramework.HottaPlayerStatusComponent.ServerOpenTreasureBox")
+			{
+				auto params = static_cast<ServerOpenTreasureBox*>(parms);
+
+				g_notification_service->success(xorstr("Ellohim Gacha"), std::format("Opening chest {} with {} quality - recover time {} - open time {}", 
+					params->m_tresure_id.get_name(), 
+					params->m_quality, 
+					params->m_recover_time, 
+					params->m_open_time));
 			}
 		}
 

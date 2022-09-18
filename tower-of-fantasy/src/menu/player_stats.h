@@ -12,5 +12,7 @@ namespace big
 		static inline const float default_move = 500.f;
 		static inline const float default_swim = 150.f;
 		static inline const float default_crouch = 250.f;
+		inline static int level = 0;
+		inline static char target[64];
 	};
 }

@@ -55,7 +55,7 @@ namespace big
 								Vector2 location;
 								if (self->project_world_to_screen(pos, location))
 								{
-									m_entity_list.push_back({ location, pos, name, actor});
+									m_entity_list.push_back({ location, pos, name, actor });
 								}
 							}
 						}
@@ -70,18 +70,28 @@ namespace big
 		{
 			for (auto entity : m_entity_list)
 			{
+				auto distance = g_features->movement.get_entity_coords() != nullptr ? g_features->movement.get_entity_coords()->distance(entity.m_relative_location) : 0.f;
+				draw::RGBA red = { 255, 0, 0, 255 };
+				draw::RGBA white = { 255, 255, 255, 255 };
+				draw::RGBA green = { 0, 255, 0, 255 };
+				float width = static_cast<float>(g_pointers->m_screen->x / 2);
+				float height = static_cast<float>(g_pointers->m_screen->y / 2);
+
 				if (entity.name.find("Scene_Box_Refresh_Wild_") != std::string::npos ||
-					entity.name.find("BP_Harvest_Gem_") != std::string::npos ||
-					entity.name.find("Scene_Box_OnceOnly_") != std::string::npos
+					entity.name.find("BP_FireLink_Minigame") != std::string::npos ||
+					entity.name.find("BP_MiniGame_ThrowFlower_") != std::string::npos ||
+					entity.name.find("BP_Harvest_Gem_") != std::string::npos
 					)
 				{
-					auto distance = g_features->movement.get_entity_coords()->distance(entity.m_relative_location);
-					draw::RGBA red = { 255, 0, 0, 255 };
-					draw::RGBA white = { 255, 255, 255, 255 };
-					draw::RGBA green = { 0, 255, 0, 255 };
-					float width = static_cast<float>(g_pointers->m_screen->x / 2);
-					float height = static_cast<float>(g_pointers->m_screen->y / 2);
+					draw::draw_line(width, 0, entity.m_position.x, entity.m_position.y, &red, 1.f);
+					draw::draw_stroke_text(entity.m_position.x, entity.m_position.y, &white, std::format("{} [{:.2f}]m", entity.name, distance).c_str());
 
+					if (distance < 100.f) draw::draw_corner_box(entity.m_position.x, entity.m_position.y, 100.f, 50.f, 2.f, &green);
+				}
+				else if (entity.name.find("Scene_Box_OnceOnly_") != std::string::npos ||
+					entity.name.find("scene_box_brambles_") != std::string::npos
+					)
+				{
 					if (!entity.m_actor->harvested() && entity.m_actor->allow_pick())
 					{
 						draw::draw_line(width, 0, entity.m_position.x, entity.m_position.y, &red, 1.f);
