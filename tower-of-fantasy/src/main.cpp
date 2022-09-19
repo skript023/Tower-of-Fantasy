@@ -129,6 +129,11 @@ DWORD APIENTRY main_thread(LPVOID)
 	return 0;
 }
 
+/**
+ * \brief The entry point of the library
+ * \param hmod The base address of the DLL
+ * \param reason The reason for this function being called
+ */
 BOOL APIENTRY DllMain(HMODULE hmod, DWORD reason, PVOID)
 {
 	using namespace big;
