@@ -9,12 +9,16 @@ namespace big
 	{
         if (ImGui::BeginTabItem("Player Stats"))
         {
-            ImGui::InputInt("Player Level", &level);
+            ImGui::InputInt("Player Level ", &level);
             if (ImGui::Button(xorstr("Set Level")))
             {
                 if (auto self = unreal_engine::get_hotta_character())
                 {
-                    self->server_add_exp(level, level);
+                    self->server_set_character_level(level);
+                    if (self->set_character_level(level, false, false))
+                    {
+                        g_logger->info("Set level to %d", level);
+                    }
                 }
             }
 
@@ -30,6 +34,8 @@ namespace big
             if (ImGui::CollapsingHeader("Player Stats"))
             {
                 ImGui::InputInt("Player Level", player::player_level());
+
+                ImGui::InputFloat("Current EXP Multiplier", g_features->defense.server_current_exp_mult());
 
                 ImGui::InputFloat("Attack Multiplier", g_features->attack.attack_multiplier(), 1.0f, 1.5f);
 

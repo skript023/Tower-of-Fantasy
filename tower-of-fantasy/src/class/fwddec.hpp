@@ -164,6 +164,13 @@ namespace big
 		}
 	};
 
+	struct EvadeBeanParam
+	{
+		int m_rand_bean; //0x21D0
+		int m_cur_bean_count; //0x21D4
+		int64_t m_change_time; //0x21D8
+	};
+
 	class GWorld;
 	class OwningGameInstance;
 	class LocalPlayer;

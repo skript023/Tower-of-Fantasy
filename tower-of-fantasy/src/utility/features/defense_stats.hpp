@@ -134,5 +134,14 @@ namespace big
 
 			return nullptr;
 		}
+
+		inline float* server_current_exp_mult()
+		{
+			if (auto self = unreal_engine::get_pawn(); self)
+			{
+				return &self->m_server_current_exp_mult;
+			}
+			return nullptr;
+		}
 	};
 }

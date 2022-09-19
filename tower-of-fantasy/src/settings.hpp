@@ -47,6 +47,8 @@ namespace big
 			bool skip_button{ false };
 			bool skateboard{ false };
 			bool reset_box{ false };
+			bool infinite_energy{ false };
+			bool infinite_mana{ false };
 
 			float attack_multiplier{ 0.0f };
 			float pysical_attack{ 0.0f };
@@ -98,6 +100,8 @@ namespace big
 			this->player.skip_button = j["player"]["skip_button"];
 			this->player.skateboard = j["player"]["skateboard"];
 			this->player.reset_box = j["player"]["reset_box"];
+			this->player.infinite_energy = j["player"]["infinite_energy"];
+			this->player.infinite_mana = j["player"]["infinite_mana"];
 
 			this->system.token = j["system"]["token"];
 			this->system.log_process_event = j["system"]["log_process_event"];
@@ -128,7 +132,9 @@ namespace big
 						{ "esp", this->player.esp },
 						{ "skip_button", this->player.skip_button },
 						{ "skateboard", this->player.skateboard },
-						{ "reset_box", this->player.reset_box }
+						{ "reset_box", this->player.reset_box },
+						{ "infinite_energy", this->player.infinite_energy },
+						{ "infinite_mana", this->player.infinite_mana }
 					}
 				},
 				{

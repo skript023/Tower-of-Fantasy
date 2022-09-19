@@ -70,7 +70,7 @@ namespace big
 
 		void can_use_auto_pickup(bool activate)
 		{
-			if (IsBadReadPtr(&this->m_can_use_auto_pickup), sizeof(&this->m_can_use_auto_pickup))
+			if (IsBadReadPtr(&this->m_can_use_auto_pickup, sizeof(&this->m_can_use_auto_pickup)))
 			{
 				return;
 			}

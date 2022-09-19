@@ -9,12 +9,10 @@ namespace big
 	{
 		memory::pattern_batch main_batch;
 
-		int tries = 0;
-		while (!swapchain_found && tries < 10)
+		for (int i = 0;!swapchain_found && i <= 10; i++)
 		{
 			swapchain_found = this->get_swapchain();
 
-			tries++;
 			std::this_thread::sleep_for(0ms);
 		}
 		
@@ -63,6 +61,11 @@ namespace big
 			m_rapid_attack = ptr.add(2).as<decltype(m_rapid_attack)>();
 		});
 
+		main_batch.add("Attack Range", "41 0F 10 88 ? ? 00 00 41 0F 10 80 ? ? 00 00 0F C2 C1 04 0F 50 C0", [this](memory::handle ptr)
+		{
+			m_attack_range = ptr.add(2).as<decltype(m_attack_range)>();
+		});
+
 		main_batch.add("Local Player", "48 89 3D ? ? ? ? C7 05 ? ? ? ? ? ? ? ? 89 05 ? ? ? ? 40 88 3D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? E9", [this](memory::handle ptr)
 		{
 			m_player = ptr.add(3).rip().as<decltype(m_player)>();
@@ -101,6 +104,12 @@ namespace big
 		main_batch.add("SSR Stealer", "80 39 1D 75 2C 48 8B 41 08 48 63 49 10 4C 8D 04 49 4E 8D 0C 80 49 3B C1 74 14 48 8B 0A 0F 1F", [this](memory::handle ptr)
 		{
 			m_ssr_stuff = ptr.sub(13).as<decltype(m_ssr_stuff)>();
+		});
+
+		main_batch.add("Evasion Handler", "48 83 EC 38 8B 51 04 B8 ? ? ? ? 2B 11 8B 0D ? ? ? ? F7 EA 0F 29 74 24 ? C1 FA 02", [this](memory::handle ptr)
+		{
+			m_evasion_handler = ptr.as<PVOID>();
+			dword_7FF681753804 = ptr.add(85).rip().as<PVOID>();
 		});
 
 		main_batch.run(memory::module(nullptr));

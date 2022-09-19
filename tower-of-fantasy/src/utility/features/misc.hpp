@@ -18,5 +18,7 @@ namespace big
 		void skip_button(bool activate);
 		void get_entity_list(bool activate);
 		void render_esp(bool activate);
+		void infinite_energy(bool activate);
+		void infinite_mana(bool activate);
 	};
 }

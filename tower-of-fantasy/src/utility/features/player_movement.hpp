@@ -34,13 +34,9 @@ namespace big
 						{
 							if (auto pawn = controller->m_pawn)
 							{
-								pawn->m_rand_bean = 6001;
-								pawn->m_cur_bean_count = 6641;
-								pawn->m_change_time = 637963816908830000;
-								if (auto self = unreal_engine::get_hotta_character(); self)
-								{
-									self->update_evade_count();
-								}
+								pawn->m_evade_bean.m_rand_bean = 6001;
+								pawn->m_evade_bean.m_cur_bean_count = 6641;
+								pawn->m_evade_bean.m_change_time = 637963816908830000;
 							}
 						}
 					}
@@ -195,15 +191,7 @@ namespace big
 		{
 			if (auto player = unreal_engine::get_local_player())
 			{
-				uint8_t freeze_status = player->m_player_controller->m_pawn->m_freeze_mobs;
-				if (activate && !freeze_status)
-				{
-					player->m_player_controller->m_pawn->m_freeze_mobs = true;
-				}
-				else if (activate && freeze_status)
-				{
-					player->m_player_controller->m_pawn->m_freeze_mobs = false;
-				}
+				player->m_player_controller->m_pawn->m_cant_be_Selected = activate;
 			}
 		}
 

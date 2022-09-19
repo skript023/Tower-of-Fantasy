@@ -50,7 +50,7 @@ namespace big
 
 						if (auto local_player = unreal_engine::get_local_player())
 						{
-							if (auto self = local_player->m_player_controller)
+							if (auto self = local_player->m_player_controller; self)
 							{
 								Vector2 location;
 								if (self->project_world_to_screen(pos, location))
@@ -64,6 +64,7 @@ namespace big
 			}
 		}
 	}
+
 	void MiscOption::render_esp(bool activate)
 	{
 		if (activate && unreal_engine::game_state())
@@ -100,6 +101,32 @@ namespace big
 						if (distance < 100.f) draw::draw_corner_box(entity.m_position.x, entity.m_position.y, 100.f, 50.f, 2.f, &green);
 					}
 				}
+			}
+		}
+	}
+
+	void MiscOption::infinite_mana(bool activate)
+	{
+		if (activate)
+		{
+			if (auto self = unreal_engine::get_hotta_character())
+			{
+				if (self->get_mana() < self->get_max_mana())
+					self->set_mana(self->get_max_mana());
+			}
+		}
+	}
+
+	void MiscOption::infinite_energy(bool activate)
+	{
+		if (activate)
+		{
+			if (auto self = unreal_engine::get_hotta_character())
+			{
+				auto half = self->m_skill_component->m_max_energy / 2.f;
+				auto energy = self->m_skill_component->m_energy;
+				if (energy < half)
+					self->set_energy(self->m_skill_component->m_max_energy);
 			}
 		}
 	}

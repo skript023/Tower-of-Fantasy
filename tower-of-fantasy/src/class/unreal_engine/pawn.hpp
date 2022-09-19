@@ -39,7 +39,7 @@ namespace big
 		char pad_0799[0x5CF]; //0x0799
 		int m_selected_waeapon_id; //0x0D68
 		char pad_0D6C[0x67B]; //0x0D6C
-		bool m_freeze_mobs; //0x13E7
+		bool m_cant_be_Selected; //0x13E7
 		char pad_13E8[0x4B8]; //0x13E8
 		bool m_fall_damage; //0x18A0
 		char pad_18A1[0x1BF]; //0x18A1
@@ -69,9 +69,7 @@ namespace big
 		int m_trigger_open_treasure_box;
 		int m_guide_id_in_not_ready;
 		char pad_20FC[0xD4]; //0x20FC
-		int m_rand_bean; //0x21D0
-		int m_cur_bean_count; //0x21D4
-		int64_t m_change_time; //0x21D8
+		EvadeBeanParam m_evade_bean; //0x21D0
 		char pad_21E0[0x188];
 		bool m_skateboard_starting; //0x2368
 		bool m_skateboard_sliding; //0x2369
@@ -98,27 +96,6 @@ namespace big
 		float m_min_gliding_height; //0x55F4
 		float m_jump_height; //0x55F8
 		bool m_gliding_sprinted; //0x55FC
-
-		void server_set_health(float health, EDamageReason damageReason)
-		{
-			if (!g_native_invoker->m_server_set_health)
-				g_native_invoker->m_server_set_health = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.ServerSetHP");
-
-			g_native_invoker->m_server_set_health_params.m_health = health;
-			g_native_invoker->m_server_set_health_params.m_damage_reason = damageReason;
-
-			process_event(g_native_invoker->m_server_set_health, &g_native_invoker->m_server_set_health_params);
-		}
-
-		void server_set_character_level(int level)
-		{
-			if (!g_native_invoker->m_server_set_character_level)
-				g_native_invoker->m_server_set_character_level = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.ServerSetCharacterLevel");
-
-			g_native_invoker->m_server_set_character_level_params.m_level = level;
-
-			process_event(g_native_invoker->m_server_set_character_level, &g_native_invoker->m_server_set_character_level_params);
-		}
 	};
 	static_assert(sizeof(Pawn) == 0x55FD);
 

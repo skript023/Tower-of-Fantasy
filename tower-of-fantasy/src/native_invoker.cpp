@@ -29,9 +29,15 @@ namespace big
 		m_server_add_exp(get_native("Function HottaFramework.HottaPlayerCharacter.ServerAddExp")),
 		m_kismet_text_library(get_class<UClass*>("Class Engine.KismetTextLibrary")),
 		m_server_set_health(get_native("Function HottaFramework.HottaCharacter.ServerSetHP")),
+		m_set_health(get_native("Function HottaFramework.HottaCharacter.SetHP")),
 		m_server_set_character_level(get_native("Function HottaFramework.HottaCharacter.ServerSetCharacterLevel")),
+		m_set_character_level(get_native("Function HottaFramework.HottaCharacter.SetCharacterLevel")),
 		m_server_set_location_and_rotation(get_native("Function HottaFramework.HottaCharacter.ServerSetLocationAndRotation")),
-		m_server_kick_player(get_native("Function HottaFramework.HottaPlayerCharacter.ServerKickPlayer"))
+		m_server_kick_player(get_native("Function HottaFramework.HottaPlayerCharacter.ServerKickPlayer")),
+		m_set_energy(get_native("Function HottaFramework.HottaCharacter.SetEnergy")),
+		m_set_mana(get_native("Function HottaFramework.HottaCharacter.SetMana")),
+		m_get_max_mana(get_native("Function HottaFramework.HottaCharacter.GetMaxMana")),
+		m_get_mana(get_native("Function HottaFramework.HottaCharacter.GetMana"))
 	{
 		g_native_invoker = this;
 	}

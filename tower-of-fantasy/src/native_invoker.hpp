@@ -175,6 +175,14 @@ namespace big
 		EDamageReason m_damage_reason;
 	};
 
+	struct SetHP
+	{
+		float m_health;
+		EDamageReason m_damage_reason;
+		bool m_is_read_damage;
+		float m_read_damage;
+	};
+
 	struct ServerSetCharacterLevel
 	{
 		int m_level;
@@ -221,6 +229,24 @@ namespace big
 		int64_t m_open_time;
 	};
 
+	struct SetEnergy
+	{
+		float m_energy;
+	};
+
+	struct SetCharacterLevel
+	{
+		int m_level;
+		bool m_refresh_attribute;
+		bool m_server_rep;
+		bool m_return;
+	};
+
+	struct GetMaxMana
+	{
+		float m_return;
+	};
+
 	class NativeInvoker
 	{
 	public:
@@ -259,9 +285,15 @@ namespace big
 		UFunction* m_set_character_exp;
 		UFunction* m_server_add_exp;
 		UFunction* m_server_set_health;
+		UFunction* m_set_health;
 		UFunction* m_server_set_character_level;
+		UFunction* m_set_character_level;
 		UFunction* m_server_set_location_and_rotation;
 		UFunction* m_server_kick_player;
+		UFunction* m_set_energy;
+		UFunction* m_set_mana;
+		UFunction* m_get_max_mana;
+		UFunction* m_get_mana;
 	public:
 		UClass* m_kismet_text_library;
 	public:
@@ -280,9 +312,13 @@ namespace big
 		Conv_TextToString m_convert_text_to_string_params{};
 		SetProjectileTrackActor m_set_projectile_track_actor_params{};
 		ServerSetHP m_server_set_health_params{};
+		SetHP m_set_health_params{};
 		ServerSetCharacterLevel m_server_set_character_level_params{};
+		SetCharacterLevel m_set_character_level_params{};
 		ServerSetLocationAndRotation m_server_set_location_and_rotation_params{};
 		ServerKickPlayer m_server_kick_player_params{};
+		SetEnergy m_set_energy_params{};
+		GetMaxMana m_get_max_mana_params{};
 	private:
 		inline static UFunction* m_function;
 		inline static UClass* m_class;

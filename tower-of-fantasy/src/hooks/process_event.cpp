@@ -63,7 +63,7 @@ namespace big
 				if (params->m_add_amount < 0)
 				{
 					params->m_add_amount = 1000000;
-					params->m_path_type = EHottaOutputPathType::Add_Rewared;
+					params->m_path_type = EHottaOutputPathType::Add_DailyGift;
 
 					g_notification_service->success(xorstr("Ellohim Currency"), xorstr("No currency used"));
 
@@ -97,10 +97,6 @@ namespace big
 			if (function->get_name() == "ServerUpgradeStarLevel")
 			{
 				auto params = static_cast<ServerUpgradeStarLevel*>(parms);
-				for (int i = 0; i <= 6; i++)
-				{
-					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
-				}
 
 				g_notification_service->success(xorstr("Ellohim Star Upgrade"),
 					std::format("Star upgrade slot index {} successfull contain type {}",
@@ -109,10 +105,7 @@ namespace big
 			if (function->get_name() == "ServerMatrixUpgradeStar")
 			{
 				auto params = static_cast<ServerMatrixStrengthen*>(parms);
-				for (int i = 0; i <= 6; i++)
-				{
-					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
-				}
+
 				g_notification_service->success(xorstr("Ellohim Matrix Star Upgrade"),
 					std::format("Matrix star upgrade slot index {} successfull contain type {}",
 						params->m_slot_index, params->m_contain_type));
@@ -120,37 +113,21 @@ namespace big
 			if (function->get_name() == "ServerMatrixUpgradeStar")
 			{
 				auto params = static_cast<ServerMatrixStrengthen*>(parms);
-				for (int i = 0; i <= 6; i++)
-				{
-					params->m_slot_index = i;
-					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
-				}
+
 				g_notification_service->success(xorstr("Ellohim Matrix Star Upgrade"),
 					std::format("Matrix star upgrade slot index {} successfull contain type {}",
 						params->m_slot_index, params->m_contain_type));
 			}
 			if (function->get_name() == "ServerMatrixStrengthen")
 			{
-				for (int i = 0; i <= 15; i++)
-				{
-					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
-				}
 				g_notification_service->success(xorstr("Ellohim matrix upgrade"), xorstr("Matrix upgrade successfully multiplied 15 times"));
 			}
 			if (function->get_name() == "ServerEquipStrengthen")
 			{
-				for (int i = 0; i <= 10; i++)
-				{
-					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
-				}
 				g_notification_service->success(xorstr("Ellohim equipment strengthen"), xorstr("Equipment upgrade successfull"));
 			}
 			if (function->get_name() == "ServerEquipWeapon")
 			{
-				for (int i = 0; i <= 10; i++)
-				{
-					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
-				}
 				g_notification_service->success(xorstr("Ellohim equipment"), xorstr("Weapon equiped succesfully"));
 			}
 			if (function->get_name() == "ServerRecordExploreProgress")
@@ -161,11 +138,6 @@ namespace big
 						params->m_drop_id.get_name(), params->m_drop_num));
 
 				params->m_drop_num = 10000;
-
-				for (int i = 0; i <= 10; i++)
-				{
-					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
-				}
 			}
 			if (function->get_name() == "ServerSetHaveFallDamage")
 			{
@@ -182,15 +154,22 @@ namespace big
 
 				params->m_health = *g_features->defense.max_health();
 
-				g_notification_service->success(xorstr("Ellohim Server Set Health"), xorstr("Health has been adjusted succesfully"));
+				g_notification_service->success(xorstr("Ellohim Player Health"), xorstr("Health has been adjusted succesfully"));
 
 				return g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
+			}
+			if (function->get_name() == "SetHP")
+			{
+				auto params = static_cast<SetHP*>(parms);
+
+				g_notification_service->success(xorstr("Ellohim Player Health"), xorstr("Health has been adjusted succesfully"));
+				return;
 			}
 			if (function->get_name() == "ServerSetCharacterLevel")
 			{
 				auto params = static_cast<ServerSetCharacterLevel*>(parms);
 
-				params->m_level += 5;
+				//params->m_level += 5;
 				g_notification_service->success(xorstr("Ellohim Level"), xorstr("Level has been adjusted succesfully"));
 			}
 			if (function->get_name() == "ServerLotteryExtract")
@@ -206,15 +185,23 @@ namespace big
 
 				params->m_amount = 1000000;
 			}
-			if (function->get_fullname() == "Function HottaFramework.HottaPlayerStatusComponent.ServerOpenTreasureBox")
+			if (function->get_name() == "ServerOpenTreasureBox")
 			{
 				auto params = static_cast<ServerOpenTreasureBox*>(parms);
 
-				g_notification_service->success(xorstr("Ellohim Gacha"), std::format("Opening chest {} with {} quality - recover time {} - open time {}", 
+				g_notification_service->success(xorstr("Ellohim Treasure"), std::format("Opening chest {} with {} quality - recover time {} - open time {}", 
 					params->m_tresure_id.get_name(), 
 					params->m_quality, 
 					params->m_recover_time, 
 					params->m_open_time));
+			}
+			if (function->get_name() == "Server_CostSkillBean")
+			{
+				if (g_settings->player.infinite_dodge)
+				{
+					g_notification_service->success(xorstr("Ellohim Evade Skill"), xorstr("Evade Skill has been adjusted succesfully"));
+					return;
+				}
 			}
 		}
 

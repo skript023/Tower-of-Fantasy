@@ -75,7 +75,9 @@ namespace big
 		TArray<class Tags*> m_tags; //0x0178
 		char pad_0188[280]; //0x0188
 		class CapsuleComponent* m_capsule_component; //0x02A0
-		char pad_02A8[0x2E20]; //0x02A8
+		char pad_02A8[0x4D8]; //0x02A8
+		class SkillComponent* m_skill_component; //0x0780
+		char pad_0788[0x2940]; //0x0788
 		class QuestComponent* m_quest_component; //0x30C8
 		char pad_30D0[0x2210]; //0x30D0
 		class AvatarUnlockDataArray* m_avatar_unlock; //0x52E0
@@ -99,7 +101,7 @@ namespace big
 
 			g_native_invoker->m_teleport_with_loading_params.m_location.x = dst.x;
 			g_native_invoker->m_teleport_with_loading_params.m_location.y = dst.y;
-			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 1000.f;
+			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 400.f;
 
 			g_native_invoker->m_teleport_with_loading_params.m_rotator = rot;
 
@@ -113,7 +115,7 @@ namespace big
 
 			g_native_invoker->m_teleport_with_loading_params.m_location.x = dst.x;
 			g_native_invoker->m_teleport_with_loading_params.m_location.y = dst.y;
-			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 1000.f;
+			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 400.f;
 
 			g_native_invoker->m_teleport_with_loading_params.m_rotator = rot;
 
@@ -127,7 +129,7 @@ namespace big
 
 			g_native_invoker->m_teleport_with_loading_params.m_location.x = dst.x;
 			g_native_invoker->m_teleport_with_loading_params.m_location.y = dst.y;
-			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 1000.f;
+			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 400.f;
 
 			g_native_invoker->m_teleport_with_loading_params.m_rotator = rot;
 
@@ -141,7 +143,7 @@ namespace big
 			
 			g_native_invoker->m_teleport_with_loading_params.m_location.x = dst.x;
 			g_native_invoker->m_teleport_with_loading_params.m_location.y = dst.y;
-			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 1000.f;
+			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 400.f;
 
 			g_native_invoker->m_teleport_with_loading_params.m_rotator = rot;
 
@@ -155,7 +157,7 @@ namespace big
 
 			g_native_invoker->m_teleport_with_loading_params.m_location.x = dst.x;
 			g_native_invoker->m_teleport_with_loading_params.m_location.y = dst.y;
-			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 1000.f;
+			g_native_invoker->m_teleport_with_loading_params.m_location.z = dst.z + 400.f;
 
 			g_native_invoker->m_teleport_with_loading_params.m_rotator = rot;
 
@@ -202,6 +204,109 @@ namespace big
 			g_native_invoker->m_server_kick_player_params.m_target = playerName;
 
 			process_event(g_native_invoker->m_server_kick_player, &g_native_invoker->m_server_kick_player_params);
+		}
+
+		void server_set_health(float health, EDamageReason damageReason)
+		{
+			if (!g_native_invoker->m_server_set_health)
+				g_native_invoker->m_server_set_health = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.ServerSetHP");
+
+			g_native_invoker->m_server_set_health_params.m_health = health;
+			g_native_invoker->m_server_set_health_params.m_damage_reason = damageReason;
+
+			process_event(g_native_invoker->m_server_set_health, &g_native_invoker->m_server_set_health_params);
+		}
+
+		void set_health(float health, EDamageReason damageReason, bool isReadDamage, float readDamage)
+		{
+			if (!g_native_invoker->m_set_health)
+				g_native_invoker->m_set_health = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.SetHP");
+
+			g_native_invoker->m_set_health_params.m_health = health;
+			g_native_invoker->m_set_health_params.m_damage_reason = damageReason;
+			g_native_invoker->m_set_health_params.m_is_read_damage = isReadDamage;
+			g_native_invoker->m_set_health_params.m_read_damage = readDamage;
+
+			process_event(g_native_invoker->m_set_health, &g_native_invoker->m_set_health_params);
+		}
+
+		void server_set_character_level(int level)
+		{
+			if (!g_native_invoker->m_server_set_character_level)
+				g_native_invoker->m_server_set_character_level = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.ServerSetCharacterLevel");
+
+			g_native_invoker->m_server_set_character_level_params.m_level = level;
+
+			process_event(g_native_invoker->m_server_set_character_level, &g_native_invoker->m_server_set_character_level_params);
+		}
+
+		bool set_character_level(int level, bool refreshAttribute, bool ServerRep)
+		{
+			if (!g_native_invoker->m_set_character_level)
+				g_native_invoker->m_set_character_level = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.SetCharacterLevel");
+
+			g_native_invoker->m_set_character_level_params.m_level = level;
+			g_native_invoker->m_set_character_level_params.m_refresh_attribute = refreshAttribute;
+			g_native_invoker->m_set_character_level_params.m_server_rep = ServerRep;
+
+			process_event(g_native_invoker->m_set_character_level, &g_native_invoker->m_set_character_level_params);
+
+			return g_native_invoker->m_set_character_level_params.m_return;
+		}
+
+		void set_energy(float energy)
+		{
+			if (!g_native_invoker->m_set_energy)
+				g_native_invoker->m_set_energy = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.SetEnergy");
+
+			g_native_invoker->m_set_energy_params.m_energy = energy;
+
+			process_event(g_native_invoker->m_set_energy, &g_native_invoker->m_set_energy_params);
+		}
+			
+		void set_mana(float mana)
+		{
+			if (!g_native_invoker->m_set_mana)
+				g_native_invoker->m_set_mana = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.SetMana");
+
+			g_native_invoker->m_set_energy_params.m_energy = mana;
+
+			process_event(g_native_invoker->m_set_energy, &g_native_invoker->m_set_energy_params);
+		}
+
+		float get_mana()
+		{
+			if (!g_native_invoker->m_get_mana)
+				g_native_invoker->m_get_mana = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.GetMana");
+
+			process_event(g_native_invoker->m_get_mana, &g_native_invoker->m_get_max_mana_params);
+
+			return g_native_invoker->m_get_max_mana_params.m_return;
+		}
+
+		float get_max_mana()
+		{
+			if (!g_native_invoker->m_get_max_mana)
+				g_native_invoker->m_get_max_mana = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.GetMaxMana");
+
+			process_event(g_native_invoker->m_get_max_mana, &g_native_invoker->m_get_max_mana_params);
+
+			return g_native_invoker->m_get_max_mana_params.m_return;
+		}
+		
+		void server_set_location_and_rotation(FVector location, Rotator rotation, bool authoritative)
+		{
+			if (!g_native_invoker->m_server_set_location_and_rotation)
+				g_native_invoker->m_server_set_location_and_rotation = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.ServerSetLocationAndRotation");
+
+			g_native_invoker->m_server_set_location_and_rotation_params.m_location.x = location.x;
+			g_native_invoker->m_server_set_location_and_rotation_params.m_location.y = location.y;
+			g_native_invoker->m_server_set_location_and_rotation_params.m_location.z = location.z + 400.f;
+
+			g_native_invoker->m_server_set_location_and_rotation_params.m_rotation = rotation;
+			g_native_invoker->m_server_set_location_and_rotation_params.m_close_server_accept_client_authoritative_position = authoritative;
+
+			process_event(g_native_invoker->m_server_set_location_and_rotation, &g_native_invoker->m_server_set_location_and_rotation_params);
 		}
 	};
 	static_assert(sizeof(AcknowledgedPawn) == 0x52E8);

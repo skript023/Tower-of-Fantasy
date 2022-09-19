@@ -23,12 +23,14 @@ namespace big
             if (ImGui::Checkbox(BIG_TRANSLATE("Godmode"), &g_settings->player.godmode))
                 g_features->defense.godmode(g_settings->player.godmode);
 
-            ImGui::Checkbox(BIG_TRANSLATE("Infinite Jump"), &g_settings->player.infinite_jump);
+            ImGui::Checkbox(BIG_TRANSLATE("Inf Jump"), &g_settings->player.infinite_jump);
 
             if (ImGui::Checkbox(BIG_TRANSLATE("No Cooldown"), &g_settings->player.no_cooldown))
                 g_features->attack.remove_cooldown(g_settings->player.no_cooldown);
 
             ImGui::Checkbox(BIG_TRANSLATE("ESP"), &g_settings->player.esp);
+
+            ImGui::Checkbox(BIG_TRANSLATE("Inf Energy"), &g_settings->player.infinite_energy);
 
             ImGui::EndGroup();
 
@@ -54,13 +56,15 @@ namespace big
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip(xorstr("Enable skateboard relic"));
 
+            ImGui::Checkbox(BIG_TRANSLATE("Inf Mana"), &g_settings->player.infinite_mana);
+
             ImGui::EndGroup();
 
             ImGui::SameLine(400);
 
             ImGui::BeginGroup();
 
-            ImGui::Checkbox(BIG_TRANSLATE("Infinite Dodge"), &g_settings->player.infinite_dodge);
+            ImGui::Checkbox(BIG_TRANSLATE("Inf Dodge"), &g_settings->player.infinite_dodge);
 
             if (ImGui::Checkbox(BIG_TRANSLATE("Can't jump"), &g_settings->player.cant_jump))
                 unreal_engine::get_pawn()->m_cant_jump = g_settings->player.cant_jump;
@@ -119,18 +123,17 @@ namespace big
 
             ImGui::BeginGroup();
 
-            if (ImGui::Button(BIG_TRANSLATE("Spawn Projectile"), ImVec2(120, 0)))
+            if (ImGui::Button(BIG_TRANSLATE("Heal"), ImVec2(120, 0)))
             {
-                THREAD_POOL_BEGIN()
+                QUEUE_JOB_BEGIN_CLAUSE()
                 {
-                    if (auto pawn = unreal_engine::get_pawn(); pawn)
+                    if (auto self = unreal_engine::get_hotta_character(); self)
                     {
-                        if (auto self = pawn->m_skill_component; self)
-                        {
-                            self->spawn_artifac_arrow(100.f);
-                        }
+                        auto max = self->m_skill_component->m_max_health;
+                        self->set_health(max, EDamageReason::Max, false, 0.0f);
+                        self->server_set_health(max, EDamageReason::Max);
                     }
-                } THREAD_POOL_END
+                } QUEUE_JOB_END_CLAUSE
             }
 
             ImGui::EndGroup();

@@ -36,7 +36,9 @@ namespace big
 		int* m_ssr_stuff;
 		PVOID m_player_navigation;
 		PVOID m_task_queue;
-
+		PVOID m_evasion_handler;
+		PVOID m_attack_range;
+		PVOID dword_7FF681753804;
 		functions::get_bone_matrix_t m_get_bone_matrix{};
 	private:
 		bool get_swapchain();
