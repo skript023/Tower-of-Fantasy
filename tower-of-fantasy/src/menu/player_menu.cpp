@@ -74,6 +74,16 @@ namespace big
 
             ImGui::Checkbox(BIG_TRANSLATE("Reset Box"), &g_settings->player.reset_box);
 
+            if (ImGui::Checkbox(xorstr("Auto Combat"), &g_settings->player.auto_combat))
+            {
+                g_fiber_pool->queue_job([] {
+                    if (auto self = unreal_engine::get_hotta_character(); self)
+                    {
+                        self->client_set_auto_combat(g_settings->player.auto_combat);
+                    }
+                });
+            }
+
             ImGui::EndGroup();
 
             ImGui::BeginGroup();
@@ -96,19 +106,18 @@ namespace big
                 {
                     if (auto const self = unreal_engine::get_hotta_character(); self)
                     {
-                        for (auto& quest : self->m_quest_component->quest_in_progress())
+                        for (auto& quest : self->m_quest_component->m_quest_in_progress)
                         {
-                            for (auto& objective : quest.object_progress())
+                            for (auto&& objective : quest.m_objective_progress)
                             {
                                 g_notification_service->success(xorstr("Ellohim Auto Quest"), std::format("{} Quest has been completed", quest.m_quest_id.get_name()));
                                 self->server_quest_update_progress(quest.m_quest_id, objective.m_objective_id, objective.m_needed_amount, true);
                             }
-
                         }
 
-                        for (auto& quest : self->m_quest_component->accepted_quest())
+                        for (auto&& quest : self->m_quest_component->m_auto_accept_quest_array)
                         {
-                            for (auto& objective : quest.object_progress())
+                            for (auto&& objective : quest.m_objective_progress)
                             {
                                 self->server_quest_update_progress(quest.m_quest_id, objective.m_objective_id, objective.m_needed_amount, true);
                             }
@@ -159,9 +168,9 @@ namespace big
                 {
                     g_fiber_pool->queue_job([]
                     {
-                        for (auto level : (*g_pointers->m_world)->m_level.to_vector())
+                        for (auto level : (*g_pointers->m_world)->m_level)
                         {
-                            for (auto actor : level->m_actor.to_vector())
+                            for (auto actor : level->m_actor)
                             {
                                 auto name = actor->get_name();
 
@@ -193,9 +202,9 @@ namespace big
                 {
                     g_fiber_pool->queue_job([]
                     {
-                        for (auto level : (*g_pointers->m_world)->m_level.to_vector())
+                        for (auto level : (*g_pointers->m_world)->m_level)
                         {
-                            for (auto actor : level->m_actor.to_vector())
+                            for (auto actor : level->m_actor)
                             {
                                 auto name = actor->get_name();
 
@@ -218,9 +227,9 @@ namespace big
                 {
                     g_fiber_pool->queue_job([]
                     {
-                        for (auto level : (*g_pointers->m_world)->m_level.to_vector())
+                        for (auto level : (*g_pointers->m_world)->m_level)
                         {
-                            for (auto actor : level->m_actor.to_vector())
+                            for (auto actor : level->m_actor)
                             {
                                 auto name = actor->get_name();
 
@@ -252,9 +261,9 @@ namespace big
                 {
                     g_fiber_pool->queue_job([]
                         {
-                            for (auto level : (*g_pointers->m_world)->m_level.to_vector())
+                            for (auto level : (*g_pointers->m_world)->m_level)
                             {
-                                for (auto actor : level->m_actor.to_vector())
+                                for (auto actor : level->m_actor)
                                 {
                                     auto name = actor->get_name();
 
@@ -286,9 +295,9 @@ namespace big
                 {
                     g_fiber_pool->queue_job([]
                         {
-                            for (auto level : (*g_pointers->m_world)->m_level.to_vector())
+                            for (auto level : (*g_pointers->m_world)->m_level)
                             {
-                                for (auto actor : level->m_actor.to_vector())
+                                for (auto actor : level->m_actor)
                                 {
                                     auto name = actor->get_name();
 

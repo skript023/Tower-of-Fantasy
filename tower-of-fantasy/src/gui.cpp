@@ -131,16 +131,6 @@ namespace big
 			TRY_CLAUSE
 			{
 				g_features->movement.infinite_jump(g_settings->player.infinite_jump);
-				//g_features->movement.infinite_dodge(g_settings->player.infinite_dodge);
-				g_features->misc.infinite_energy(g_settings->player.infinite_energy);
-				g_features->misc.infinite_mana(g_settings->player.infinite_mana);
-
-				static auto start = std::chrono::steady_clock::now();
-				if ((std::chrono::steady_clock::now() - start).count() >= std::chrono::seconds(10).count())
-				{
-					g_features->misc.get_entity_list(g_settings->player.esp);
-					start = std::chrono::steady_clock::now();
-				}
 			} EXCEPT_CLAUSE
 		}
 	}

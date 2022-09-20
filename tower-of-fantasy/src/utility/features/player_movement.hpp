@@ -59,7 +59,7 @@ namespace big
 
 		inline void teleport_forward()
 		{
-			THREAD_POOL_BEGIN()
+			QUEUE_JOB_BEGIN_CLAUSE()
 			{
 				if (auto self = unreal_engine::get_hotta_character(); self)
 				{
@@ -67,13 +67,13 @@ namespace big
 					auto pos = self->m_capsule_component->m_position;
 					auto rot = self->m_capsule_component->m_rotation;
 
-					pos.x += forward * sin(unreal_engine::degree_to_radian(rot.yaw)) * -1.500f;
+					pos.x -= forward * sin(unreal_engine::degree_to_radian(rot.yaw));
 					pos.y += forward * cos(unreal_engine::degree_to_radian(rot.yaw));
 
-					self->server_teleport_to(pos, rot);
 					self->client_teleport_to(pos, rot);
+					self->server_teleport_to(pos, rot);
 				}
-			} THREAD_POOL_END
+			} QUEUE_JOB_END_CLAUSE
 		}
 
 		inline void teleport_to(Vector3 coords)
@@ -82,8 +82,8 @@ namespace big
 			{
 				if (auto self = unreal_engine::get_hotta_character(); self)
 				{
-					self->server_teleport_to(coords, self->m_capsule_component->m_rotation);
 					self->client_teleport_to(coords, self->m_capsule_component->m_rotation);
+					self->server_teleport_to(coords, self->m_capsule_component->m_rotation);
 				}
 			} QUEUE_JOB_END_CLAUSE
 		}

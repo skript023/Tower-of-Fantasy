@@ -33,15 +33,16 @@ namespace big
 			}
 			});
 	}
-	void MiscOption::get_entity_list(bool activate)
+	void MiscOption::render_esp(bool activate)
 	{
 		if (activate && unreal_engine::game_state())
 		{
-			m_entity_list.clear();
-			for (auto level : (*g_pointers->m_world)->m_level.to_vector())
+			for (auto level : (*g_pointers->m_world)->m_level)
 			{
-				for (auto actor : level->m_actor.to_vector())
+				if (!level) continue;
+				for (auto actor : level->m_actor)
 				{
+					if (!actor) continue;
 					auto name = actor->get_name();
 
 					if (auto root_component = actor->root_component())
@@ -55,50 +56,39 @@ namespace big
 								Vector2 location;
 								if (self->project_world_to_screen(pos, location))
 								{
-									m_entity_list.push_back({ location, pos, name, actor });
+									auto distance = g_features->movement.get_entity_coords() != nullptr ? g_features->movement.get_entity_coords()->distance(pos) : 0.f;
+									draw::RGBA red = { 255, 0, 0, 255 };
+									draw::RGBA white = { 255, 255, 255, 255 };
+									draw::RGBA green = { 0, 255, 0, 255 };
+									float width = static_cast<float>(g_pointers->m_screen->x / 2);
+									float height = static_cast<float>(g_pointers->m_screen->y / 2);
+
+									if (name.find("Scene_Box_Refresh_Wild_") != std::string::npos ||
+										name.find("BP_FireLink_Minigame") != std::string::npos ||
+										name.find("BP_MiniGame_ThrowFlower_") != std::string::npos ||
+										name.find("BP_Harvest_Gem_") != std::string::npos
+										)
+									{
+										draw::draw_line(width, 0, location.x, location.y, &red, 1.f);
+										draw::draw_stroke_text(location.x, location.y, &white, std::format("{} [{:.2f}]m", name, distance).c_str());
+
+										if (distance < 100.f) draw::draw_corner_box(location.x, location.y, 100.f, 50.f, 2.f, &green);
+									}
+									else if (name.find("Scene_Box_OnceOnly_") != std::string::npos ||
+										name.find("scene_box_brambles_") != std::string::npos
+										)
+									{
+										if (!actor->harvested() && actor->allow_pick())
+										{
+											draw::draw_line(width, 0, location.x, location.y, &red, 1.f);
+											draw::draw_stroke_text(location.x, location.y, &white, std::format("{} [{:.2f}]m", name, distance).c_str());
+
+											if (distance < 100.f) draw::draw_corner_box(location.x, location.y, 100.f, 50.f, 2.f, &green);
+										}
+									}
 								}
 							}
 						}
-					}
-				}
-			}
-		}
-	}
-
-	void MiscOption::render_esp(bool activate)
-	{
-		if (activate && unreal_engine::game_state())
-		{
-			for (auto entity : m_entity_list)
-			{
-				auto distance = g_features->movement.get_entity_coords() != nullptr ? g_features->movement.get_entity_coords()->distance(entity.m_relative_location) : 0.f;
-				draw::RGBA red = { 255, 0, 0, 255 };
-				draw::RGBA white = { 255, 255, 255, 255 };
-				draw::RGBA green = { 0, 255, 0, 255 };
-				float width = static_cast<float>(g_pointers->m_screen->x / 2);
-				float height = static_cast<float>(g_pointers->m_screen->y / 2);
-
-				if (entity.name.find("Scene_Box_Refresh_Wild_") != std::string::npos ||
-					entity.name.find("BP_FireLink_Minigame") != std::string::npos ||
-					entity.name.find("BP_MiniGame_ThrowFlower_") != std::string::npos ||
-					entity.name.find("BP_Harvest_Gem_") != std::string::npos
-					)
-				{
-					draw::draw_line(width, 0, entity.m_position.x, entity.m_position.y, &red, 1.f);
-					draw::draw_stroke_text(entity.m_position.x, entity.m_position.y, &white, std::format("{} [{:.2f}]m", entity.name, distance).c_str());
-
-					if (distance < 100.f) draw::draw_corner_box(entity.m_position.x, entity.m_position.y, 100.f, 50.f, 2.f, &green);
-				}
-				else if (entity.name.find("Scene_Box_OnceOnly_") != std::string::npos ||
-					entity.name.find("scene_box_brambles_") != std::string::npos
-					)
-				{
-					if (!entity.m_actor->harvested() && entity.m_actor->allow_pick())
-					{
-						draw::draw_line(width, 0, entity.m_position.x, entity.m_position.y, &red, 1.f);
-						draw::draw_stroke_text(entity.m_position.x, entity.m_position.y, &white, std::format("{} [{:.2f}]m", entity.name, distance).c_str());
-
-						if (distance < 100.f) draw::draw_corner_box(entity.m_position.x, entity.m_position.y, 100.f, 50.f, 2.f, &green);
 					}
 				}
 			}

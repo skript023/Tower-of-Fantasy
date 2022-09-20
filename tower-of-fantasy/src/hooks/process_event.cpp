@@ -17,10 +17,10 @@ namespace big
 		{
 			if (g_settings->system.log_process_event)
 			{
-				g_logger->info("Function name %s", function->get_fullname().c_str());
+				g_logger->info("Function name %s Object name %s", function->get_fullname().c_str(), _this->get_fullname().c_str());
 			}
 
-			if (function->get_name() == "ReceiveTick")
+			if (function->get_name() == "ReceiveTick" || function->get_name() == "Received_NotifyTick")
 			{
 				g_script_mgr.tick();
 			}
@@ -86,13 +86,18 @@ namespace big
 			if (function->get_name() == "ServerMatrixUnequiped")
 			{
 				auto params = static_cast<ServerMatrixUnequiped*>(parms);
-				for (int i = 0; i <= 20; i++)
-				{
-					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
-				}
+
 				g_notification_service->success(xorstr("Ellohim Matrix Unequiped"),
 					std::format("Matrix unequiped slot index {} successfull contain type {} weapon slot {}",
-						params->m_matrix_slot, params->m_contain_type, params->m_weapon_slot));
+						(int8_t)params->m_weapon_matrix_slot, (int8_t)params->m_contain_type, params->m_weapon_slot));
+			}
+			if (function->get_name() == "ServerMatrixEquiped")
+			{
+				auto params = static_cast<ServerMatrixEquiped*>(parms);
+
+				g_notification_service->success(xorstr("Ellohim Matrix Unequiped"),
+					std::format("Matrix unequiped slot index {} successfull contain type {} weapon slot {}",
+						(int8_t)params->m_weapon_matrix_slot, (int8_t)params->m_contain_type, params->m_weapon_slot));
 			}
 			if (function->get_name() == "ServerUpgradeStarLevel")
 			{
@@ -100,7 +105,7 @@ namespace big
 
 				g_notification_service->success(xorstr("Ellohim Star Upgrade"),
 					std::format("Star upgrade slot index {} successfull contain type {}",
-						params->m_choose_item_slot, params->m_contain_type));
+						params->m_choose_item_slot, (int8_t)params->m_contain_type));
 			}
 			if (function->get_name() == "ServerMatrixUpgradeStar")
 			{
@@ -108,7 +113,8 @@ namespace big
 
 				g_notification_service->success(xorstr("Ellohim Matrix Star Upgrade"),
 					std::format("Matrix star upgrade slot index {} successfull contain type {}",
-						params->m_slot_index, params->m_contain_type));
+						params->m_slot_index, (int8_t)params->m_contain_type));
+
 			}
 			if (function->get_name() == "ServerMatrixUpgradeStar")
 			{
@@ -116,11 +122,21 @@ namespace big
 
 				g_notification_service->success(xorstr("Ellohim Matrix Star Upgrade"),
 					std::format("Matrix star upgrade slot index {} successfull contain type {}",
-						params->m_slot_index, params->m_contain_type));
+						params->m_slot_index, (int8_t)params->m_contain_type));
 			}
 			if (function->get_name() == "ServerMatrixStrengthen")
 			{
-				g_notification_service->success(xorstr("Ellohim matrix upgrade"), xorstr("Matrix upgrade successfully multiplied 15 times"));
+				auto params = static_cast<ServerMatrixStrengthen*>(parms);
+				ServerMatrixStrengthen new_params{};
+				g_notification_service->success(xorstr("Ellohim matrix upgrade"), 
+					std::format("Matrix upgrade slot index {} successfull contain type {}",
+						params->m_slot_index, (int8_t)params->m_contain_type));
+
+				new_params.m_slot_index = params->m_slot_index;
+				new_params.m_contain_type = EItemContainType::ITEMCONTAIN_TYPE_TRADE_BUY;
+
+				g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, &new_params);
+			
 			}
 			if (function->get_name() == "ServerEquipStrengthen")
 			{
@@ -195,12 +211,20 @@ namespace big
 					params->m_recover_time, 
 					params->m_open_time));
 			}
-			if (function->get_name() == "Server_CostSkillBean")
+			if (function->get_name() == "ServerApplyEffectContainerWithTargetDatas")
 			{
-				if (g_settings->player.infinite_dodge)
+				g_notification_service->success(xorstr("Ellohim Apply Effect"), xorstr("Effect has been applied succesfully"));
+				for (int i = 0; i <= 10; i++)
 				{
-					g_notification_service->success(xorstr("Ellohim Evade Skill"), xorstr("Evade Skill has been adjusted succesfully"));
-					return;
+					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
+				}
+			}
+			if (function->get_name() == "ServerGiveAbilityAndActivateOnce")
+			{
+				g_notification_service->success(xorstr("Ellohim Ability"), xorstr("Ability has been activated succesfully"));
+				for (int i = 0; i <= 10; i++)
+				{
+					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
 				}
 			}
 		}

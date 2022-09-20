@@ -37,7 +37,8 @@ namespace big
 		m_set_energy(get_native("Function HottaFramework.HottaCharacter.SetEnergy")),
 		m_set_mana(get_native("Function HottaFramework.HottaCharacter.SetMana")),
 		m_get_max_mana(get_native("Function HottaFramework.HottaCharacter.GetMaxMana")),
-		m_get_mana(get_native("Function HottaFramework.HottaCharacter.GetMana"))
+		m_get_mana(get_native("Function HottaFramework.HottaCharacter.GetMana")),
+		m_client_set_auto_combat(get_native("Function HottaFramework.HottaPlayerCharacter.ClientSetAutoCombat"))
 	{
 		g_native_invoker = this;
 	}
@@ -45,6 +46,17 @@ namespace big
 	NativeInvoker::~NativeInvoker()
 	{
 		g_native_invoker = nullptr;
+	}
+
+	template <typename T>
+	T NativeInvoker::get_class(std::string name)
+	{
+		if (auto uclass = UObject::find_class(name))
+		{
+			return static_cast<T>(uclass);
+		}
+
+		return nullptr;
 	}
 
 	UFunction* NativeInvoker::get_native(std::string name)
@@ -78,16 +90,5 @@ namespace big
 			return "OutputPathType_FromBag";
 		}
 		return "None";
-	}
-
-	template <typename T>
-	T NativeInvoker::get_class(std::string name)
-	{
-		if (auto uclass = UObject::find_class(name))
-		{
-			return static_cast<T>(uclass);
-		}
-
-		return nullptr;
 	}
 }

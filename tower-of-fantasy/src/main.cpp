@@ -10,7 +10,7 @@
 #include "script_mgr.hpp"
 #include "translation.hpp"
 #include "native_invoker.hpp"
-#include "directx_pool.hpp"
+#include "fiber.hpp"
 #include "utility/services/init_services.hpp"
 
 DWORD APIENTRY main_thread(LPVOID)
@@ -49,7 +49,6 @@ DWORD APIENTRY main_thread(LPVOID)
 		g_logger->info("Virtual Protect initialized.");
 
 		auto renderer_instance = std::make_unique<renderer>();
-		auto directx_warper = std::make_unique<directx_pool>();
 		g_logger->info("Renderer initialized.");
 
 		auto hooking_instance = std::make_unique<hooking>();
@@ -68,6 +67,7 @@ DWORD APIENTRY main_thread(LPVOID)
 		g_logger->info("Service initialized.");
 
 		g_thread_pool->push(gui::script_func);
+		g_script_mgr.add_script(std::make_unique<script>(&fiber::fiber_func));
 		g_logger->info("Scripts registered.");
 
 		g_hooking->enable();
@@ -82,6 +82,9 @@ DWORD APIENTRY main_thread(LPVOID)
 
 		hooking_instance.reset();
 		g_logger->info("Hooking uninitialized.");
+
+		g_script_mgr.remove_all_scripts();
+		g_logger->info("Scripts unregistered.");
 
 		g_thread_pool->destroy();
 		g_logger->info("Destroyed thread pool.");

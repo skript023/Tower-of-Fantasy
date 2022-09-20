@@ -308,6 +308,16 @@ namespace big
 
 			process_event(g_native_invoker->m_server_set_location_and_rotation, &g_native_invoker->m_server_set_location_and_rotation_params);
 		}
+
+		void client_set_auto_combat(bool activate)
+		{
+			if (!g_native_invoker->m_client_set_auto_combat)
+				g_native_invoker->m_client_set_auto_combat = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.ClientSetAutoCombat");
+		
+			g_native_invoker->m_client_set_auto_combat_params.m_enable = activate;
+
+			process_event(g_native_invoker->m_client_set_auto_combat, &g_native_invoker->m_client_set_auto_combat_params);
+		}
 	};
 	static_assert(sizeof(AcknowledgedPawn) == 0x52E8);
 
@@ -323,7 +333,7 @@ namespace big
 		char pad_2B8[16]; //0x2B8
 		class PlayerCameraManager* m_camera_manager; //0x2C8
 	public:
-		bool project_world_to_screen(FVector& WorldLocation, FVector2D& ScreenLocation, bool bPlayerViewportRelative = false)
+		bool project_world_to_screen(FVector& WorldLocation, FVector2D& ScreenLocation, bool bPlayerViewportRelative = true)
 		{
 			if (!g_native_invoker->m_world_to_screen)
 				g_native_invoker->m_world_to_screen = g_native_invoker->get_native("Function Engine.PlayerController.ProjectWorldLocationToScreen");
