@@ -106,7 +106,7 @@ namespace big
                 {
                     if (auto const self = unreal_engine::get_hotta_character(); self)
                     {
-                        for (auto& quest : self->m_quest_component->m_quest_in_progress)
+                        for (auto&& quest : self->m_quest_component->m_quest_in_progress)
                         {
                             for (auto&& objective : quest.m_objective_progress)
                             {
@@ -204,8 +204,10 @@ namespace big
                     {
                         for (auto level : (*g_pointers->m_world)->m_level)
                         {
+                            if (!level) continue;
                             for (auto actor : level->m_actor)
                             {
+                                if (!actor) continue;
                                 auto name = actor->get_name();
 
                                 if (name.find("BP_Harvest_Gem_") != std::string::npos)
@@ -229,8 +231,10 @@ namespace big
                     {
                         for (auto level : (*g_pointers->m_world)->m_level)
                         {
+                            if (!level) continue;
                             for (auto actor : level->m_actor)
                             {
+                                if (!actor) continue;
                                 auto name = actor->get_name();
 
                                 if (name.find("BP_FireLink_Minigame") != std::string::npos)
@@ -260,33 +264,35 @@ namespace big
                 if (ImGui::Button(xorstr("Teleport to Flower Throw"), ImVec2(160, 0)))
                 {
                     g_fiber_pool->queue_job([]
+                    {
+                        for (auto level : (*g_pointers->m_world)->m_level)
                         {
-                            for (auto level : (*g_pointers->m_world)->m_level)
+                            if (!level) continue;
+                            for (auto actor : level->m_actor)
                             {
-                                for (auto actor : level->m_actor)
-                                {
-                                    auto name = actor->get_name();
+                                if (!actor) continue;
+                                auto name = actor->get_name();
 
-                                    if (name.find("BP_MiniGame_ThrowFlower_") != std::string::npos)
+                                if (name.find("BP_MiniGame_ThrowFlower_") != std::string::npos)
+                                {
+                                    if (auto root_component = actor->root_component())
                                     {
-                                        if (auto root_component = actor->root_component())
+                                        auto pos = root_component->m_relative_location;
+                                        auto distance = g_features->movement.get_entity_coords()->distance(pos);
+                                        if (distance > 500.f && distance < 2500.f)
                                         {
-                                            auto pos = root_component->m_relative_location;
-                                            auto distance = g_features->movement.get_entity_coords()->distance(pos);
-                                            if (distance > 500.f && distance < 2500.f)
+                                            if (!actor->harvested())
                                             {
-                                                if (!actor->harvested())
-                                                {
-                                                    g_features->movement.teleport_with_loading(pos);
-                                                    g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near flower"));
-                                                    return;
-                                                }
+                                                g_features->movement.teleport_with_loading(pos);
+                                                g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near flower"));
+                                                return;
                                             }
                                         }
                                     }
                                 }
                             }
-                        });
+                        }
+                    });
                 }
 
                 ImGui::SameLine();
@@ -294,26 +300,28 @@ namespace big
                 if (ImGui::Button(xorstr("Teleport to Chest Box"), ImVec2(160, 0)))
                 {
                     g_fiber_pool->queue_job([]
+                    {
+                        for (auto level : (*g_pointers->m_world)->m_level)
                         {
-                            for (auto level : (*g_pointers->m_world)->m_level)
+                            if (!level) continue;
+                            for (auto actor : level->m_actor)
                             {
-                                for (auto actor : level->m_actor)
-                                {
-                                    auto name = actor->get_name();
+                                if (!actor) continue;
+                                auto name = actor->get_name();
 
-                                    if (name.find("Scene_Box_Refresh_Wild_") != std::string::npos)
+                                if (name.find("Scene_Box_Refresh_Wild_") != std::string::npos)
+                                {
+                                    if (auto root_component = actor->root_component())
                                     {
-                                        if (auto root_component = actor->root_component())
-                                        {
-                                            auto pos = root_component->m_relative_location;
-                                            g_features->movement.teleport_with_loading(pos);
-                                            g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near chest"));
-                                            return;
-                                        }
+                                        auto pos = root_component->m_relative_location;
+                                        g_features->movement.teleport_with_loading(pos);
+                                        g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near chest"));
+                                        return;
                                     }
                                 }
                             }
-                        });
+                        }
+                    });
                 }
 
                 ImGui::PushItemWidth(200);
