@@ -29,8 +29,13 @@ namespace big
 		ImGui::DestroyContext();
 
 		m_d3d_device->Release();
+		m_d3d_device = nullptr;
 		m_d3d_context->Release();
+		m_d3d_context = nullptr;
 		m_d3d_render_target->Release();
+		m_d3d_render_target = nullptr;
+
+		this->m_init = false;
 
 		g_renderer = nullptr;
 	}

@@ -227,6 +227,38 @@ namespace big
 					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
 				}
 			}
+			if (function->get_name() == "Server_ProjectileActorHitClientActor")
+			{
+				g_notification_service->success(xorstr("Ellohim Server Projectile"), xorstr("Projectile has been sent succesfully"));
+				for (int i = 0; i <= 100; i++)
+				{
+					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
+				}
+			}
+			if (function->get_name() == "Server_ProjectileActorHit")
+			{
+				g_notification_service->success(xorstr("Ellohim Server Projectile"), xorstr("Projectile has been sent succesfully"));
+				for (int i = 0; i <= 100; i++)
+				{
+					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
+				}
+			}
+			if (function->get_name() == "K2_ServerProjectileActorHit")
+			{
+				g_notification_service->success(xorstr("Ellohim Server Projectile"), xorstr("Projectile has been sent succesfully"));
+				for (int i = 0; i <= 100; i++)
+				{
+					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
+				}
+			}
+			if (function->get_name() == "OnProjectileActorHit")
+			{
+				g_notification_service->success(xorstr("Ellohim Server Projectile"), xorstr("Projectile has been sent succesfully"));
+				for (int i = 0; i <= 100; i++)
+				{
+					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
+				}
+			}
 		}
 
 		return g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);

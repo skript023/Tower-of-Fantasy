@@ -75,7 +75,7 @@ namespace big
 										if (distance < 100.f) draw::draw_corner_box(location.x, location.y, 100.f, 50.f, 2.f, &green);
 									}
 									else if (name.find("Scene_Box_OnceOnly_") != std::string::npos ||
-										name.find("scene_box_brambles_") != std::string::npos
+											 name.find("scene_box_brambles_") != std::string::npos
 										)
 									{
 										if (!actor->harvested() && actor->allow_pick())

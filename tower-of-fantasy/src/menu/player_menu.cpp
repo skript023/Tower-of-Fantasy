@@ -156,9 +156,7 @@ namespace big
                                     }
                                 }
                             }
-                            script::get_current()->yield(100ms);
                         }
-                        script::get_current()->yield(100ms);
                     }
                 });
             }

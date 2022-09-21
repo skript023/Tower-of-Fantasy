@@ -35,6 +35,8 @@ namespace big
 		bool m_can_use_auto_pickup; //0x0810
 		char pad_0811[236]; //0x0811
 		bool m_can_client_open; //0x08FD
+		char pad_08FE[0x942];
+		FText m_decriptive_name; //0x1240
 
 		Owner* owner()
 		{
@@ -133,7 +135,7 @@ namespace big
 		}
 	};
 	const auto test = sizeof(AActor);
-	static_assert(sizeof(AActor) == 0x8FE);
+	static_assert(sizeof(AActor) == 0x1258);
 
 	class ULevel
 	{

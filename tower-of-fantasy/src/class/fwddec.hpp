@@ -421,9 +421,18 @@ namespace big
 	struct FString : private TArray<wchar_t>
 	{
 		FString() = default;
-		FString(wchar_t* str)
+		FString(const wchar_t* other)
 		{
-			lstrcpy(m_data, str);
+			m_max = m_count = *other ? std::wcslen(other) + 1 : 0;
+			if (m_count)
+			{
+				m_data = const_cast<wchar_t*>(other);
+			}
+		}
+
+		inline bool is_valid() const
+		{
+			return m_data != nullptr;
 		}
 
 		inline std::wstring get_wstring() { return std::wstring(this->m_data); }
@@ -470,6 +479,8 @@ namespace big
 
 	struct FText
 	{
+		char padding[0x18];
+		/*
 		FString* m_text;
 		char m_unknown_data[0x30];
 
@@ -477,6 +488,7 @@ namespace big
 		{
 			return m_text->c_str();
 		}
+		*/
 	};
 
 	struct EvadeBeanParam
