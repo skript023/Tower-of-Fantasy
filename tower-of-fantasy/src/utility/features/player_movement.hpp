@@ -1,6 +1,8 @@
 #pragma once
-#include "../unreal_engine_utility.hpp"
 #include "script.hpp"
+#include "../unreal_engine_utility.hpp"
+#include "../services/all.hpp"
+#include "../ecryption.h"
 
 namespace big
 {
@@ -44,6 +46,19 @@ namespace big
 			}
 		}
 
+		inline Rotator* get_entity_rotation()
+		{
+			if (auto pawn = unreal_engine::get_pawn())
+			{
+				if (auto self = pawn->m_capsule_component)
+				{
+					return &self->m_rotation;
+				}
+			}
+
+			return nullptr;
+		}
+
 		inline Vector3* get_entity_coords()
 		{
 			if (auto pawn = unreal_engine::get_pawn())
@@ -63,12 +78,13 @@ namespace big
 			{
 				if (auto self = unreal_engine::get_hotta_character(); self)
 				{
-					constexpr auto forward = 1000.f;
+					constexpr auto forward = 500.f;
 					auto pos = self->m_capsule_component->m_position;
 					auto rot = self->m_capsule_component->m_rotation;
 
-					pos.x -= forward * sin(unreal_engine::degree_to_radian(rot.yaw));
-					pos.y += forward * cos(unreal_engine::degree_to_radian(rot.yaw));
+					pos.x += forward * sin(unreal_engine::degree_to_radian(rot.yaw)) * -1.500f;
+					pos.y += -forward * cos(unreal_engine::degree_to_radian(rot.yaw)) * 1.500f;
+					pos.z -= 390.f;
 
 					self->client_teleport_to(pos, rot);
 					self->server_teleport_to(pos, rot);
@@ -208,6 +224,49 @@ namespace big
 					player->m_player_controller->m_pawn->m_chara_movement->m_freeze_entity = true;
 				}
 			}
+		}
+
+		inline void teleport_to_entity(const char* entityName, bool distanceCheck)
+		{
+			g_fiber_pool->queue_job([=]
+			{
+				for (auto level : (*g_pointers->m_world)->m_level)
+				{
+					if (!level) continue;
+					for (auto actor : level->m_actor)
+					{
+						if (!actor) continue;
+						auto name = actor->get_name();
+
+						if (name.find(entityName) != std::string::npos)
+						{
+							if (auto root_component = actor->root_component())
+							{
+								auto pos = root_component->m_relative_location;
+								auto distance = get_entity_coords()->distance(pos);
+								if (distanceCheck)
+								{
+									if (distance > 100.f && distance < 2500.f)
+									{
+										if (!actor->harvested() && actor->allow_pick())
+										{
+											teleport_with_loading(pos);
+											g_notification_service->success(xorstr("Ellohim Teleport"), std::format("Teleported to near {}", name));
+											return;
+										}
+									}
+								}
+								else if (!distanceCheck)
+								{
+									teleport_with_loading(pos);
+									g_notification_service->success(xorstr("Ellohim Teleport"), std::format("Teleported to {}", name));
+									return;
+								}
+							}
+						}
+					}
+				}
+			});
 		}
 	};
 }

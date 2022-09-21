@@ -109,6 +109,32 @@ namespace big
 		}
 	};
 
+	struct FVector_NetQuantize : public Vector3
+	{
+		FVector_NetQuantize()
+		{}
+
+		FVector_NetQuantize(float x, float y, float z)
+			: Vector3(x, y, z)
+		{}
+
+		FVector_NetQuantize operator=(const Vector3 vec3) const { return { vec3.x, vec3.y, vec3.z }; }
+		FVector_NetQuantize operator-() const { return { -x, -y, -z }; }
+	};
+
+	struct FVector_NetQuantizeNormal : public Vector3
+	{
+		FVector_NetQuantizeNormal()
+		{}
+
+		FVector_NetQuantizeNormal(float InX, float InY, float InZ)
+			: Vector3(InX, InY, InZ)
+		{}
+
+		FVector_NetQuantizeNormal operator=(const Vector3 vec3) const { return { vec3.x, vec3.y, vec3.z }; }
+		FVector_NetQuantizeNormal operator-() const { return { -x, -y, -z }; }
+	};
+
 	struct Matrix
 	{
 		float m[4][4];

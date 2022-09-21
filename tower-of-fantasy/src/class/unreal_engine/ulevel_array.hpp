@@ -1,5 +1,6 @@
 #pragma once
 #include <class/vector.hpp>
+#include "native_invoker.hpp"
 
 namespace big
 {
@@ -75,6 +76,60 @@ namespace big
 				return;
 			}
 			this->m_can_use_auto_pickup = activate;
+		}
+
+		bool k2_teleport_to(FVector pos, Rotator rot)
+		{
+			K2_TeleportTo params{};
+
+			if (!g_native_invoker->m_k2_teleport_to)
+				g_native_invoker->m_k2_teleport_to = g_native_invoker->get_native("Function Engine.Actor.K2_TeleportTo");
+
+			params.m_location.x = pos.x;
+			params.m_location.y = pos.y;
+			params.m_location.z = pos.z + 1.f;
+			params.m_rotation = rot;
+
+			process_event(g_native_invoker->m_k2_teleport_to, &params);
+
+			return params.m_return;
+		}
+
+		bool k2_set_actor_location(FVector pos, bool Sweeped, bool bTeleport = false)
+		{
+			K2_SetActorLocation params{};
+			FHitResult SweepHitResult{};
+
+			if (!g_native_invoker->m_k2_set_actor_location_and_rotation)
+				g_native_invoker->m_k2_set_actor_location_and_rotation = g_native_invoker->get_native("Function Engine.Actor.K2_SetActorLocationAndRotation");
+
+			params.m_new_location = pos;
+			params.m_sweep = Sweeped;
+			params.m_sweep_hit_result = SweepHitResult;
+			params.m_teleport = bTeleport;
+
+			process_event(g_native_invoker->m_k2_set_actor_location_and_rotation, &params);
+
+			return params.m_return;
+		}
+
+		bool k2_set_actor_location_and_rotation(FVector pos, Rotator rot, bool Sweeped, bool bTeleport = false)
+		{
+			K2_SetActorLocationAndRotation params{};
+			FHitResult SweepHitResult{};
+
+			if (!g_native_invoker->m_k2_set_actor_location_and_rotation)
+				g_native_invoker->m_k2_set_actor_location_and_rotation = g_native_invoker->get_native("Function Engine.Actor.K2_SetActorLocationAndRotation");
+
+			params.m_new_location = pos;
+			params.m_new_rotation = rot;
+			params.m_sweep = Sweeped;
+			params.m_sweep_hit_result = SweepHitResult;
+			params.m_teleport = bTeleport;
+
+			process_event(g_native_invoker->m_k2_set_actor_location_and_rotation, &params);
+
+			return params.m_return;
 		}
 	};
 	const auto test = sizeof(AActor);

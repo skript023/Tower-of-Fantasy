@@ -129,7 +129,7 @@ namespace big::unreal_engine
 
 	inline float degree_to_radian(float degs)
 	{
-		return degs * 3.141592653589793f / 360.f;
+		return degs * (M_PI / 180.f);
 	}
 
 	inline wchar_t* convert_to_wchar(char* c)

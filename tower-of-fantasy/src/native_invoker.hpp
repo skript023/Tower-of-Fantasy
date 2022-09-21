@@ -50,6 +50,9 @@ namespace big
 		UFunction* m_get_max_mana;
 		UFunction* m_get_mana;
 		UFunction* m_client_set_auto_combat;
+		UFunction* m_k2_set_actor_location_and_rotation;
+		UFunction* m_k2_set_actor_location;
+		UFunction* m_k2_teleport_to;
 	public:
 		UClass* m_kismet_text_library;
 	public:

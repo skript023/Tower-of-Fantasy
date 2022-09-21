@@ -7,7 +7,41 @@ enum class EFindName
     FNAME_Replace_Not_Safe_For_Threading,
 };
 
-enum class EDamageReason : int8_t
+enum
+{
+	INDEX_NONE = -1
+};
+
+enum EItemRarity
+{
+	ITEM_RARITY_Invalid,
+	ITEM_RARITY_N,
+	ITEM_RARITY_R,
+	ITEM_RARITY_SR,
+	ITEM_RARITY_SSR,
+	ITEM_RARITY_MAX
+};
+
+enum EAttachmentRule
+{
+	KeepRelative,
+	KeepWorld,
+	SnapToTarget,
+	EAttachmentRule_MAX
+};
+
+enum ENoInit
+{
+	NoInit,
+};
+
+enum EForceInit
+{
+	ForceInit,
+	ForceInitToZero,
+};
+
+enum EDamageReason : int8_t
 {
 	Normal,
 	Drowning,
@@ -16,7 +50,7 @@ enum class EDamageReason : int8_t
 	Max
 };
 
-enum class EItemContainType : int8_t
+enum EItemContainType : int8_t
 {
 	ITEMCONTAIN_TYPE_INVENTORY,
 	ITEMCONTAIN_TYPE_EQUIP,
@@ -33,6 +67,14 @@ enum class EItemContainType : int8_t
 	ITEMCONTAIN_TYPE_OTHER,
 	ITEMCONTAIN_TYPE_FATE_ARTIFACT,
 	ITEMCONTAIN_TYPE_MAX
+};
+
+enum ETeleportType : int8_t
+{
+	None, 
+	TeleportPhysics, 
+	ResetPhysics, 
+	ETeleportType_MAX
 };
 
 enum class EWeaponMatrixSlot : int8_t

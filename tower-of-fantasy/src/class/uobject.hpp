@@ -39,6 +39,14 @@ namespace big
 		{
 			return !!(m_flags & static_cast<std::underlying_type_t<EInternalObjectFlags>>(EInternalObjectFlags::PendingKill));
 		}
+		inline bool is_valid(bool bEvenIfPendingKill)
+		{
+			if (this)
+			{
+				return bEvenIfPendingKill ? !this->is_unreachable() : !(this->is_unreachable() || this->is_pending_kill());
+			}
+			return false;
+		}
 		UObject* get_valid_object();
 	};
 	static_assert(sizeof(FUObjectItem) == 0x18);

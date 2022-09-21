@@ -9,8 +9,6 @@ namespace big
 		static void render_menu();
 	private:
 		inline static float m_exp_multiplier{};
-		inline static int selected_method{ 0 };
-		inline static const char* const method[]{ "Teleport Standard", "Teleport With Loading" };
 	};
 }
 /*

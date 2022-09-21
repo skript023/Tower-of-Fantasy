@@ -29,16 +29,10 @@ namespace big
 		class GetNavigation* m_get_navigation; //0x09F4
 	};
 
-	class GWorld
+	class GWorld : public UObject
 	{
 	public:
-		char pad_0000[0xC]; //0x0000
-		int m_object_index; //0x000C
-		class ClassType* m_type; //0x0010
-		int m_name_index; //0x0018
-		int unk_1C; //0x001C
-		class Outer* m_outer; //0x0020
-		void* unk_28; //0x0028
+		void* pad_0028; //0x0028
 		class PersistentLevel* m_persist_level; //0x0030
 		class NetDriver* m_net_driver; //0x0038
 		class LineBatcher* m_line_batcher; //0x0040

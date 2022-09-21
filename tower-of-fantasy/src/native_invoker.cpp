@@ -38,7 +38,10 @@ namespace big
 		m_set_mana(get_native("Function HottaFramework.HottaCharacter.SetMana")),
 		m_get_max_mana(get_native("Function HottaFramework.HottaCharacter.GetMaxMana")),
 		m_get_mana(get_native("Function HottaFramework.HottaCharacter.GetMana")),
-		m_client_set_auto_combat(get_native("Function HottaFramework.HottaPlayerCharacter.ClientSetAutoCombat"))
+		m_client_set_auto_combat(get_native("Function HottaFramework.HottaPlayerCharacter.ClientSetAutoCombat")),
+		m_k2_set_actor_location_and_rotation(get_native("Function Engine.Actor.K2_SetActorLocationAndRotation")),
+		m_k2_set_actor_location(get_native("Function Engine.Actor.K2_SetActorLocation")),
+		m_k2_teleport_to(get_native("Function Engine.Actor.K2_TeleportTo"))
 	{
 		g_native_invoker = this;
 	}

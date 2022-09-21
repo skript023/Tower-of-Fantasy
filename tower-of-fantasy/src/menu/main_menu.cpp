@@ -6,9 +6,10 @@
 #include "utility/networking/http_request.hpp"
 #include "utility/joaat.hpp"
 
-#include "menu/player_menu.h"
-#include "menu/player_stats.h"
-#include "menu/setting_menu.h"
+#include "player_menu.h"
+#include "player_stats.h"
+#include "setting_menu.h"
+#include "teleport_menu.h"
 
 #include <objbase.h>      // include the base COM header
 #include <netlistmgr.h>
@@ -154,6 +155,7 @@ namespace big
 			{
 				ImGui::BeginTabBar("tabbar");
 				player_menu::render_menu();
+				teleport_menu::render_menu();
 				player_stat::render_menu();
 				setting_menu::render_menu();
 				ImGui::EndTabBar();

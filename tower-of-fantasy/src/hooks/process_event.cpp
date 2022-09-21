@@ -22,7 +22,7 @@ namespace big
 
 			if (function->get_name() == "ReceiveTick" || function->get_name() == "Received_NotifyTick")
 			{
-				g_script_mgr.tick();
+				
 			}
 			if (function->get_name() == "ClientSetTreasureOpened")
 			{

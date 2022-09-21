@@ -2,6 +2,7 @@
 #include "fname_pool.hpp"
 #include "vector.hpp"
 #include "enums.hpp"
+#include <class/fhit_result.hpp>
 
 namespace big
 {
@@ -257,5 +258,33 @@ namespace big
 	struct ClientSetAutoCombat
 	{
 		bool m_enable;
+	};
+
+	struct K2_SetActorLocationAndRotation
+	{
+		FVector m_new_location; //0x0000
+		Rotator m_new_rotation; //0x000C
+		bool m_sweep; //0x0018
+		char pad_0019[3]; //0x0019
+		FHitResult m_sweep_hit_result; //0x001C
+		bool m_teleport; //0x00A8
+		bool m_return; //0x00A9
+	};
+
+	struct K2_SetActorLocation
+	{
+		FVector m_new_location; //0x0000
+		bool m_sweep; //0x000C
+		char pad_000D[3]; //0x000D
+		FHitResult m_sweep_hit_result; //0x0010
+		bool m_teleport; //0x009C
+		bool m_return; //0x009D
+	};
+
+	struct K2_TeleportTo
+	{
+		FVector m_location;
+		Rotator m_rotation;
+		bool m_return;
 	};
 }

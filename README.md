@@ -11,7 +11,7 @@ Strictly for educational purposes.
 ## Building
 To build Tower of Fantasy Internal you need:
 * Visual Studio 2022
-* [Premake 5.0](https://premake.github.io/download.html) in your PATH
+* [Premake 5.0](https://premake.github.io/) in your PATH
 
 To set up the build environment, run the following commands in a terminal:
 ```dos
