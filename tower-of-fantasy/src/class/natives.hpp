@@ -287,4 +287,18 @@ namespace big
 		Rotator m_rotation;
 		bool m_return;
 	};
+	
+	struct ReceivePointDamage
+	{
+		float m_damage;
+		EDamageType m_damage_type;
+		FVector m_hit_location;
+		FVector m_hit_normal;
+		class PrimitiveComponent* m_hit_component;
+		FName m_bone_name;
+		FVector m_shot_from_direction;
+		PlayerController* m_insigned_by;
+		AActor* m_damage_cuaser;
+		FHitResult m_hit_info;
+	};
 }

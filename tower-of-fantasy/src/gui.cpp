@@ -130,7 +130,7 @@ namespace big
 		{
 			TRY_CLAUSE
 			{
-				g_features->movement.infinite_jump(g_settings->player.infinite_jump);
+				
 			} EXCEPT_CLAUSE
 		}
 	}

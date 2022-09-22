@@ -133,6 +133,7 @@ namespace big
 
 			return params.m_return;
 		}
+
 	};
 	const auto test = sizeof(AActor);
 	static_assert(sizeof(AActor) == 0x1258);

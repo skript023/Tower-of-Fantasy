@@ -56,14 +56,24 @@ namespace big
 			m_player_nav = ptr.add(3).rip().as<decltype(m_player_nav)>();
 		});
 
-		main_batch.add("Rapid Attack", "0F 28 C2 74 12 F3 0F 10 4F ? F3 0F 5C 4C 24 ? 0F 2F D1", [this](memory::handle ptr)
+		main_batch.add("Rapid Attack", "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC 50 48 8B 31 4D 8B F8", [this](memory::handle ptr)
 		{
-			m_rapid_attack = ptr.add(2).as<decltype(m_rapid_attack)>();
+			m_rapid_attack = ptr.as<decltype(m_rapid_attack)>();//0F 28 C2 74 12 F3 0F 10 4F ? F3 0F 5C 4C 24 ? 0F 2F D1
+		});
+
+		main_batch.add("xmmword_7FF67F73A040", "0F 28 0D ? ? ? ? 66 41 0F 38 14 CF 0F 28 C1 66 0F 15 C1 0F 5D C1 F3 0F 16 C8 F3 0F 5D C1 F3 41 0F 11 03 0F B6 C1", [this](memory::handle ptr)
+		{
+			xmmword_7FF67F73A040 = ptr.add(3).rip().as<decltype(xmmword_7FF67F73A040)>();
 		});
 
 		main_batch.add("Attack Range", "41 0F 10 88 ? ? 00 00 41 0F 10 80 ? ? 00 00 0F C2 C1 04 0F 50 C0", [this](memory::handle ptr)
 		{
 			m_attack_range = ptr.add(2).as<decltype(m_attack_range)>();
+		});
+
+		main_batch.add("Unlimited Jump Hit", "75 ? 48 8B ? 48 8B ? FF 90 ? ? ? ? 84 C0 0F 84 ? ? ? ? 80 BF 70 01 00 00", [this](memory::handle ptr)
+		{
+			
 		});
 
 		main_batch.add("Local Player", "48 89 3D ? ? ? ? C7 05 ? ? ? ? ? ? ? ? 89 05 ? ? ? ? 40 88 3D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? E9", [this](memory::handle ptr)

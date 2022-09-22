@@ -214,50 +214,12 @@ namespace big
 			if (function->get_name() == "ServerApplyEffectContainerWithTargetDatas")
 			{
 				g_notification_service->success(xorstr("Ellohim Apply Effect"), xorstr("Effect has been applied succesfully"));
-				for (int i = 0; i <= 10; i++)
-				{
-					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
-				}
 			}
-			if (function->get_name() == "ServerGiveAbilityAndActivateOnce")
+			if (function->get_name() == "ReceivePointDamage")
 			{
-				g_notification_service->success(xorstr("Ellohim Ability"), xorstr("Ability has been activated succesfully"));
-				for (int i = 0; i <= 10; i++)
-				{
-					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
-				}
-			}
-			if (function->get_name() == "Server_ProjectileActorHitClientActor")
-			{
-				g_notification_service->success(xorstr("Ellohim Server Projectile"), xorstr("Projectile has been sent succesfully"));
-				for (int i = 0; i <= 100; i++)
-				{
-					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
-				}
-			}
-			if (function->get_name() == "Server_ProjectileActorHit")
-			{
-				g_notification_service->success(xorstr("Ellohim Server Projectile"), xorstr("Projectile has been sent succesfully"));
-				for (int i = 0; i <= 100; i++)
-				{
-					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
-				}
-			}
-			if (function->get_name() == "K2_ServerProjectileActorHit")
-			{
-				g_notification_service->success(xorstr("Ellohim Server Projectile"), xorstr("Projectile has been sent succesfully"));
-				for (int i = 0; i <= 100; i++)
-				{
-					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
-				}
-			}
-			if (function->get_name() == "OnProjectileActorHit")
-			{
-				g_notification_service->success(xorstr("Ellohim Server Projectile"), xorstr("Projectile has been sent succesfully"));
-				for (int i = 0; i <= 100; i++)
-				{
-					g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
-				}
+				auto params = static_cast<ReceivePointDamage*>(parms);
+				g_notification_service->success(xorstr("Ellohim Ability"), xorstr("Damage has been received succesfully"));
+				//female_player_C
 			}
 		}
 

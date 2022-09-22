@@ -198,12 +198,13 @@ namespace big
 
 		void server_kick_player(FString playerName)
 		{
+			ServerKickPlayer params{};
 			if (!g_native_invoker->m_server_kick_player)
 				g_native_invoker->m_server_kick_player = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.ServerKickPlayer");
 
-			g_native_invoker->m_server_kick_player_params.m_target = playerName;
+			params.m_target = playerName;
 
-			process_event(g_native_invoker->m_server_kick_player, &g_native_invoker->m_server_kick_player_params);
+			process_event(g_native_invoker->m_server_kick_player, &params);
 		}
 
 		void server_set_health(float health, EDamageReason damageReason)
@@ -256,42 +257,47 @@ namespace big
 
 		void set_energy(float energy)
 		{
+			SetEnergy params{};
+
 			if (!g_native_invoker->m_set_energy)
 				g_native_invoker->m_set_energy = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.SetEnergy");
 
-			g_native_invoker->m_set_energy_params.m_energy = energy;
+			params.m_energy = energy;
 
-			process_event(g_native_invoker->m_set_energy, &g_native_invoker->m_set_energy_params);
+			process_event(g_native_invoker->m_set_energy, &params);
 		}
-			
+		
 		void set_mana(float mana)
 		{
+			SetEnergy params{};
 			if (!g_native_invoker->m_set_mana)
 				g_native_invoker->m_set_mana = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.SetMana");
 
-			g_native_invoker->m_set_energy_params.m_energy = mana;
+			params.m_energy = mana;
 
-			process_event(g_native_invoker->m_set_energy, &g_native_invoker->m_set_energy_params);
+			process_event(g_native_invoker->m_set_energy, &params);
 		}
 
 		float get_mana()
 		{
+			GetMaxMana params{};
 			if (!g_native_invoker->m_get_mana)
 				g_native_invoker->m_get_mana = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.GetMana");
 
-			process_event(g_native_invoker->m_get_mana, &g_native_invoker->m_get_max_mana_params);
+			process_event(g_native_invoker->m_get_mana, &params);
 
-			return g_native_invoker->m_get_max_mana_params.m_return;
+			return params.m_return;
 		}
 
 		float get_max_mana()
 		{
+			GetMaxMana params{};
 			if (!g_native_invoker->m_get_max_mana)
 				g_native_invoker->m_get_max_mana = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.GetMaxMana");
 
-			process_event(g_native_invoker->m_get_max_mana, &g_native_invoker->m_get_max_mana_params);
+			process_event(g_native_invoker->m_get_max_mana, &params);
 
-			return g_native_invoker->m_get_max_mana_params.m_return;
+			return params.m_return;
 		}
 		
 		void server_set_location_and_rotation(FVector location, Rotator rotation, bool authoritative)
@@ -311,12 +317,13 @@ namespace big
 
 		void client_set_auto_combat(bool activate)
 		{
+			ClientSetAutoCombat params{};
 			if (!g_native_invoker->m_client_set_auto_combat)
 				g_native_invoker->m_client_set_auto_combat = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.ClientSetAutoCombat");
 		
-			g_native_invoker->m_client_set_auto_combat_params.m_enable = activate;
+			params.m_enable = activate;
 
-			process_event(g_native_invoker->m_client_set_auto_combat, &g_native_invoker->m_client_set_auto_combat_params);
+			process_event(g_native_invoker->m_client_set_auto_combat, &params);
 		}
 	};
 	static_assert(sizeof(AcknowledgedPawn) == 0x52E8);
@@ -335,17 +342,18 @@ namespace big
 	public:
 		bool project_world_to_screen(FVector& WorldLocation, FVector2D& ScreenLocation, bool bPlayerViewportRelative = true)
 		{
+			WorldToScreenParam params{};
 			if (!g_native_invoker->m_world_to_screen)
 				g_native_invoker->m_world_to_screen = g_native_invoker->get_native("Function Engine.PlayerController.ProjectWorldLocationToScreen");
 			
-			g_native_invoker->m_world_to_screen_param.m_world_location = WorldLocation;
-			g_native_invoker->m_world_to_screen_param.m_screen_location = ScreenLocation;
-			g_native_invoker->m_world_to_screen_param.m_viewport_relative = bPlayerViewportRelative;
+			params.m_world_location = WorldLocation;
+			params.m_screen_location = ScreenLocation;
+			params.m_viewport_relative = bPlayerViewportRelative;
 
-			process_event(g_native_invoker->m_world_to_screen, &g_native_invoker->m_world_to_screen_param);
+			process_event(g_native_invoker->m_world_to_screen, &params);
 
-			ScreenLocation = g_native_invoker->m_world_to_screen_param.m_screen_location;
-			return g_native_invoker->m_world_to_screen_param.m_return;
+			ScreenLocation = params.m_screen_location;
+			return params.m_return;
 		}
 	};
 	static_assert(sizeof(PlayerController) == 0x2D0);

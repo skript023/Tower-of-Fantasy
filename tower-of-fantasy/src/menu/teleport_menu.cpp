@@ -30,7 +30,7 @@ namespace big
                             if (!actor) continue;
                             auto name = actor->get_name();
 
-                            if (name.find("Scene_Box_OnceOnly_") != std::string::npos || name.find("scene_box_brambles_") != std::string::npos)
+                            if (name.find("scene_box_brambles_") != std::string::npos)
                             {
                                 if (auto root_component = actor->root_component())
                                 {
@@ -43,7 +43,6 @@ namespace big
                                             if (actor->k2_set_actor_location(*g_features->movement.get_entity_coords(), true))
                                             {
                                                 g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near supply pods"));
-                                                return;
                                             }
                                         }
                                     }
@@ -75,7 +74,7 @@ namespace big
                     g_features->movement.teleport_to_entity("BP_MiniGame_ThrowFlower_", true);
                     break;
                 case 5:
-                    g_features->movement.teleport_to_entity("Scene_Box_Refresh_Wild_", true);
+                    g_features->movement.teleport_to_entity("Scene_Box_Refresh_Wild_", false);
                     break;
                 }
             }

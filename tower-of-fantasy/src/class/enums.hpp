@@ -41,6 +41,17 @@ enum EForceInit
 	ForceInitToZero,
 };
 
+enum EDamageType : uint8_t
+{
+	DAMAGETYPE_PHY,
+	DAMAGETYPE_FIRE,
+	DAMAGETYPE_THUNDER,
+	DAMAGETYPE_ICE,
+	DAMAGETYPE_SUPERPOWER,
+	DAMAGETYPE_TREAT,
+	DAMAGETYPE_MAX
+};
+
 enum EDamageReason : int8_t
 {
 	Normal,

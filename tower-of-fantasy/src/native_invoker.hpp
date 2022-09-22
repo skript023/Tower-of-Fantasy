@@ -56,7 +56,6 @@ namespace big
 	public:
 		UClass* m_kismet_text_library;
 	public:
-		WorldToScreenParam m_world_to_screen_param{};
 		ServerQuestUpdateProgress m_server_quest_update_progress_param{};
 		ServerBuyGHAIntegral m_server_buy_gha_integral_params{};
 		Server_MatchSoloLeague m_server_match_solo_league_params{};
@@ -75,10 +74,6 @@ namespace big
 		ServerSetCharacterLevel m_server_set_character_level_params{};
 		SetCharacterLevel m_set_character_level_params{};
 		ServerSetLocationAndRotation m_server_set_location_and_rotation_params{};
-		ServerKickPlayer m_server_kick_player_params{};
-		SetEnergy m_set_energy_params{};
-		GetMaxMana m_get_max_mana_params{};
-		ClientSetAutoCombat m_client_set_auto_combat_params{};
 	private:
 		inline static UFunction* m_function;
 		inline static UClass* m_class;

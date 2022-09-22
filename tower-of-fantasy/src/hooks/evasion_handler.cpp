@@ -8,8 +8,6 @@ namespace big
 	{
 		if (g_running)
 		{
-			g_script_mgr.tick();
-
 			if (g_settings->player.infinite_dodge)
 			{
 				static const float v1 = (float)(a1->m_cur_bean_count - a1->m_cur_bean_count / 10);

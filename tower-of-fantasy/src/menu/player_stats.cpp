@@ -27,7 +27,7 @@ namespace big
             {
                 if (auto self = unreal_engine::get_hotta_character())
                 {
-                    self->server_kick_player(FString(unreal_engine::convert_to_wchar(target)));
+                    self->server_kick_player(FString(target));
                 }
             }
 

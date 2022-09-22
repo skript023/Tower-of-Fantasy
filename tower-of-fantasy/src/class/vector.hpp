@@ -107,6 +107,13 @@ namespace big
 		{
 			return (x * vec4.x) + (y * vec4.y) + (z * vec4.z) + (w * vec4.w);
 		}
+
+		float bitwise_and_first(int v)
+		{
+			return float((int)x & v);
+		}
+
+		Vector4 operator&(const Vector4& v) { return {float((int)v.x & (int)x), float((int)v.y & (int)y), float((int)v.z & (int)z), float((int)v.w & (int)w) }; };
 	};
 
 	struct FVector_NetQuantize : public Vector3

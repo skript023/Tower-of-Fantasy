@@ -23,18 +23,18 @@ namespace big
 				switch (get_weapon_type())
 				{
 				case 2:
-					if (*g_pointers->m_rapid_attack != 0xC0)
-						*g_pointers->m_rapid_attack = 0xC0;
+					if (*(uint8_t*)g_pointers->m_rapid_attack != 0xC0)
+						*(uint8_t*)g_pointers->m_rapid_attack = 0xC0;
 					break;
 				case 3:
-					if (*g_pointers->m_rapid_attack != 0xC3)
-						*g_pointers->m_rapid_attack = 0xC3;
+					if (*(uint8_t*)g_pointers->m_rapid_attack != 0xC3)
+						*(uint8_t*)g_pointers->m_rapid_attack = 0xC3;
 					break;
 				}
 			}
-			else if (!activate && *g_pointers->m_rapid_attack != 0xC2)
+			else if (!activate && *(uint8_t*)g_pointers->m_rapid_attack != 0xC2)
 			{
-				*g_pointers->m_rapid_attack = 0xC2;
+				*(uint8_t*)g_pointers->m_rapid_attack = 0xC2;
 			}
 		}
 

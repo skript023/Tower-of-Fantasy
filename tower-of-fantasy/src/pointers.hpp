@@ -31,13 +31,14 @@ namespace big
 		iVector2* m_screen{};
 
 		uint8_t* m_cooldown;
-		uint8_t* m_rapid_attack;
 		uint8_t* m_skip_button;
+		float* xmmword_7FF67F73A040;
 		int* m_ssr_stuff;
 		PVOID m_player_navigation;
 		PVOID m_task_queue;
 		PVOID m_evasion_handler;
 		PVOID m_attack_range;
+		PVOID m_rapid_attack;
 		PVOID dword_7FF681753804;
 		functions::get_bone_matrix_t m_get_bone_matrix{};
 	private:

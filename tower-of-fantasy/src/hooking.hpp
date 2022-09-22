@@ -23,6 +23,7 @@ namespace big
 		static void APIENTRY process_event(UObject* _this, UFunction* function, void* parms);
 		static __int64 __fastcall evasion_handler(EvadeBeanParam* a1);
 		static __int64 __fastcall attack_range(__int64 a1, __int64 a2, __int64 a3);
+		static int8_t __fastcall fast_attack(__int64 a1, float* a2, signed __int64* a3);
 	};
 
 	struct minhook_keepalive
@@ -52,6 +53,7 @@ namespace big
 		detour_hook m_set_cursor_pos_hook;
 		detour_hook m_process_event_hook;
 		detour_hook m_evasion_handler_hook;
+		detour_hook m_rapid_attack_hook;
 	};
 
 	inline hooking *g_hooking{};

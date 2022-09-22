@@ -17,7 +17,8 @@ namespace big
 		m_set_cursor_pos_hook("SetCursorPos", memory::module("user32.dll").get_export("SetCursorPos").as<void*>(), &hooks::set_cursor_pos),
 		m_convert_thread_to_fiber_hook("ConvertThreadToFiber", memory::module("kernel32.dll").get_export("ConvertThreadToFiber").as<void*>(), &hooks::convert_thread_to_fiber),
 		m_process_event_hook("Process Event", g_pointers->m_process_event, &hooks::process_event),
-		m_evasion_handler_hook("Evasion Handle Hook", g_pointers->m_evasion_handler, &hooks::evasion_handler)
+		m_evasion_handler_hook("Evasion Handle Hook", g_pointers->m_evasion_handler, &hooks::evasion_handler),
+		m_rapid_attack_hook("Rapid Attack Hook", g_pointers->m_rapid_attack, &hooks::fast_attack)
 	{
 		g_hooking = this;
 	}
@@ -40,6 +41,8 @@ namespace big
 
 		m_process_event_hook.enable();
 		m_evasion_handler_hook.enable();
+		m_rapid_attack_hook.enable();
+
 		m_enabled = true;
 	}
 
@@ -48,10 +51,10 @@ namespace big
 		m_enabled = false;
 
 		*g_pointers->m_cooldown = 0x74;
-		*g_pointers->m_rapid_attack = 0xC2;
 		*g_pointers->m_skip_button = 0x74;
 		m_process_event_hook.disable();
 		m_evasion_handler_hook.disable();
+		m_rapid_attack_hook.disable();
 
 		m_convert_thread_to_fiber_hook.disable();
 		m_set_cursor_pos_hook.disable();

@@ -429,6 +429,14 @@ namespace big
 				m_data = const_cast<wchar_t*>(other);
 			}
 		}
+		FString(const char* c)
+		{
+			const size_t cSize = strlen(c) + 1;
+			wchar_t* wc = new wchar_t[cSize];
+			mbstowcs(wc, c, cSize);
+
+			m_data = wc;
+		}
 
 		inline bool is_valid() const
 		{

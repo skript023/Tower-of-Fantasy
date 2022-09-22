@@ -66,6 +66,9 @@ namespace big
 									if (name.find("Scene_Box_Refresh_Wild_") != std::string::npos ||
 										name.find("BP_FireLink_Minigame") != std::string::npos ||
 										name.find("BP_MiniGame_ThrowFlower_") != std::string::npos ||
+										name.find("BP_Minigame_NanoMetal_") != std::string::npos ||
+										name.find("BP_Minigame_ElementAttack_Volcano_") != std::string::npos ||
+										name.find("BP_MiniGame_FlyFlower") != std::string::npos ||
 										name.find("BP_Harvest_Gem_") != std::string::npos
 										)
 									{
@@ -113,10 +116,14 @@ namespace big
 		{
 			if (auto self = unreal_engine::get_hotta_character())
 			{
-				auto half = self->m_skill_component->m_max_energy / 2.f;
+				static const auto half = self->m_skill_component->m_max_energy / 2.f;
 				auto energy = self->m_skill_component->m_energy;
-				if (energy < half)
+				if (energy <= half)	
+				{
 					self->set_energy(self->m_skill_component->m_max_energy);
+					g_notification_service->success(xorstr("Set Energy"), xorstr("Energy refill successfull"));
+					self->m_skill_component->m_energy = self->m_skill_component->m_max_energy;
+				}
 			}
 		}
 	}

@@ -8,6 +8,7 @@ namespace big
 	{
 		g_features->misc.infinite_energy(g_settings->player.infinite_energy);
 		g_features->misc.infinite_mana(g_settings->player.infinite_mana);
+		g_features->movement.infinite_jump(g_settings->player.infinite_jump);
 	}
 	void fiber::fiber_func()
 	{
