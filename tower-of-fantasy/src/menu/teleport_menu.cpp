@@ -34,13 +34,21 @@ namespace big
                             {
                                 if (auto root_component = actor->root_component())
                                 {
+                                    FHitResult hit_result;
+                                    auto root = unreal_engine::get_local_player()->m_player_controller->m_root_component;
                                     auto pos = root_component->m_relative_location;
                                     auto distance = g_features->movement.get_entity_coords()->distance(pos);
+                                    auto target = *g_features->movement.get_entity_coords();
+                                    auto forward = root->get_forward_vector();
+
+                                    target.x += 300 * forward.x;
+                                    target.y += 300 * forward.y;
+                                    target.z -= 300;
                                     if (distance > 100.f && distance < 2500.f)
                                     {
                                         if (!actor->harvested() && actor->allow_pick())
                                         {
-                                            if (actor->k2_set_actor_location(*g_features->movement.get_entity_coords(), true))
+                                            if (actor->k2_set_actor_location(target, true, hit_result))
                                             {
                                                 g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near supply pods"));
                                             }

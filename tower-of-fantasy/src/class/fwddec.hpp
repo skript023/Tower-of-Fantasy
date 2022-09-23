@@ -506,6 +506,7 @@ namespace big
 		int64_t m_change_time; //0x21D8
 	};
 
+	class Engine;
 	class GWorld;
 	class OwningGameInstance;
 	class LocalPlayer;

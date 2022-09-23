@@ -42,7 +42,10 @@ namespace big
 		m_k2_set_actor_location_and_rotation(get_native("Function Engine.Actor.K2_SetActorLocationAndRotation")),
 		m_k2_set_actor_location(get_native("Function Engine.Actor.K2_SetActorLocation")),
 		m_k2_teleport_to(get_native("Function Engine.Actor.K2_TeleportTo")),
-		m_k2_add_relative_location(get_native("Function Engine.SceneComponent.K2_AddRelativeLocation"))
+		m_k2_add_relative_location(get_native("Function Engine.SceneComponent.K2_AddRelativeLocation")),
+		m_get_forward_vector(get_native("Function Engine.SceneComponent.GetForwardVector")),
+		m_k2_add_local_offset(get_native("Function Engine.SceneComponent.K2_AddLocalOffset")),
+		m_k2_set_actor_relative_location(get_native("Function Engine.Actor.K2_SetActorRelativeLocation"))
 	{
 		g_native_invoker = this;
 	}

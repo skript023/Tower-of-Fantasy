@@ -12,7 +12,8 @@ namespace big
 		static constexpr auto swapchain_present_index = 8;
 		static constexpr auto swapchain_draw_indexed_index = 12;
 		static constexpr auto swapchain_resizebuffers_index = 13;
-		static constexpr auto post_render_index = 97;
+		static constexpr auto post_render_index = 98;
+		static constexpr auto draw_transition_index = 99;
 		static HRESULT APIENTRY swapchain_present(IDXGISwapChain *this_, UINT sync_interval, UINT flags);
 		static HRESULT APIENTRY swapchain_resizebuffers(IDXGISwapChain *this_, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swapchain_flags);
 		static void APIENTRY swapchain_draw_indexed(ID3D11DeviceContext* pContext, UINT IndexCount, UINT StartIndexLocation, INT BaseVertexLocation);
@@ -27,6 +28,7 @@ namespace big
 		static int8_t __fastcall fast_attack(__int64 a1, float* a2, signed __int64* a3);
 
 		static void post_render(class ViewportClient* UGameViewportClient, class UCanvas* canvas);
+		static void draw_transition(class UCanvas* canvas);
 	};
 
 	struct minhook_keepalive
@@ -48,7 +50,7 @@ namespace big
 		bool m_enabled{};
 		minhook_keepalive m_minhook_keepalive;
 
-		//vmt_hook m_post_render_hook;
+		vmt_hook m_client_viewport_hook;
 		WNDPROC m_og_wndproc;
 
 		detour_hook m_convert_thread_to_fiber_hook;

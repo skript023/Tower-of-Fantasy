@@ -83,7 +83,7 @@ namespace big
 
 	void UObject::process_event(UFunction* function, void* parms)
 	{
-		return GetVFunction<void(*)(UObject*, UFunction*, void*)>(this, 0x43)(this, function, parms);
+		return vmt_hook::call_virtual<void(*)(UObject*, UFunction*, void*)>(this, 0x43)(this, function, parms);
 	}
 
 	void UObject::Process_event(UFunction* func, void* params)

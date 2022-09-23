@@ -21,6 +21,7 @@ namespace big
 		TUObjectArray* m_object{};
 		FUObjectArray* m_object_array{};
 		FNamePool* m_name{};
+		Engine** m_engine{};
 
 		uintptr_t** m_view_matrix{};
 		Navigation** m_player_nav{};

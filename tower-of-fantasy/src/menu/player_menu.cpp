@@ -109,14 +109,21 @@ namespace big
                             {
                                 if (auto root_component = actor->root_component())
                                 {
+                                    auto root = unreal_engine::get_local_player()->m_player_controller->m_root_component;
                                     auto pos = root_component->m_relative_location;
                                     auto distance = g_features->movement.get_entity_coords()->distance(pos);
                                     auto target = *g_features->movement.get_entity_coords();
-                                    if (actor->k2_set_actor_location(target, true))
+                                    auto forward = root->get_forward_vector();
+                                    
+                                    target.x += 300 * forward.x;
+                                    target.y += 300 * forward.y;
+                                    target.z -= 300;
+                                    FHitResult hit_result;
+                                    if (actor->k2_set_actor_location(target, true, hit_result))
                                     {
-                                        root_component->k2_add_relative_location(target, true);
-                                        root_component->k2_add_local_offset(target, true);
-                                        actor->k2_set_relative_location(target, true);
+                                        root_component->k2_add_relative_location(target, true, hit_result);
+                                        root_component->k2_add_local_offset(target, true, hit_result);
+                                        actor->k2_set_relative_location(target, true, hit_result);
                                         g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Chest box teleported to you"));
                                     }
                                 }
@@ -179,9 +186,11 @@ namespace big
                             {
                                 if (auto root_component = actor->root_component())
                                 {
+                                    FHitResult hit_result;
                                     auto pos = root_component->m_relative_location;
                                     auto distance = g_features->movement.get_entity_coords()->distance(pos);
-                                    if (actor->k2_set_actor_location(*g_features->movement.get_entity_coords(), true))
+                                    auto target = *g_features->movement.get_entity_coords();
+                                    if (actor->k2_set_actor_location(target, true, hit_result))
                                     {
                                         g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Nucleus teleported to you"));
                                     }

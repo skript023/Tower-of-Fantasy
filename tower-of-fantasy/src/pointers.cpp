@@ -5,9 +5,9 @@
 
 namespace big
 {
-	pointers::pointers(): m_base_address(memory::module("QRSL.exe").begin().as<uintptr_t>())
+	pointers::pointers(): m_base_address(memory::module("QRSL.exe").begin().as<uintptr_t>())//Engine = QRSL.exe+70184E0
 	{
-		memory::pattern_batch main_batch;
+		memory::pattern_batch main_batch;//Engine to Object = 13A358
 
 		for (int i = 0;!swapchain_found && i <= 10; i++)
 		{
@@ -34,6 +34,11 @@ namespace big
 		main_batch.add("FUObjectArray", "48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? 48 83 C4 28 E9 ? ? ? ? 48 83 EC 28 48 8D 0D ? ? ? ? FF 15 ? ? ? ?", [this](memory::handle ptr)
 		{
 			m_object_array = ptr.add(3).rip().as<decltype(m_object_array)>();
+		});
+
+		main_batch.add("Game Engine", "48 8B 1D ? ? ? ? 48 8D 15 ? ? ? ? 41 B8 ? ? ? ? 48 8D 4C 24 ? E8 ? ? ? ? 83 7C 24 ? ? 48 8B D5 48 8B 03 44 8B C7 48 0F 45 54 24 ? 48 8B CB", [this](memory::handle ptr)
+		{
+			m_engine = ptr.add(3).rip().as<decltype(m_engine)>();
 		});
 
 		main_batch.add("Screen Resolution", "8B 0D ? ? ? ? 8B 05 ? ? ? ? 41 89 4E 04 E9 ? ? ? ? 32 C9", [this](memory::handle ptr)

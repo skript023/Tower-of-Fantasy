@@ -1,6 +1,7 @@
 #pragma once
 #include "fwddec.hpp"
 #include "fname_pool.hpp"
+#include "vmt_hook.hpp"
 
 namespace big
 {
@@ -15,13 +16,6 @@ namespace big
 		RootSet = 1 << 30,
 		NoStrongReference = 1 << 31
 	};
-
-	template<typename Fn>
-	inline Fn GetVFunction(const void* instance, std::size_t index)
-	{
-		auto vtable = *reinterpret_cast<const void***>(const_cast<void*>(instance));
-		return reinterpret_cast<Fn>(vtable[index]);
-	}
 
 	class FUObjectItem
 	{
@@ -275,9 +269,9 @@ namespace big
 	public:
 		char pad_0x0088[0x198]; //0x0088
 
-		inline UObject* CreateDefaultObject(class UFunction* function, void* parms)
+		inline UObject* CreateDefaultObject()
 		{
-			return GetVFunction<UObject* (*)(UClass*)>(this, 0x73)(this);
+			return vmt_hook::call_virtual<UObject* (*)(UClass*)>(this, 0x73)(this);
 		}
 	};
 

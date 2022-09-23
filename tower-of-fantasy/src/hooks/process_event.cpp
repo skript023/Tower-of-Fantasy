@@ -221,6 +221,14 @@ namespace big
 				g_notification_service->success(xorstr("Ellohim Ability"), xorstr("Damage has been received succesfully"));
 				//female_player_C
 			}
+			if (function->get_name() == "ReceiveAnyDamage")
+			{
+				g_notification_service->success(xorstr("Ellohim Ability"), xorstr("Damage has been received succesfully"));
+			}
+			if (function->get_name() == "ReceivePointDamage")
+			{
+				g_notification_service->success(xorstr("Ellohim Ability"), xorstr("Damage has been received succesfully"));
+			}
 		}
 
 		return g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);

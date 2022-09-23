@@ -18,38 +18,38 @@ namespace big
 		char pad_0028[252];
 		Vector3 m_relative_location; //0x124
 
-		void k2_add_relative_location(FVector DeltaLocation, bool bSweep, bool bTeleport = false)
+		void k2_add_relative_location(FVector DeltaLocation, bool bSweep, FHitResult& SweepHitResult, bool bTeleport = false)
 		{
 			K2_SetActorLocation params{};
-			FHitResult SweepHitResult{};
 
 			params.m_new_location = DeltaLocation;
 			params.m_sweep = bSweep;
-			params.m_sweep_hit_result = SweepHitResult;
 			params.m_teleport = bTeleport;
 			const std::string func = "Function Engine.SceneComponent.K2_AddRelativeLocation";
 
 			if (!g_native_invoker->m_k2_add_relative_location)
 				g_native_invoker->m_k2_add_relative_location = g_native_invoker->get_native(func);
 
-			process_event(g_native_invoker->m_k2_set_actor_location_and_rotation, &params);
+			process_event(g_native_invoker->m_k2_add_relative_location, &params);
+
+			SweepHitResult = params.m_sweep_hit_result;
 		}
 
-		void k2_add_local_offset(FVector DeltaLocation, bool bSweep, bool bTeleport = false)
+		void k2_add_local_offset(FVector DeltaLocation, bool bSweep, FHitResult& SweepHitResult, bool bTeleport = false)
 		{
 			K2_SetActorLocation params{};
-			FHitResult SweepHitResult{};
-			static const std::string func = "Function Engine.SceneComponent.K2_AddRelativeLocation";
+			static const std::string func = "Function Engine.SceneComponent.K2_AddLocalOffset";
 
 			params.m_new_location = DeltaLocation;
 			params.m_sweep = bSweep;
-			params.m_sweep_hit_result = SweepHitResult;
 			params.m_teleport = bTeleport;
 
 			if (!g_native_invoker->m_k2_add_local_offset)
 				g_native_invoker->m_k2_add_local_offset = g_native_invoker->get_native(func);
 
-			process_event(g_native_invoker->m_k2_set_actor_location_and_rotation, &params);
+			process_event(g_native_invoker->m_k2_add_local_offset, &params);
+
+			SweepHitResult = params.m_sweep_hit_result;
 		}
 
 		Vector3 get_forward_vector()
@@ -59,7 +59,7 @@ namespace big
 			if (!g_native_invoker->m_get_forward_vector)
 				g_native_invoker->m_get_forward_vector = g_native_invoker->get_native(native);
 
-			process_event(g_native_invoker->m_k2_set_actor_location_and_rotation, &params);
+			process_event(g_native_invoker->m_get_forward_vector, &params);
 
 			return params.m_return;
 		}
@@ -156,10 +156,9 @@ namespace big
 			return params.m_return;
 		}
 
-		bool k2_set_actor_location(FVector pos, bool Sweeped, bool bTeleport = false)
+		bool k2_set_actor_location(FVector pos, bool Sweeped, FHitResult& SweepHitResult, bool bTeleport = false)
 		{
 			K2_SetActorLocation params{};
-			FHitResult SweepHitResult{};
 			const std::string native = "Function Engine.Actor.K2_SetActorLocationAndRotation";
 
 			if (!g_native_invoker->m_k2_set_actor_location_and_rotation)
@@ -167,18 +166,17 @@ namespace big
 
 			params.m_new_location = pos;
 			params.m_sweep = Sweeped;
-			params.m_sweep_hit_result = SweepHitResult;
 			params.m_teleport = bTeleport;
 
 			process_event(g_native_invoker->m_k2_set_actor_location_and_rotation, &params);
+			SweepHitResult = params.m_sweep_hit_result;
 
 			return params.m_return;
 		}
 
-		bool k2_set_actor_location_and_rotation(FVector pos, Rotator rot, bool Sweeped, bool bTeleport = false)
+		bool k2_set_actor_location_and_rotation(FVector pos, Rotator rot, bool Sweeped, FHitResult& SweepHitResult, bool bTeleport = false)
 		{
 			K2_SetActorLocationAndRotation params{};
-			FHitResult SweepHitResult{};
 			const std::string native = "Function Engine.Actor.K2_SetActorLocationAndRotation";
 
 			if (!g_native_invoker->m_k2_set_actor_location_and_rotation)
@@ -187,22 +185,21 @@ namespace big
 			params.m_new_location = pos;
 			params.m_new_rotation = rot;
 			params.m_sweep = Sweeped;
-			params.m_sweep_hit_result = SweepHitResult;
 			params.m_teleport = bTeleport;
 
 			process_event(g_native_invoker->m_k2_set_actor_location_and_rotation, &params);
 
+			SweepHitResult = params.m_sweep_hit_result;
+
 			return params.m_return;
 		}
 
-		void k2_set_relative_location(FVector NewRelativeLocation, bool bSweep, bool bTeleport = false)
+		void k2_set_relative_location(FVector NewRelativeLocation, bool bSweep, FHitResult& SweepHitResult, bool bTeleport = false)
 		{
 			K2_SetActorRelativeLocation params{};
-			FHitResult SweepHitResult{};
 
 			params.m_new_location = NewRelativeLocation;
 			params.m_sweep = bSweep;
-			params.m_sweep_hit_result = SweepHitResult;
 			params.m_teleport = bTeleport;
 			const std::string func = "Function Engine.Actor.K2_SetActorRelativeLocation";
 
@@ -210,6 +207,8 @@ namespace big
 				g_native_invoker->m_k2_set_actor_relative_location = g_native_invoker->get_native(func);
 
 			process_event(g_native_invoker->m_k2_set_actor_relative_location, &params);
+
+			SweepHitResult = params.m_sweep_hit_result;
 		}
 	};
 	const auto test = sizeof(AActor);

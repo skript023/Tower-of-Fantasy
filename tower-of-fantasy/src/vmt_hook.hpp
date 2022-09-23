@@ -19,6 +19,9 @@ namespace big
 		template <typename T>
 		T get_original(std::size_t index);
 
+		template<typename Fn>
+		static Fn call_virtual(const void* instance, std::size_t index);
+
 		void enable();
 		void disable();
 	private:
@@ -33,5 +36,12 @@ namespace big
 	inline T vmt_hook::get_original(std::size_t index)
 	{
 		return static_cast<T>(m_original_table[index]);
+	}
+
+	template<typename Fn>
+	inline Fn vmt_hook::call_virtual(const void* instance, std::size_t index)
+	{
+		auto vtable = *static_cast<const void***>(const_cast<void*>(instance));
+		return static_cast<Fn>(vtable[index]);
 	}
 }

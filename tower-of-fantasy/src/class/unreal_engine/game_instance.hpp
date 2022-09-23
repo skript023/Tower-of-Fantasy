@@ -374,7 +374,7 @@ namespace big
 	class ViewportClient : public UObject
 	{
 	public:
-		char pad_0028[1];
+
 	};
 
 	class LocalPlayer : public UObject
@@ -383,7 +383,12 @@ namespace big
 		char pad_0028[8];
 		class PlayerController* m_player_controller; //0x0030
 		char pad_0038[56]; //0x0038
-		class ViewportClient* m_viewport; //0x0070
+		class ViewportClient** m_viewport; //0x0070
+
+		inline void get_view_point(FMinimalViewInfo& outViewInfo, EStereoscopicPass StereoPass)
+		{
+			vmt_hook::call_virtual<void(*)(FMinimalViewInfo&, EStereoscopicPass)>(this, 0x4E)(outViewInfo, StereoPass);
+		}
 	};
 	static_assert(sizeof(LocalPlayer) == 0x78);
 

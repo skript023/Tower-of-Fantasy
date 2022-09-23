@@ -86,6 +86,7 @@ namespace big
 
 					pos.x += DISTANCE * forward.x;
 					pos.y += DISTANCE * forward.y;
+					pos.z -= 380;
 
 					self->client_teleport_to(pos, rot);
 					self->server_teleport_to(pos, rot);
