@@ -93,7 +93,38 @@ namespace big
                     unreal_engine::get_local_player()->m_player_controller->m_character->server_match_solo_league(true);
                 });
             }
+            if (ImGui::Button(xorstr("Teleport chest box"), ImVec2(120, 0)))
+            {
+                g_fiber_pool->queue_job([]
+                {
+                    for (auto level : (*g_pointers->m_world)->m_level)
+                    {
+                        if (!level) continue;
+                        for (auto actor : level->m_actor)
+                        {
+                            if (!actor) continue;
+                            auto name = actor->get_name();
 
+                            if (name.find("Scene_Box_Refresh_Wild_") != std::string::npos)
+                            {
+                                if (auto root_component = actor->root_component())
+                                {
+                                    auto pos = root_component->m_relative_location;
+                                    auto distance = g_features->movement.get_entity_coords()->distance(pos);
+                                    auto target = *g_features->movement.get_entity_coords();
+                                    if (actor->k2_set_actor_location(target, true))
+                                    {
+                                        root_component->k2_add_relative_location(target, true);
+                                        root_component->k2_add_local_offset(target, true);
+                                        actor->k2_set_relative_location(target, true);
+                                        g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Chest box teleported to you"));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
             ImGui::EndGroup();
 
             ImGui::SameLine();
@@ -152,7 +183,7 @@ namespace big
                                     auto distance = g_features->movement.get_entity_coords()->distance(pos);
                                     if (actor->k2_set_actor_location(*g_features->movement.get_entity_coords(), true))
                                     {
-                                        g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near supply pods"));
+                                        g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Nucleus teleported to you"));
                                     }
                                 }
                             }

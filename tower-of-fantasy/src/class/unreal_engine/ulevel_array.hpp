@@ -12,11 +12,57 @@ namespace big
 		FText m_decriptive_name;
 	};
 
-	class RootComponent
+	class RootComponent : public UObject
 	{
 	public:
-		char pad_000[0x124];
+		char pad_0028[252];
 		Vector3 m_relative_location; //0x124
+
+		void k2_add_relative_location(FVector DeltaLocation, bool bSweep, bool bTeleport = false)
+		{
+			K2_SetActorLocation params{};
+			FHitResult SweepHitResult{};
+
+			params.m_new_location = DeltaLocation;
+			params.m_sweep = bSweep;
+			params.m_sweep_hit_result = SweepHitResult;
+			params.m_teleport = bTeleport;
+			const std::string func = "Function Engine.SceneComponent.K2_AddRelativeLocation";
+
+			if (!g_native_invoker->m_k2_add_relative_location)
+				g_native_invoker->m_k2_add_relative_location = g_native_invoker->get_native(func);
+
+			process_event(g_native_invoker->m_k2_set_actor_location_and_rotation, &params);
+		}
+
+		void k2_add_local_offset(FVector DeltaLocation, bool bSweep, bool bTeleport = false)
+		{
+			K2_SetActorLocation params{};
+			FHitResult SweepHitResult{};
+			static const std::string func = "Function Engine.SceneComponent.K2_AddRelativeLocation";
+
+			params.m_new_location = DeltaLocation;
+			params.m_sweep = bSweep;
+			params.m_sweep_hit_result = SweepHitResult;
+			params.m_teleport = bTeleport;
+
+			if (!g_native_invoker->m_k2_add_local_offset)
+				g_native_invoker->m_k2_add_local_offset = g_native_invoker->get_native(func);
+
+			process_event(g_native_invoker->m_k2_set_actor_location_and_rotation, &params);
+		}
+
+		Vector3 get_forward_vector()
+		{
+			GetForwardVector params{};
+			const std::string native = "Function Engine.SceneComponent.GetForwardVector";
+			if (!g_native_invoker->m_get_forward_vector)
+				g_native_invoker->m_get_forward_vector = g_native_invoker->get_native(native);
+
+			process_event(g_native_invoker->m_k2_set_actor_location_and_rotation, &params);
+
+			return params.m_return;
+		}
 	};
 	static_assert(sizeof(RootComponent) == 0x130);
 
@@ -56,6 +102,18 @@ namespace big
 			return this->m_root_component;
 		}
 
+		RootComponent* k2_get_root_component()
+		{
+			K2_GetRootComponent params{};
+			const std::string native = "Function Engine.Actor.K2_GetRootComponent";
+			if (!g_native_invoker->m_k2_get_root_component)
+				g_native_invoker->m_k2_get_root_component = g_native_invoker->get_native(native);
+
+			process_event(g_native_invoker->m_k2_get_root_component, &params);
+
+			return params.m_return;
+		}
+
 		bool harvested()
 		{
 			return this->m_has_harvested != 0;
@@ -83,9 +141,10 @@ namespace big
 		bool k2_teleport_to(FVector pos, Rotator rot)
 		{
 			K2_TeleportTo params{};
+			const std::string native = "Function Engine.Actor.K2_TeleportTo";
 
 			if (!g_native_invoker->m_k2_teleport_to)
-				g_native_invoker->m_k2_teleport_to = g_native_invoker->get_native("Function Engine.Actor.K2_TeleportTo");
+				g_native_invoker->m_k2_teleport_to = g_native_invoker->get_native(native);
 
 			params.m_location.x = pos.x;
 			params.m_location.y = pos.y;
@@ -101,9 +160,10 @@ namespace big
 		{
 			K2_SetActorLocation params{};
 			FHitResult SweepHitResult{};
+			const std::string native = "Function Engine.Actor.K2_SetActorLocationAndRotation";
 
 			if (!g_native_invoker->m_k2_set_actor_location_and_rotation)
-				g_native_invoker->m_k2_set_actor_location_and_rotation = g_native_invoker->get_native("Function Engine.Actor.K2_SetActorLocationAndRotation");
+				g_native_invoker->m_k2_set_actor_location_and_rotation = g_native_invoker->get_native(native);
 
 			params.m_new_location = pos;
 			params.m_sweep = Sweeped;
@@ -119,9 +179,10 @@ namespace big
 		{
 			K2_SetActorLocationAndRotation params{};
 			FHitResult SweepHitResult{};
+			const std::string native = "Function Engine.Actor.K2_SetActorLocationAndRotation";
 
 			if (!g_native_invoker->m_k2_set_actor_location_and_rotation)
-				g_native_invoker->m_k2_set_actor_location_and_rotation = g_native_invoker->get_native("Function Engine.Actor.K2_SetActorLocationAndRotation");
+				g_native_invoker->m_k2_set_actor_location_and_rotation = g_native_invoker->get_native(native);
 
 			params.m_new_location = pos;
 			params.m_new_rotation = rot;
@@ -134,6 +195,22 @@ namespace big
 			return params.m_return;
 		}
 
+		void k2_set_relative_location(FVector NewRelativeLocation, bool bSweep, bool bTeleport = false)
+		{
+			K2_SetActorRelativeLocation params{};
+			FHitResult SweepHitResult{};
+
+			params.m_new_location = NewRelativeLocation;
+			params.m_sweep = bSweep;
+			params.m_sweep_hit_result = SweepHitResult;
+			params.m_teleport = bTeleport;
+			const std::string func = "Function Engine.Actor.K2_SetActorRelativeLocation";
+
+			if (!g_native_invoker->m_k2_set_actor_relative_location)
+				g_native_invoker->m_k2_set_actor_relative_location = g_native_invoker->get_native(func);
+
+			process_event(g_native_invoker->m_k2_set_actor_relative_location, &params);
+		}
 	};
 	const auto test = sizeof(AActor);
 	static_assert(sizeof(AActor) == 0x1258);

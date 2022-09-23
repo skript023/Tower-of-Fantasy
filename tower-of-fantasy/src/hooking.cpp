@@ -9,9 +9,12 @@
 
 #include <MinHook.h>
 
+#include "utility/unreal_engine_utility.hpp"
+
 namespace big
 {
 	hooking::hooking() :
+		//m_post_render_hook(unreal_engine::get_local_player()->m_viewport, 110),
 		m_swapchain_present_hook("SwapChainPresent", g_pointers->m_swapchain_methods[hooks::swapchain_present_index], &hooks::swapchain_present),
 		m_swapchain_resizebuffers_hook("SwapChainResizeBuffers", g_pointers->m_swapchain_methods[hooks::swapchain_resizebuffers_index], &hooks::swapchain_resizebuffers),
 		m_set_cursor_pos_hook("SetCursorPos", memory::module("user32.dll").get_export("SetCursorPos").as<void*>(), &hooks::set_cursor_pos),
@@ -20,6 +23,8 @@ namespace big
 		m_evasion_handler_hook("Evasion Handle Hook", g_pointers->m_evasion_handler, &hooks::evasion_handler),
 		m_rapid_attack_hook("Rapid Attack Hook", g_pointers->m_rapid_attack, &hooks::fast_attack)
 	{
+		//m_post_render_hook.hook(hooks::post_render_index, &hooks::post_render);
+
 		g_hooking = this;
 	}
 
@@ -33,6 +38,7 @@ namespace big
 
 	void hooking::enable()
 	{
+		//m_post_render_hook.enable();
 		m_swapchain_present_hook.enable();
 		m_swapchain_resizebuffers_hook.enable();
 		m_og_wndproc = reinterpret_cast<WNDPROC>(SetWindowLongPtrW(g_pointers->m_hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&hooks::wndproc)));
@@ -61,6 +67,7 @@ namespace big
 		SetWindowLongPtrW(g_pointers->m_hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(m_og_wndproc));
 		m_swapchain_resizebuffers_hook.disable();
 		m_swapchain_present_hook.disable();
+		//m_post_render_hook.disable();
 		free(g_pointers->m_swapchain_methods);
 	}
 

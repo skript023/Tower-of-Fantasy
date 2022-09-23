@@ -14,6 +14,7 @@ namespace big
 		T get_class(std::string name);
 		UFunction* get_native(std::string name);
 		static void execute_native_function(std::string className, std::string functionName, void* parameters);
+		static void execute_native_function(UClass* classInstance, std::string functionName, void* parameters);
 		std::string get_output_path_type(EHottaOutputPathType PathType);
 	public:
 		UFunction* m_world_to_screen;
@@ -53,6 +54,11 @@ namespace big
 		UFunction* m_k2_set_actor_location_and_rotation;
 		UFunction* m_k2_set_actor_location;
 		UFunction* m_k2_teleport_to;
+		UFunction* m_k2_add_relative_location;
+		UFunction* m_k2_add_local_offset;
+		UFunction* m_k2_set_actor_relative_location;
+		UFunction* m_k2_get_root_component;
+		UFunction* m_get_forward_vector;
 	public:
 		UClass* m_kismet_text_library;
 	public:

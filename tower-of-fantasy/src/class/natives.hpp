@@ -281,6 +281,20 @@ namespace big
 		bool m_return; //0x009D
 	};
 
+	struct K2_SetActorRelativeLocation
+	{
+		FVector m_new_location; //0x0000
+		bool m_sweep; //0x000C
+		char pad_000D[3]; //0x000D
+		FHitResult m_sweep_hit_result; //0x0010
+		bool m_teleport; //0x009C
+	};
+
+	struct K2_GetRootComponent
+	{
+		class RootComponent* m_return;
+	};
+
 	struct K2_TeleportTo
 	{
 		FVector m_location;
@@ -288,6 +302,38 @@ namespace big
 		bool m_return;
 	};
 	
+	struct K2_AddRelativeLocation
+	{
+		FVector m_new_location; //0x0000
+		bool m_sweep; //0x000C
+		char pad_000D[3]; //0x000D
+		FHitResult m_sweep_hit_result; //0x0010
+		bool m_teleport; //0x009C
+	};
+
+	struct K2_AddLocalOffset
+	{
+		FVector m_new_location; //0x0000
+		bool m_sweep; //0x000C
+		char pad_000D[3]; //0x000D
+		FHitResult m_sweep_hit_result; //0x0010
+		bool m_teleport; //0x009C
+	};
+
+	struct K2_SetRelativeLocation
+	{
+		FVector m_new_location; //0x0000
+		bool m_sweep; //0x000C
+		char pad_000D[3]; //0x000D
+		FHitResult m_sweep_hit_result; //0x0010
+		bool m_teleport; //0x009C
+	};
+
+	struct GetForwardVector
+	{
+		FVector m_return;
+	};
+
 	struct ReceivePointDamage
 	{
 		float m_damage;

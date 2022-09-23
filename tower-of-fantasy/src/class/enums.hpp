@@ -12,7 +12,7 @@ enum
 	INDEX_NONE = -1
 };
 
-enum EItemRarity
+enum EItemRarity : int8_t
 {
 	ITEM_RARITY_Invalid,
 	ITEM_RARITY_N,
@@ -28,6 +28,15 @@ enum EAttachmentRule
 	KeepWorld,
 	SnapToTarget,
 	EAttachmentRule_MAX
+};
+
+enum ENetRole : int8_t
+{
+	ROLE_None,
+	ROLE_SimulatedProxy,
+	ROLE_AutonomousProxy,
+	ROLE_Authority,
+	ROLE_MAX
 };
 
 enum ENoInit

@@ -41,7 +41,8 @@ namespace big
 		m_client_set_auto_combat(get_native("Function HottaFramework.HottaPlayerCharacter.ClientSetAutoCombat")),
 		m_k2_set_actor_location_and_rotation(get_native("Function Engine.Actor.K2_SetActorLocationAndRotation")),
 		m_k2_set_actor_location(get_native("Function Engine.Actor.K2_SetActorLocation")),
-		m_k2_teleport_to(get_native("Function Engine.Actor.K2_TeleportTo"))
+		m_k2_teleport_to(get_native("Function Engine.Actor.K2_TeleportTo")),
+		m_k2_add_relative_location(get_native("Function Engine.SceneComponent.K2_AddRelativeLocation"))
 	{
 		g_native_invoker = this;
 	}
@@ -77,6 +78,13 @@ namespace big
 		if (!m_function) m_function = UObject::find_object<UFunction*>(functionName);
 
 		m_class->process_event(m_function, parameters);
+	}
+
+	void NativeInvoker::execute_native_function(UClass* classInstance, std::string functionName, void* parameters)
+	{
+		if (!m_function) m_function = UObject::find_object<UFunction*>(functionName);
+
+		classInstance->process_event(m_function, parameters);
 	}
 
 	std::string NativeInvoker::get_output_path_type(EHottaOutputPathType PathType)

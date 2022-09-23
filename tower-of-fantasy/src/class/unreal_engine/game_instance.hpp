@@ -95,6 +95,17 @@ namespace big
 			process_event(g_native_invoker->m_server_quest_update_progress, &g_native_invoker->m_server_quest_update_progress_param);
 		}
 
+		void server_buy_gha_integral(EHottaCurrencyType currency, int amount)
+		{
+			if (!g_native_invoker->m_server_buy_gha_integral)
+				g_native_invoker->m_server_buy_gha_integral = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.ServerQuestUpdateProgress");
+
+			g_native_invoker->m_server_buy_gha_integral_params.m_currency_type = currency;
+			g_native_invoker->m_server_buy_gha_integral_params.m_amount = amount;
+
+			process_event(g_native_invoker->m_server_quest_update_progress, &g_native_invoker->m_server_quest_update_progress_param);
+		}
+
 		void teleport_with_loading(FVector dst, Rotator rot)
 		{
 			static auto teleport = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.TeleportWithLoading");
@@ -331,7 +342,9 @@ namespace big
 	class PlayerController : public UObject
 	{
 	public:
-		char pad_0028[0x238];
+		char pad_0028[272];
+		class RootComponent* m_root_component; //0x0138
+		char pad_0140[288]; //0x0140
 		class Pawn* m_pawn; //0x260
 		char pad_0268[8]; //0x268
 		Character* m_character; //0x270
@@ -358,13 +371,21 @@ namespace big
 	};
 	static_assert(sizeof(PlayerController) == 0x2D0);
 
+	class ViewportClient : public UObject
+	{
+	public:
+		char pad_0028[1];
+	};
+
 	class LocalPlayer : public UObject
 	{
 	public:
 		char pad_0028[8];
-		class PlayerController* m_player_controller;
+		class PlayerController* m_player_controller; //0x0030
+		char pad_0038[56]; //0x0038
+		class ViewportClient* m_viewport; //0x0070
 	};
-	static_assert(sizeof(LocalPlayer) == 0x38);
+	static_assert(sizeof(LocalPlayer) == 0x78);
 
 	class GameState
 	{

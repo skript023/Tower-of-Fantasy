@@ -76,15 +76,16 @@ namespace big
 		{
 			QUEUE_JOB_BEGIN_CLAUSE()
 			{
-				if (auto self = unreal_engine::get_hotta_character(); self)
+				auto root = unreal_engine::get_local_player()->m_player_controller->m_root_component;
+				if (auto self = unreal_engine::get_hotta_character(); self && root)
 				{
-					constexpr auto forward = 500.f;
+					constexpr auto DISTANCE = 500.f;
 					auto pos = self->m_capsule_component->m_position;
 					auto rot = self->m_capsule_component->m_rotation;
+					auto forward = root->get_forward_vector();
 
-					pos.x += forward * sin(unreal_engine::degree_to_radian(rot.yaw)) * -1.500f;
-					pos.y += -forward * cos(unreal_engine::degree_to_radian(rot.yaw)) * 1.500f;
-					pos.z -= 390.f;
+					pos.x += DISTANCE * forward.x;
+					pos.y += DISTANCE * forward.y;
 
 					self->client_teleport_to(pos, rot);
 					self->server_teleport_to(pos, rot);
