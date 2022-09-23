@@ -431,11 +431,11 @@ namespace big
 		}
 		FString(const char* c)
 		{
-			const size_t cSize = strlen(c) + 1;
-			wchar_t* wc = new wchar_t[cSize];
-			mbstowcs(wc, c, cSize);
+			const size_t cSize = strlen(c);
+			std::wstring wc(cSize, L'#');
+			mbstowcs(&wc[0], c, cSize);
 
-			m_data = wc;
+			m_data = const_cast<wchar_t*>(wc.c_str());
 		}
 
 		inline bool is_valid() const
@@ -477,11 +477,11 @@ namespace big
 
 		inline const wchar_t* convert(const char* c)
 		{
-			const size_t cSize = strlen(c) + 1;
-			wchar_t* wc = new wchar_t[cSize];
-			mbstowcs(wc, c, cSize);
+			const size_t cSize = strlen(c);
+			std::wstring wc(cSize, L'#');
+			mbstowcs(&wc[0], c, cSize);
 
-			return wc;
+			return wc.c_str();
 		}
 	};
 

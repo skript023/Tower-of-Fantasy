@@ -371,7 +371,7 @@ namespace big
 	};
 	static_assert(sizeof(PlayerController) == 0x2D0);
 
-	class ViewportClient : public UObject
+	class GameViewport : public UObject
 	{
 	public:
 
@@ -383,7 +383,7 @@ namespace big
 		char pad_0028[8];
 		class PlayerController* m_player_controller; //0x0030
 		char pad_0038[56]; //0x0038
-		class ViewportClient** m_viewport; //0x0070
+		class GameViewport** m_viewport; //0x0070
 
 		inline void get_view_point(FMinimalViewInfo& outViewInfo, EStereoscopicPass StereoPass)
 		{

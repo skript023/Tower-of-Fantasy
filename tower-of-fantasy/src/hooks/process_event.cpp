@@ -45,7 +45,7 @@ namespace big
 				auto params = static_cast<ServerRecordAbnormalJumpSectionData*>(parms);
 
 				g_notification_service->success(xorstr("Server Record Abnormal Jump Section Data"),
-					std::format("Your action suspected as tempering => Data Info : {} Comment Info : {} Type : {}",
+					std::format("Your action suspected as cheater => Data Info : {} Comment Info : {} Type : {}",
 						params->m_collect_info,
 						params->m_comment2,
 						params->m_anti_type));
@@ -54,7 +54,10 @@ namespace big
 			{
 				auto params = static_cast<ServerCheckQuestRpcRequire*>(parms);
 
-				g_logger->info("Quest ID : %s Object ID : %s", params->m_quest_id.get_name().c_str(), params->m_objective_id.get_name().c_str());
+				g_notification_service->warning(xorstr("Server Side RPC Check"), 
+					std::format("Quest ID : {} Objective ID : {}", 
+						params->m_quest_id.get_name(), 
+						params->m_objective_id.get_name()));
 			}
 			if (function->get_name() == "ClientOnCurrencyAmountChanged")
 			{

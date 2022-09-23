@@ -43,7 +43,7 @@ namespace big
 
                                     target.x += 300 * forward.x;
                                     target.y += 300 * forward.y;
-                                    target.z -= 300;
+                                    target.z -= 100;
                                     if (distance > 100.f && distance < 2500.f)
                                     {
                                         if (!actor->harvested() && actor->allow_pick())

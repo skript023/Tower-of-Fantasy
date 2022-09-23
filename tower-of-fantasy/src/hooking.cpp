@@ -14,7 +14,7 @@
 namespace big
 {
 	hooking::hooking() :
-		m_client_viewport_hook(unreal_engine::get_local_player()->m_viewport, 160),
+		m_client_viewport_hook((*g_pointers->m_engine)->m_viewport, hooks::viewport_num_funcs),
 		m_swapchain_present_hook("SwapChainPresent", g_pointers->m_swapchain_methods[hooks::swapchain_present_index], &hooks::swapchain_present),
 		m_swapchain_resizebuffers_hook("SwapChainResizeBuffers", g_pointers->m_swapchain_methods[hooks::swapchain_resizebuffers_index], &hooks::swapchain_resizebuffers),
 		m_set_cursor_pos_hook("SetCursorPos", memory::module("user32.dll").get_export("SetCursorPos").as<void*>(), &hooks::set_cursor_pos),

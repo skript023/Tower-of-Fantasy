@@ -12,6 +12,7 @@ namespace big
 		static constexpr auto swapchain_present_index = 8;
 		static constexpr auto swapchain_draw_indexed_index = 12;
 		static constexpr auto swapchain_resizebuffers_index = 13;
+		static constexpr auto viewport_num_funcs = 100;
 		static constexpr auto post_render_index = 98;
 		static constexpr auto draw_transition_index = 99;
 		static HRESULT APIENTRY swapchain_present(IDXGISwapChain *this_, UINT sync_interval, UINT flags);
@@ -27,7 +28,7 @@ namespace big
 		static __int64 __fastcall attack_range(__int64 a1, __int64 a2, __int64 a3);
 		static int8_t __fastcall fast_attack(__int64 a1, float* a2, signed __int64* a3);
 
-		static void post_render(class ViewportClient* UGameViewportClient, class UCanvas* canvas);
+		static void post_render(class UCanvas* canvas);
 		static void draw_transition(class UCanvas* canvas);
 	};
 

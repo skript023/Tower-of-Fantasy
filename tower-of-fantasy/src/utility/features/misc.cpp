@@ -35,7 +35,7 @@ namespace big
 	}
 	void MiscOption::render_esp(bool activate)
 	{
-		if (activate && unreal_engine::game_state())
+		if (activate && unreal_engine::world_state())
 		{
 			for (auto level : (*g_pointers->m_world)->m_level)
 			{

@@ -29,11 +29,6 @@ namespace big
 		class GetNavigation* m_get_navigation; //0x09F4
 	};
 
-	class GameViewport : public UObject
-	{
-	public:
-	};
-
 	class GWorld : public UObject
 	{
 	public:
@@ -55,8 +50,10 @@ namespace big
 	class Engine : public UObject
 	{
 	public:
-		char pad_0028[0x758]; //0x0000
-		class GameViewport** m_game_viewport; //0x0780
+		char pad_0028[136]; //0x0000
+		class UFont* m_font; //0x00B0
+		char pad_00B8[1736]; //0x00B8
+		class GameViewport** m_viewport; //0x0780
 	};
 	static_assert(sizeof(Engine) == 0x788);
 

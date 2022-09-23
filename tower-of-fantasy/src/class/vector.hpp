@@ -142,6 +142,14 @@ namespace big
 		FVector_NetQuantizeNormal operator-() const { return { -x, -y, -z }; }
 	};
 
+	class FLinearColor 
+	{
+	public:
+		float R, G, B, A;
+		FLinearColor() : R(0.f), G(0.f), B(0.f), A(0.f) {};
+		FLinearColor(float R, float G, float B, float A) : R(R), G(G), B(B), A(A) {};
+	};
+
 	struct Matrix
 	{
 		float m[4][4];

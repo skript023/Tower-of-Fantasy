@@ -117,7 +117,7 @@ namespace big
                                     
                                     target.x += 300 * forward.x;
                                     target.y += 300 * forward.y;
-                                    target.z -= 300;
+                                    target.z -= 100;
                                     FHitResult hit_result;
                                     if (actor->k2_set_actor_location(target, true, hit_result))
                                     {

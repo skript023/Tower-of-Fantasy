@@ -347,4 +347,36 @@ namespace big
 		AActor* m_damage_cuaser;
 		FHitResult m_hit_info;
 	};
+
+	struct K2_DrawText 
+	{
+		void* m_render_font;
+		FString m_render_text;
+		FVector2D m_screen_pos;
+		FVector2D m_scale;
+		FLinearColor m_render_color;
+		float m_kerning;
+		FLinearColor m_shadow_color;
+		FVector2D m_shadow_offset;
+		bool m_center_x;
+		bool m_center_y;
+		bool m_outlined;
+		FLinearColor m_outline_color;
+	};
+
+	struct K2_DrawLine
+	{
+		FVector2D m_position_a;
+		FVector2D m_position_b;
+		float m_thickness;
+		FLinearColor m_render_color;
+	};
+
+	struct K2_DrawBox
+	{
+		FVector2D m_position;
+		FVector2D m_size;
+		float m_thickness;
+		FLinearColor m_render_color;
+	};
 }
