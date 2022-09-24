@@ -95,7 +95,7 @@ namespace big
             }
             if (ImGui::Button(xorstr("Teleport chest box"), ImVec2(120, 0)))
             {
-                g_fiber_pool->queue_job([]
+                g_thread_pool->push([]
                 {
                     for (auto level : (*g_pointers->m_world)->m_level)
                     {
@@ -119,11 +119,12 @@ namespace big
                                     target.y += 300 * forward.y;
                                     target.z -= 100;
                                     FHitResult hit_result;
+
+                                    root_component->k2_add_relative_location(target, true, hit_result);
+                                    root_component->k2_add_local_offset(target, true, hit_result);
+                                    actor->k2_set_relative_location(target, true, hit_result);
                                     if (actor->k2_set_actor_location(target, true, hit_result))
                                     {
-                                        root_component->k2_add_relative_location(target, true, hit_result);
-                                        root_component->k2_add_local_offset(target, true, hit_result);
-                                        actor->k2_set_relative_location(target, true, hit_result);
                                         g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Chest box teleported to you"));
                                     }
                                 }
@@ -140,7 +141,7 @@ namespace big
 
             if (ImGui::Button(BIG_TRANSLATE("Auto Quest"), ImVec2(120, 0)))
             {
-                g_fiber_pool->queue_job([]
+                g_thread_pool->push([]
                 {
                     if (auto const self = unreal_engine::get_hotta_character(); self)
                     {
@@ -172,7 +173,7 @@ namespace big
 
             if (ImGui::Button(xorstr("Auto loot nucleus"), ImVec2(120, 0)))
             {
-                g_fiber_pool->queue_job([]
+                g_thread_pool->push([]
                 {
                     for (auto level : (*g_pointers->m_world)->m_level)
                     {

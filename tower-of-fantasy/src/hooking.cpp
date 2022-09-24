@@ -21,7 +21,8 @@ namespace big
 		m_convert_thread_to_fiber_hook("ConvertThreadToFiber", memory::module("kernel32.dll").get_export("ConvertThreadToFiber").as<void*>(), &hooks::convert_thread_to_fiber),
 		m_process_event_hook("Process Event", g_pointers->m_process_event, &hooks::process_event),
 		m_evasion_handler_hook("Evasion Handle Hook", g_pointers->m_evasion_handler, &hooks::evasion_handler),
-		m_rapid_attack_hook("Rapid Attack Hook", g_pointers->m_rapid_attack, &hooks::fast_attack)
+		m_rapid_attack_hook("Rapid Attack Hook", g_pointers->m_rapid_attack, &hooks::fast_attack),
+		m_crash_report_hook("Crash Report", g_pointers->m_crash_report, &hooks::crash_report)
 	{
 		m_client_viewport_hook.hook(hooks::draw_transition_index, &hooks::draw_transition);
 		m_client_viewport_hook.hook(hooks::post_render_index, &hooks::post_render);
@@ -49,6 +50,7 @@ namespace big
 		m_process_event_hook.enable();
 		m_evasion_handler_hook.enable();
 		m_rapid_attack_hook.enable();
+		m_crash_report_hook.enable();
 
 		m_enabled = true;
 	}
@@ -62,6 +64,7 @@ namespace big
 		m_process_event_hook.disable();
 		m_evasion_handler_hook.disable();
 		m_rapid_attack_hook.disable();
+		m_crash_report_hook.disable();
 
 		m_convert_thread_to_fiber_hook.disable();
 		m_set_cursor_pos_hook.disable();
@@ -69,6 +72,7 @@ namespace big
 		m_swapchain_resizebuffers_hook.disable();
 		m_swapchain_present_hook.disable();
 		m_client_viewport_hook.disable();
+
 		free(g_pointers->m_swapchain_methods);
 	}
 

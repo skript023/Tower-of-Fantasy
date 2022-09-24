@@ -76,9 +76,14 @@ namespace big
 			m_attack_range = ptr.add(2).as<decltype(m_attack_range)>();
 		});
 
-		main_batch.add("Unlimited Jump Hit", "75 ? 48 8B ? 48 8B ? FF 90 ? ? ? ? 84 C0 0F 84 ? ? ? ? 80 BF 70 01 00 00", [this](memory::handle ptr)
+		main_batch.add("Unlimited Jump Hit (Drill)", "75 ? 48 8B ? 48 8B ? FF 90 ? ? ? ? 84 C0 0F 84 ? ? ? ? 80 BF 70 01 00 00", [this](memory::handle ptr)
 		{
 			
+		});
+
+		main_batch.add("Crash Report", "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC 20", [this](memory::handle ptr)
+		{
+			m_crash_report = ptr.as<decltype(m_crash_report)>();
 		});
 
 		main_batch.add("Local Player", "48 89 3D ? ? ? ? C7 05 ? ? ? ? ? ? ? ? 89 05 ? ? ? ? 40 88 3D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? E9", [this](memory::handle ptr)
@@ -190,33 +195,34 @@ namespace big
 		D3D_FEATURE_LEVEL featureLevel;
 		const D3D_FEATURE_LEVEL featureLevels[] = { D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_10_1, D3D_FEATURE_LEVEL_10_0, D3D_FEATURE_LEVEL_9_3, D3D_FEATURE_LEVEL_9_2, D3D_FEATURE_LEVEL_9_1, };
 
-		DXGI_RATIONAL refreshRate;
-		refreshRate.Numerator = 60;
-		refreshRate.Denominator = 1;
+		DXGI_RATIONAL refresh_rate;
+		refresh_rate.Numerator = 60;
+		refresh_rate.Denominator = 1;
 
-		DXGI_MODE_DESC bufferDesc;
-		bufferDesc.Width = 100;
-		bufferDesc.Height = 100;
-		bufferDesc.RefreshRate = refreshRate;
-		bufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		bufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-		bufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+		DXGI_MODE_DESC buffer_desc;
+		buffer_desc.Width = 100;
+		buffer_desc.Height = 100;
+		buffer_desc.RefreshRate = refresh_rate;
+		buffer_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		buffer_desc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+		buffer_desc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 
-		DXGI_SAMPLE_DESC sampleDesc;
-		sampleDesc.Count = 1;
-		sampleDesc.Quality = 0;
+		DXGI_SAMPLE_DESC sample_desc;
+		sample_desc.Count = 1;
+		sample_desc.Quality = 0;
 
-		DXGI_SWAP_CHAIN_DESC swapChainDesc;
-		swapChainDesc.BufferDesc = bufferDesc;
-		swapChainDesc.SampleDesc = sampleDesc;
-		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-		swapChainDesc.BufferCount = 1;
-		swapChainDesc.OutputWindow = this->m_window;
-		swapChainDesc.Windowed = 1;
-		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-		swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+		DXGI_SWAP_CHAIN_DESC swapchain_desc;
+		swapchain_desc.BufferDesc = buffer_desc;
+		swapchain_desc.SampleDesc = sample_desc;
+		swapchain_desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+		swapchain_desc.BufferCount = 1;
+		swapchain_desc.OutputWindow = this->m_window;
+		swapchain_desc.Windowed = 1;
+		swapchain_desc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+		swapchain_desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-		HRESULT hr = ((long(__stdcall*)(IDXGIAdapter*, D3D_DRIVER_TYPE, HMODULE, UINT, const D3D_FEATURE_LEVEL*, UINT, UINT, const DXGI_SWAP_CHAIN_DESC*, IDXGISwapChain**, ID3D11Device**, D3D_FEATURE_LEVEL*, ID3D11DeviceContext**))(D3D11CreateDeviceAndSwapChain))(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, featureLevels, 2, D3D11_SDK_VERSION, &swapChainDesc, &this->m_swapchain, &this->m_d3d_device, &featureLevel, &this->m_d3d_context);
+		using d3d11_create_device_t = HRESULT(__stdcall*)(IDXGIAdapter*, D3D_DRIVER_TYPE, HMODULE, UINT, const D3D_FEATURE_LEVEL*, UINT, UINT, const DXGI_SWAP_CHAIN_DESC*, IDXGISwapChain**, ID3D11Device**, D3D_FEATURE_LEVEL*, ID3D11DeviceContext**);
+		HRESULT hr = ((d3d11_create_device_t)(D3D11CreateDeviceAndSwapChain))(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, featureLevels, 2, D3D11_SDK_VERSION, &swapchain_desc, &this->m_swapchain, &this->m_d3d_device, &featureLevel, &this->m_d3d_context);
 		if (FAILED(hr))
 		{
 			::DestroyWindow(this->m_window);
@@ -227,13 +233,13 @@ namespace big
 		::memcpy(this->m_swapchain_methods, *(void***)this->m_swapchain, sizeof(m_swapchain_methods));
 
 		this->m_swapchain->Release();
-		this->m_swapchain = NULL;
+		this->m_swapchain = nullptr;
 
 		this->m_d3d_device->Release();
-		this->m_d3d_device = NULL;
+		this->m_d3d_device = nullptr;
 
 		this->m_d3d_context->Release();
-		this->m_d3d_context = NULL;
+		this->m_d3d_context = nullptr;
 
 		::DestroyWindow(this->m_window);
 		::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
@@ -283,8 +289,8 @@ namespace big
 			return false;
 		}
 
-		IDXGIFactory* Factory;
-		if (((long(__stdcall*)(const IID&, void**))(CreateDXGIFactory))(__uuidof(IDXGIFactory), (void**)&Factory) < 0) 
+		IDXGIFactory* dxgi_factory;
+		if (((long(__stdcall*)(const IID&, void**))(CreateDXGIFactory))(__uuidof(IDXGIFactory), (void**)&dxgi_factory) < 0) 
 		{
 			::DestroyWindow(this->m_window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
@@ -292,7 +298,7 @@ namespace big
 		}
 
 		IDXGIAdapter* Adapter;
-		if (Factory->EnumAdapters(0, &Adapter) == DXGI_ERROR_NOT_FOUND) {
+		if (dxgi_factory->EnumAdapters(0, &Adapter) == DXGI_ERROR_NOT_FOUND) {
 			::DestroyWindow(this->m_window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 			return false;
@@ -305,8 +311,7 @@ namespace big
 			return false;
 		}
 
-		ID3D12Device* Device;
-		if (((long(__stdcall*)(IUnknown*, D3D_FEATURE_LEVEL, const IID&, void**))(D3D12CreateDevice))(Adapter, D3D_FEATURE_LEVEL_11_0, __uuidof(ID3D12Device), (void**)&Device) < 0) {
+		if (((long(__stdcall*)(IUnknown*, D3D_FEATURE_LEVEL, const IID&, void**))(D3D12CreateDevice))(Adapter, D3D_FEATURE_LEVEL_11_0, __uuidof(ID3D12Device), (void**)&m_d3d12_device) < 0) {
 			::DestroyWindow(this->m_window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 			return false;
@@ -318,81 +323,82 @@ namespace big
 		QueueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 		QueueDesc.NodeMask = 0;
 
-		ID3D12CommandQueue* CommandQueue;
-		if (Device->CreateCommandQueue(&QueueDesc, __uuidof(ID3D12CommandQueue), (void**)&CommandQueue) < 0)
+		if (m_d3d12_device->CreateCommandQueue(&QueueDesc, __uuidof(ID3D12CommandQueue), (void**)&m_command_queue) < 0)
 		{
 			::DestroyWindow(this->m_window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 			return false;
 		}
 
-		ID3D12CommandAllocator* CommandAllocator;
-		if (Device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, __uuidof(ID3D12CommandAllocator), (void**)&CommandAllocator) < 0) 
+		if (m_d3d12_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, __uuidof(ID3D12CommandAllocator), (void**)&m_command_allocator) < 0) 
 		{
 			::DestroyWindow(this->m_window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 			return false;
 		}
 
-		ID3D12GraphicsCommandList* CommandList;
-		if (Device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, CommandAllocator, NULL, __uuidof(ID3D12GraphicsCommandList), (void**)&CommandList) < 0)
+		if (m_d3d12_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_command_allocator, NULL, __uuidof(ID3D12GraphicsCommandList), (void**)&m_command_list) < 0)
 		{
 			::DestroyWindow(this->m_window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 			return false;
 		}
 
-		DXGI_RATIONAL RefreshRate;
-		RefreshRate.Numerator = 60;
-		RefreshRate.Denominator = 1;
+		DXGI_RATIONAL refresh_rate;
+		refresh_rate.Numerator = 60;
+		refresh_rate.Denominator = 1;
 
-		DXGI_MODE_DESC BufferDesc;
-		BufferDesc.Width = 100;
-		BufferDesc.Height = 100;
-		BufferDesc.RefreshRate = RefreshRate;
-		BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-		BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+		DXGI_MODE_DESC buffer_desc;
+		buffer_desc.Width = 100;
+		buffer_desc.Height = 100;
+		buffer_desc.RefreshRate = refresh_rate;
+		buffer_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		buffer_desc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+		buffer_desc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 
-		DXGI_SAMPLE_DESC SampleDesc;
-		SampleDesc.Count = 1;
-		SampleDesc.Quality = 0;
+		DXGI_SAMPLE_DESC sample_desc;
+		sample_desc.Count = 1;
+		sample_desc.Quality = 0;
 
-		DXGI_SWAP_CHAIN_DESC SwapChainDesc = {};
-		SwapChainDesc.BufferDesc = BufferDesc;
-		SwapChainDesc.SampleDesc = SampleDesc;
-		SwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-		SwapChainDesc.BufferCount = 2;
-		SwapChainDesc.OutputWindow = this->m_window;
-		SwapChainDesc.Windowed = 1;
-		SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-		SwapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+		DXGI_SWAP_CHAIN_DESC swapchain_desc = {};
+		swapchain_desc.BufferDesc = buffer_desc;
+		swapchain_desc.SampleDesc = sample_desc;
+		swapchain_desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+		swapchain_desc.BufferCount = 2;
+		swapchain_desc.OutputWindow = this->m_window;
+		swapchain_desc.Windowed = 1;
+		swapchain_desc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+		swapchain_desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-		if (Factory->CreateSwapChain(CommandQueue, &SwapChainDesc, &this->m_swapchain) < 0)
+		if (dxgi_factory->CreateSwapChain(m_command_queue, &swapchain_desc, &this->m_swapchain) < 0)
 		{
 			::DestroyWindow(this->m_window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 			return false;
 		}
 
-		memcpy(this->m_swapchain_methods, *(void***)this->m_swapchain, sizeof(this->m_swapchain_methods));
+		memcpy(m_d3d12_device_methods, *(void***)m_d3d12_device, sizeof(m_d3d12_device_methods));
+		memcpy(m_swapchain_methods, *(void***)m_swapchain, sizeof(m_swapchain_methods));
+		memcpy(m_command_queue_methods, *(void***)m_command_queue, sizeof(m_command_queue_methods));
+		memcpy(m_command_list_methods, *(void***)m_command_list, sizeof(m_command_list_methods));
+		memcpy(m_command_allocator_methods, *(void***)m_command_allocator, sizeof(m_command_allocator_methods));
 
 		std::this_thread::sleep_for(1s);
 
-		Device->Release();
-		Device = NULL;
+		m_d3d12_device->Release();
+		m_d3d12_device = NULL;
 
-		CommandQueue->Release();
-		CommandQueue = NULL;
+		m_command_queue->Release();
+		m_command_queue = nullptr;
 
-		CommandAllocator->Release();
-		CommandAllocator = NULL;
+		m_command_allocator->Release();
+		m_command_allocator = nullptr;
 
-		CommandList->Release();
-		CommandList = NULL;
+		m_command_list->Release();
+		m_command_list = nullptr;
 
 		this->m_swapchain->Release();
-		this->m_swapchain = NULL;
+		this->m_swapchain = nullptr;
 
 		::DestroyWindow(this->m_window);
 		::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);

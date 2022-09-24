@@ -3,7 +3,8 @@
 
 namespace big
 {
-	enum class NotificationType {
+	enum class NotificationType 
+	{
 		INFO,
 		SUCCESS,
 		WARNING,

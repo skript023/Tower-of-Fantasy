@@ -20,5 +20,6 @@ namespace big
 		void render_esp(bool activate);
 		void infinite_energy(bool activate);
 		void infinite_mana(bool activate);
+		void block_input(bool activate);
 	};
 }

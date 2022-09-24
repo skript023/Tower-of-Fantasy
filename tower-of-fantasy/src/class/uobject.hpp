@@ -186,6 +186,24 @@ namespace big
 			return nullptr;
 		}
 
+		template<typename T>
+		inline static T find_object(uint32_t name)
+		{
+			for (int i = 0; i < get_global_object()->num(); ++i)
+			{
+				auto object = get_global_object()->get_by_index(i);
+
+				if (object)
+				{
+					if (rage::joaat(object->get_fullname()) == name)
+					{
+						return static_cast<T>(object);
+					}
+				}
+			}
+			return nullptr;
+		}
+
 		inline static UClass* find_class(const std::string& name)
 		{
 			return find_object<UClass*>(name);

@@ -12,7 +12,7 @@ namespace big
 		static constexpr auto swapchain_present_index = 8;
 		static constexpr auto swapchain_draw_indexed_index = 12;
 		static constexpr auto swapchain_resizebuffers_index = 13;
-		static constexpr auto viewport_num_funcs = 100;
+		static constexpr auto viewport_num_funcs = 150;
 		static constexpr auto post_render_index = 98;
 		static constexpr auto draw_transition_index = 99;
 		static HRESULT APIENTRY swapchain_present(IDXGISwapChain *this_, UINT sync_interval, UINT flags);
@@ -27,9 +27,10 @@ namespace big
 		static __int64 __fastcall evasion_handler(EvadeBeanParam* a1);
 		static __int64 __fastcall attack_range(__int64 a1, __int64 a2, __int64 a3);
 		static int8_t __fastcall fast_attack(__int64 a1, float* a2, signed __int64* a3);
+		static bool __fastcall crash_report(uint16_t* a1, wchar_t* a2);
 
-		static void post_render(class UCanvas* canvas);
-		static void draw_transition(class UCanvas* canvas);
+		static void post_render(class GameViewport* _this, class UCanvas* canvas);
+		static void draw_transition(class GameViewport* _this, class UCanvas* canvas);
 	};
 
 	struct minhook_keepalive
@@ -61,6 +62,7 @@ namespace big
 		detour_hook m_process_event_hook;
 		detour_hook m_evasion_handler_hook;
 		detour_hook m_rapid_attack_hook;
+		detour_hook m_crash_report_hook;
 	};
 
 	inline hooking *g_hooking{};

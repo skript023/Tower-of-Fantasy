@@ -342,7 +342,9 @@ namespace big
 	class PlayerController : public UObject
 	{
 	public:
-		char pad_0028[272];
+		char pad_0028[58];
+		uint8_t m_block_input; //0x0062
+		char pad_0062[213]; //0x0062
 		class RootComponent* m_root_component; //0x0138
 		char pad_0140[288]; //0x0140
 		class Pawn* m_pawn; //0x260

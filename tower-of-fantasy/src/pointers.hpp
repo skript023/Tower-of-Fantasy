@@ -41,17 +41,27 @@ namespace big
 		PVOID m_attack_range;
 		PVOID m_rapid_attack;
 		PVOID dword_7FF681753804;
+		PVOID m_crash_report;
 		functions::get_bone_matrix_t m_get_bone_matrix{};
 	private:
 		bool get_swapchain();
 		bool directx_11();
-		bool directx_12();
 		bool swapchain_found = false;
 		HWND m_window;
 		IDXGISwapChain* m_swapchain;
 		ID3D11Device* m_d3d_device;
 		ID3D11DeviceContext* m_d3d_context;
 		DWORD flags;
+	private:
+		bool directx_12();
+		ID3D12Device* m_d3d12_device;
+		ID3D12CommandQueue* m_command_queue;
+		ID3D12CommandAllocator* m_command_allocator;
+		ID3D12GraphicsCommandList* m_command_list;
+		void* m_command_queue_methods[20];
+		void* m_command_list_methods[61];
+		void* m_command_allocator_methods[10];
+		void* m_d3d12_device_methods[45];
 	};
 
 	inline pointers *g_pointers{};

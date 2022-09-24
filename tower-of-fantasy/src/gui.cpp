@@ -120,7 +120,7 @@ namespace big
 
 	void gui::script_init()
 	{
-		g_notification_service->success("Ellohim Private Cheat", "Cheat succesfully injected to the game press 'Insert' to show/hide menu");
+		g_notification_service->success(xorstr("Ellohim Private Cheat"), xorstr("Cheat succesfully injected to the game press 'Insert' to show/hide menu"));
 		g_gui.m_opened = true;
 	}
 
@@ -130,7 +130,7 @@ namespace big
 		{
 			TRY_CLAUSE
 			{
-				
+
 			} EXCEPT_CLAUSE
 		}
 	}

@@ -54,7 +54,7 @@ namespace big
 							if (auto self = local_player->m_player_controller; self)
 							{
 								Vector2 location;
-								if (self->project_world_to_screen(pos, location))
+								if (self->project_world_to_screen(pos, location, false))
 								{
 									auto distance = g_features->movement.get_entity_coords() != nullptr ? g_features->movement.get_entity_coords()->distance(pos) : 0.f;
 									draw::RGBA red = { 255, 0, 0, 255 };
@@ -106,6 +106,21 @@ namespace big
 			{
 				if (self->get_mana() < self->get_max_mana())
 					self->set_mana(self->get_max_mana());
+			}
+		}
+	}
+
+	void MiscOption::block_input(bool activate)
+	{
+		if (auto p = unreal_engine::get_local_player(); p)
+		{
+			if (auto c = p->m_player_controller; c)
+			{
+				static const auto default_value = c->m_block_input;
+				if (activate)
+					c->m_block_input = false;
+				else if (!activate)
+					c->m_block_input = default_value;
 			}
 		}
 	}

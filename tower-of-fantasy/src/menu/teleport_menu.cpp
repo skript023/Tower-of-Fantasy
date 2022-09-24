@@ -20,7 +20,7 @@ namespace big
             ImGui::SameLine();
             if (ImGui::Button(xorstr("Teleport loot items"), ImVec2(120, 0)))
             {
-                g_fiber_pool->queue_job([]
+                g_thread_pool->push([]
                 {
                     for (auto level : (*g_pointers->m_world)->m_level)
                     {
@@ -62,7 +62,7 @@ namespace big
             }
 
             ImGui::Combo(xorstr("##List Teleport"), &selected_teleport, target, IM_ARRAYSIZE(target));
-            if (ImGui::Button(BIG_TRANSLATE("Teleport to loot box"), ImVec2(160, 0)))
+            if (ImGui::Button(xorstr("Teleport to loot box"), ImVec2(160, 0)))
             {
                 switch (selected_teleport)
                 {
@@ -87,7 +87,7 @@ namespace big
                 }
             }
 
-			if (ImGui::CollapsingHeader("Custom Teleport"))
+			if (ImGui::CollapsingHeader(xorstr("Custom Teleport")))
 			{
                 auto teleport_locations = persist_teleport::list_locations();
                 static std::string selected_location;
