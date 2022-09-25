@@ -22,7 +22,7 @@ namespace big
 		void server_match_solo_league(bool isBattleAI)
 		{
 			if (!g_native_invoker->m_server_match_solo_league)
-				g_native_invoker->m_server_match_solo_league = g_native_invoker->get_native("Function QRSL.QRSLPlayerCharacter.Server_MatchSoloLeague");
+				g_native_invoker->m_server_match_solo_league = g_native_invoker->get_native(RAGE_JOAAT("Function QRSL.QRSLPlayerCharacter.Server_MatchSoloLeague"));
 
 			g_native_invoker->m_server_match_solo_league_params.m_is_battle_ai = isBattleAI;
 
@@ -85,7 +85,7 @@ namespace big
 		void server_quest_update_progress(FName QuestID, FName ObjectiveID, int progress, bool is_add)
 		{
 			if (!g_native_invoker->m_server_quest_update_progress)
-				g_native_invoker->m_server_quest_update_progress = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.ServerQuestUpdateProgress");
+				g_native_invoker->m_server_quest_update_progress = g_native_invoker->get_native(RAGE_JOAAT("Function HottaFramework.HottaPlayerCharacter.ServerQuestUpdateProgress"));
 			
 			g_native_invoker->m_server_quest_update_progress_param.m_quest_id = QuestID;
 			g_native_invoker->m_server_quest_update_progress_param.m_objective_id = ObjectiveID;
@@ -98,7 +98,7 @@ namespace big
 		void server_buy_gha_integral(EHottaCurrencyType currency, int amount)
 		{
 			if (!g_native_invoker->m_server_buy_gha_integral)
-				g_native_invoker->m_server_buy_gha_integral = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.ServerQuestUpdateProgress");
+				g_native_invoker->m_server_buy_gha_integral = g_native_invoker->get_native(RAGE_JOAAT("Function HottaFramework.HottaPlayerCharacter.ServerQuestUpdateProgress"));
 
 			g_native_invoker->m_server_buy_gha_integral_params.m_currency_type = currency;
 			g_native_invoker->m_server_buy_gha_integral_params.m_amount = amount;
@@ -108,7 +108,7 @@ namespace big
 
 		void teleport_with_loading(FVector dst, Rotator rot)
 		{
-			static auto teleport = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.TeleportWithLoading");
+			static auto teleport = g_native_invoker->get_native(RAGE_JOAAT("Function HottaFramework.HottaPlayerCharacter.TeleportWithLoading"));
 
 			g_native_invoker->m_teleport_with_loading_params.m_location.x = dst.x;
 			g_native_invoker->m_teleport_with_loading_params.m_location.y = dst.y;
@@ -122,7 +122,7 @@ namespace big
 		void server_teleport_with_loading(FVector dst, Rotator rot)
 		{
 			if (!g_native_invoker->m_server_teleport_with_loading)
-				g_native_invoker->m_server_teleport_with_loading = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.TeleportWithLoading");
+				g_native_invoker->m_server_teleport_with_loading = g_native_invoker->get_native(RAGE_JOAAT("Function HottaFramework.HottaPlayerCharacter.TeleportWithLoading"));
 
 			g_native_invoker->m_teleport_with_loading_params.m_location.x = dst.x;
 			g_native_invoker->m_teleport_with_loading_params.m_location.y = dst.y;
@@ -136,7 +136,7 @@ namespace big
 		void server_teleport_to(FVector dst, Rotator rot)
 		{
 			if (!g_native_invoker->m_server_teleport_to)
-				g_native_invoker->m_server_teleport_to = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.ServerTeleportTo");
+				g_native_invoker->m_server_teleport_to = g_native_invoker->get_native(RAGE_JOAAT("Function HottaFramework.HottaPlayerCharacter.ServerTeleportTo"));
 
 			g_native_invoker->m_teleport_with_loading_params.m_location.x = dst.x;
 			g_native_invoker->m_teleport_with_loading_params.m_location.y = dst.y;
@@ -150,7 +150,7 @@ namespace big
 		void client_teleport_to(FVector dst, Rotator rot)
 		{
 			if (!g_native_invoker->m_client_teleport_to)
-				g_native_invoker->m_client_teleport_to = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.ClientTeleportTo");
+				g_native_invoker->m_client_teleport_to = g_native_invoker->get_native(RAGE_JOAAT("Function HottaFramework.HottaPlayerCharacter.ClientTeleportTo"));
 			
 			g_native_invoker->m_teleport_with_loading_params.m_location.x = dst.x;
 			g_native_invoker->m_teleport_with_loading_params.m_location.y = dst.y;
@@ -164,7 +164,7 @@ namespace big
 		void client_teleport_with_loading(FVector dst, Rotator rot)
 		{
 			if (!g_native_invoker->m_client_teleport_with_loading)
-				g_native_invoker->m_client_teleport_with_loading = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.ClientTeleportTo");
+				g_native_invoker->m_client_teleport_with_loading = g_native_invoker->get_native(RAGE_JOAAT("Function HottaFramework.HottaPlayerCharacter.ClientTeleportTo"));
 
 			g_native_invoker->m_teleport_with_loading_params.m_location.x = dst.x;
 			g_native_invoker->m_teleport_with_loading_params.m_location.y = dst.y;
@@ -179,7 +179,7 @@ namespace big
 		{
 			auto self = g_native_invoker;
 			if (!self->m_update_cur_skill_evade_bean_count)
-				self->m_update_cur_skill_evade_bean_count = self->get_native("Function HottaFramework.HottaPlayerCharacter.UpdateCurSkillEvadeBeanCount");
+				self->m_update_cur_skill_evade_bean_count = self->get_native(RAGE_JOAAT("Function HottaFramework.HottaPlayerCharacter.UpdateCurSkillEvadeBeanCount"));
 
 			process_event(self->m_update_cur_skill_evade_bean_count, nullptr);
 		}
@@ -187,7 +187,7 @@ namespace big
 		bool set_character_exp(int exp)
 		{
 			if (!g_native_invoker->m_set_character_exp)
-				g_native_invoker->m_set_character_exp = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.SetCharacterExp");
+				g_native_invoker->m_set_character_exp = g_native_invoker->get_native(RAGE_JOAAT("Function HottaFramework.HottaPlayerCharacter.SetCharacterExp"));
 
 			g_native_invoker->m_set_character_exp_params.m_new_exp = exp;
 
@@ -199,7 +199,7 @@ namespace big
 		void server_add_exp(int exp, int limit_index)
 		{
 			if (!g_native_invoker->m_server_add_exp)
-				g_native_invoker->m_server_add_exp = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.ServerAddExp");
+				g_native_invoker->m_server_add_exp = g_native_invoker->get_native(RAGE_JOAAT("Function HottaFramework.HottaPlayerCharacter.ServerAddExp"));
 
 			g_native_invoker->m_server_add_exp_params.m_value = exp;
 			g_native_invoker->m_server_add_exp_params.m_limit_index = limit_index;
@@ -211,7 +211,7 @@ namespace big
 		{
 			ServerKickPlayer params{};
 			if (!g_native_invoker->m_server_kick_player)
-				g_native_invoker->m_server_kick_player = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.ServerKickPlayer");
+				g_native_invoker->m_server_kick_player = g_native_invoker->get_native(RAGE_JOAAT("Function HottaFramework.HottaPlayerCharacter.ServerKickPlayer"));
 
 			params.m_target = playerName;
 
@@ -221,7 +221,7 @@ namespace big
 		void server_set_health(float health, EDamageReason damageReason)
 		{
 			if (!g_native_invoker->m_server_set_health)
-				g_native_invoker->m_server_set_health = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.ServerSetHP");
+				g_native_invoker->m_server_set_health = g_native_invoker->get_native(RAGE_JOAAT("Function HottaFramework.HottaCharacter.ServerSetHP"));
 
 			g_native_invoker->m_server_set_health_params.m_health = health;
 			g_native_invoker->m_server_set_health_params.m_damage_reason = damageReason;
@@ -232,7 +232,7 @@ namespace big
 		void set_health(float health, EDamageReason damageReason, bool isReadDamage, float readDamage)
 		{
 			if (!g_native_invoker->m_set_health)
-				g_native_invoker->m_set_health = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.SetHP");
+				g_native_invoker->m_set_health = g_native_invoker->get_native(RAGE_JOAAT("Function HottaFramework.HottaCharacter.SetHP"));
 
 			g_native_invoker->m_set_health_params.m_health = health;
 			g_native_invoker->m_set_health_params.m_damage_reason = damageReason;
@@ -245,7 +245,7 @@ namespace big
 		void server_set_character_level(int level)
 		{
 			if (!g_native_invoker->m_server_set_character_level)
-				g_native_invoker->m_server_set_character_level = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.ServerSetCharacterLevel");
+				g_native_invoker->m_server_set_character_level = g_native_invoker->get_native(RAGE_JOAAT("Function HottaFramework.HottaCharacter.ServerSetCharacterLevel"));
 
 			g_native_invoker->m_server_set_character_level_params.m_level = level;
 
@@ -255,7 +255,7 @@ namespace big
 		bool set_character_level(int level, bool refreshAttribute, bool ServerRep)
 		{
 			if (!g_native_invoker->m_set_character_level)
-				g_native_invoker->m_set_character_level = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.SetCharacterLevel");
+				g_native_invoker->m_set_character_level = g_native_invoker->get_native(RAGE_JOAAT("Function HottaFramework.HottaCharacter.SetCharacterLevel"));
 
 			g_native_invoker->m_set_character_level_params.m_level = level;
 			g_native_invoker->m_set_character_level_params.m_refresh_attribute = refreshAttribute;
@@ -271,7 +271,7 @@ namespace big
 			SetEnergy params{};
 
 			if (!g_native_invoker->m_set_energy)
-				g_native_invoker->m_set_energy = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.SetEnergy");
+				g_native_invoker->m_set_energy = g_native_invoker->get_native(RAGE_JOAAT("Function HottaFramework.HottaCharacter.SetEnergy"));
 
 			params.m_energy = energy;
 
@@ -282,7 +282,7 @@ namespace big
 		{
 			SetEnergy params{};
 			if (!g_native_invoker->m_set_mana)
-				g_native_invoker->m_set_mana = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.SetMana");
+				g_native_invoker->m_set_mana = g_native_invoker->get_native(RAGE_JOAAT("Function HottaFramework.HottaCharacter.SetMana"));
 
 			params.m_energy = mana;
 
@@ -293,7 +293,7 @@ namespace big
 		{
 			GetMaxMana params{};
 			if (!g_native_invoker->m_get_mana)
-				g_native_invoker->m_get_mana = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.GetMana");
+				g_native_invoker->m_get_mana = g_native_invoker->get_native(RAGE_JOAAT("Function HottaFramework.HottaCharacter.GetMana"));
 
 			process_event(g_native_invoker->m_get_mana, &params);
 
@@ -304,7 +304,7 @@ namespace big
 		{
 			GetMaxMana params{};
 			if (!g_native_invoker->m_get_max_mana)
-				g_native_invoker->m_get_max_mana = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.GetMaxMana");
+				g_native_invoker->m_get_max_mana = g_native_invoker->get_native(RAGE_JOAAT("Function HottaFramework.HottaCharacter.GetMaxMana"));
 
 			process_event(g_native_invoker->m_get_max_mana, &params);
 
@@ -314,7 +314,7 @@ namespace big
 		void server_set_location_and_rotation(FVector location, Rotator rotation, bool authoritative)
 		{
 			if (!g_native_invoker->m_server_set_location_and_rotation)
-				g_native_invoker->m_server_set_location_and_rotation = g_native_invoker->get_native("Function HottaFramework.HottaCharacter.ServerSetLocationAndRotation");
+				g_native_invoker->m_server_set_location_and_rotation = g_native_invoker->get_native(RAGE_JOAAT("Function HottaFramework.HottaCharacter.ServerSetLocationAndRotation"));
 
 			g_native_invoker->m_server_set_location_and_rotation_params.m_location.x = location.x;
 			g_native_invoker->m_server_set_location_and_rotation_params.m_location.y = location.y;
@@ -330,7 +330,7 @@ namespace big
 		{
 			ClientSetAutoCombat params{};
 			if (!g_native_invoker->m_client_set_auto_combat)
-				g_native_invoker->m_client_set_auto_combat = g_native_invoker->get_native("Function HottaFramework.HottaPlayerCharacter.ClientSetAutoCombat");
+				g_native_invoker->m_client_set_auto_combat = g_native_invoker->get_native(RAGE_JOAAT("Function HottaFramework.HottaPlayerCharacter.ClientSetAutoCombat"));
 		
 			params.m_enable = activate;
 

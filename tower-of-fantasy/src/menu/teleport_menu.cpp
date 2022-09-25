@@ -17,52 +17,9 @@ namespace big
             {
                 g_features->movement.teleport_forward();
             }
-            ImGui::SameLine();
-            if (ImGui::Button(xorstr("Teleport loot items"), ImVec2(120, 0)))
-            {
-                g_thread_pool->push([]
-                {
-                    for (auto level : (*g_pointers->m_world)->m_level)
-                    {
-                        if (!level) continue;
-                        for (auto actor : level->m_actor)
-                        {
-                            if (!actor) continue;
-                            auto name = actor->get_name();
-
-                            if (name.find("scene_box_brambles_") != std::string::npos)
-                            {
-                                if (auto root_component = actor->root_component())
-                                {
-                                    FHitResult hit_result;
-                                    auto root = unreal_engine::get_local_player()->m_player_controller->m_root_component;
-                                    auto pos = root_component->m_relative_location;
-                                    auto distance = g_features->movement.get_entity_coords()->distance(pos);
-                                    auto target = *g_features->movement.get_entity_coords();
-                                    auto forward = root->get_forward_vector();
-
-                                    target.x += 300 * forward.x;
-                                    target.y += 300 * forward.y;
-                                    target.z -= 100;
-                                    if (distance > 100.f && distance < 2500.f)
-                                    {
-                                        if (!actor->harvested() && actor->allow_pick())
-                                        {
-                                            if (actor->k2_set_actor_location(target, true, hit_result))
-                                            {
-                                                g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near supply pods"));
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-            }
 
             ImGui::Combo(xorstr("##List Teleport"), &selected_teleport, target, IM_ARRAYSIZE(target));
-            if (ImGui::Button(xorstr("Teleport to loot box"), ImVec2(160, 0)))
+            if (ImGui::Button(xorstr("Teleport player to items"), ImVec2(160, 0)))
             {
                 switch (selected_teleport)
                 {
@@ -83,6 +40,37 @@ namespace big
                     break;
                 case 5:
                     g_features->movement.teleport_to_entity("Scene_Box_Refresh_Wild_", false);
+                    break;
+                case 6:
+                    g_features->movement.teleport_to_entity("BP_MiniGame_FlyFlower", false);
+                    break;
+                }
+            }
+            ImGui::SameLine();
+            if (ImGui::Button(xorstr("Teleport items to player"), ImVec2(160, 0)))
+            {
+                switch (selected_teleport)
+                {
+                case 0:
+                    g_features->movement.vacuum_items("Scene_Box_OnceOnly_", true);
+                    break;
+                case 1:
+                    g_features->movement.vacuum_items("scene_box_brambles_", true);
+                    break;
+                case 2:
+                    g_features->movement.vacuum_items("BP_Harvest_Gem_", false);
+                    break;
+                case 3:
+                    g_features->movement.vacuum_items("BP_FireLink_Minigame", false);
+                    break;
+                case 4:
+                    g_features->movement.vacuum_items("BP_MiniGame_ThrowFlower_", false);
+                    break;
+                case 5:
+                    g_features->movement.vacuum_items("Scene_Box_Refresh_Wild_", false);
+                    break;
+                case 6:
+                    g_features->movement.vacuum_items("BP_MiniGame_FlyFlower", false);
                     break;
                 }
             }
@@ -127,7 +115,7 @@ namespace big
 
                 ImGui::Text("Teleport Method");
 
-                ImGui::PushItemWidth(150.f);
+                ImGui::PushItemWidth(165.f);
                 ImGui::Combo(xorstr("##Teleport Method"), &selected_method, method, IM_ARRAYSIZE(method));
                 ImGui::PopItemWidth();
 

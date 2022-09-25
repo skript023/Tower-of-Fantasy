@@ -93,46 +93,6 @@ namespace big
                     unreal_engine::get_local_player()->m_player_controller->m_character->server_match_solo_league(true);
                 });
             }
-            if (ImGui::Button(xorstr("Teleport chest box"), ImVec2(120, 0)))
-            {
-                g_thread_pool->push([]
-                {
-                    for (auto level : (*g_pointers->m_world)->m_level)
-                    {
-                        if (!level) continue;
-                        for (auto actor : level->m_actor)
-                        {
-                            if (!actor) continue;
-                            auto name = actor->get_name();
-
-                            if (name.find("Scene_Box_Refresh_Wild_") != std::string::npos)
-                            {
-                                if (auto root_component = actor->root_component())
-                                {
-                                    auto root = unreal_engine::get_local_player()->m_player_controller->m_root_component;
-                                    auto pos = root_component->m_relative_location;
-                                    auto distance = g_features->movement.get_entity_coords()->distance(pos);
-                                    auto target = *g_features->movement.get_entity_coords();
-                                    auto forward = root->get_forward_vector();
-                                    
-                                    target.x += 300 * forward.x;
-                                    target.y += 300 * forward.y;
-                                    target.z -= 100;
-                                    FHitResult hit_result;
-
-                                    root_component->k2_add_relative_location(target, true, hit_result);
-                                    root_component->k2_add_local_offset(target, true, hit_result);
-                                    actor->k2_set_relative_location(target, true, hit_result);
-                                    if (actor->k2_set_actor_location(target, true, hit_result))
-                                    {
-                                        g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Chest box teleported to you"));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-            }
             ImGui::EndGroup();
 
             ImGui::SameLine();
@@ -141,7 +101,7 @@ namespace big
 
             if (ImGui::Button(BIG_TRANSLATE("Auto Quest"), ImVec2(120, 0)))
             {
-                g_thread_pool->push([]
+                g_fiber_pool->queue_job([]
                 {
                     if (auto const self = unreal_engine::get_hotta_character(); self)
                     {
@@ -171,36 +131,6 @@ namespace big
 
             ImGui::BeginGroup();
 
-            if (ImGui::Button(xorstr("Auto loot nucleus"), ImVec2(120, 0)))
-            {
-                g_thread_pool->push([]
-                {
-                    for (auto level : (*g_pointers->m_world)->m_level)
-                    {
-                        if (!level) continue;
-                        for (auto actor : level->m_actor)
-                        {
-                            if (!actor) continue;
-                            auto name = actor->get_name();
-
-                            if (name.find("BP_Harvest_Gem_") != std::string::npos)
-                            {
-                                if (auto root_component = actor->root_component())
-                                {
-                                    FHitResult hit_result;
-                                    auto pos = root_component->m_relative_location;
-                                    auto distance = g_features->movement.get_entity_coords()->distance(pos);
-                                    auto target = *g_features->movement.get_entity_coords();
-                                    if (actor->k2_set_actor_location(target, true, hit_result))
-                                    {
-                                        g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Nucleus teleported to you"));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-            }
 
             ImGui::EndGroup();
 

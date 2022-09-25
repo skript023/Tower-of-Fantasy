@@ -42,7 +42,7 @@ namespace big
 				if (!level) continue;
 				for (auto actor : level->m_actor)
 				{
-					if (!actor) continue;
+					if (!actor || actor->m_name == NULL) continue;
 					auto name = actor->get_name();
 
 					if (auto root_component = actor->root_component())

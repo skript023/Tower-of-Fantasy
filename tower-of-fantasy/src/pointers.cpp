@@ -2,96 +2,97 @@
 #include "logger.hpp"
 #include "pointers.hpp"
 #include "memory/all.hpp"
+#include "utility/ecryption.h"
 
 namespace big
 {
-	pointers::pointers(): m_base_address(memory::module("QRSL.exe").begin().as<uintptr_t>())//Engine = QRSL.exe+70184E0
+	pointers::pointers(): m_base_address(memory::module("QRSL.exe").begin().as<uintptr_t>())
 	{
-		memory::pattern_batch main_batch;//Engine to Object = 13A358
+		memory::pattern_batch main_batch;
 
-		for (int i = 0;!swapchain_found && i <= 10; i++)
+		for (int i = 0;m_swapchain_version != directx_version::FAILED && i <= 10; i++)
 		{
-			swapchain_found = this->get_swapchain();
+			m_swapchain_version = this->get_swapchain();
 
 			std::this_thread::sleep_for(0ms);
 		}
 		
-		main_batch.add("GWorld", "48 8B 1D ? ? ? ? 48 85 DB 74 3B 41 B0 01", [this](memory::handle ptr)
+		main_batch.add(xorstr("GWorld"), xorstr("48 8B 1D ? ? ? ? 48 85 DB 74 3B 41 B0 01"), [this](memory::handle ptr)
 		{
 			m_world = ptr.add(3).rip().as<decltype(m_world)>();
 		});
 
-		main_batch.add("GObject", "48 8B 05 ? ? ? ? C1 F9 10 48 63 C9 48 8B 14 C8 4B 8D 0C 40 4C 8D 04 CA", [this](memory::handle ptr)
+		main_batch.add(xorstr("GObjectUObject"), xorstr("48 8B 05 ? ? ? ? C1 F9 10 48 63 C9 48 8B 14 C8 4B 8D 0C 40 4C 8D 04 CA"), [this](memory::handle ptr)
 		{
-			m_object = ptr.add(3).rip().as<decltype(m_object)>();//7FF6818412D8
+			m_object = ptr.add(3).rip().as<decltype(m_object)>();
 		});
 
-		main_batch.add("GName", "48 8D 05 ? ? ? ? EB 13 48 8D 0D ? ? ? ? E8 ? ? ? ? C6 05 ? ? ? ? ? 0F 10 03 4C 8D 44 24", [this](memory::handle ptr)
+		main_batch.add(xorstr("FNamePool"), xorstr("48 8D 05 ? ? ? ? EB 13 48 8D 0D ? ? ? ? E8 ? ? ? ? C6 05 ? ? ? ? ? 0F 10 03 4C 8D 44 24"), [this](memory::handle ptr)
 		{
 			m_name = ptr.add(3).rip().as<decltype(m_name)>();
 		});
 
-		main_batch.add("FUObjectArray", "48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? 48 83 C4 28 E9 ? ? ? ? 48 83 EC 28 48 8D 0D ? ? ? ? FF 15 ? ? ? ?", [this](memory::handle ptr)
+		main_batch.add(xorstr("FUObjectArray"), xorstr("48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? 48 83 C4 28 E9 ? ? ? ? 48 83 EC 28 48 8D 0D ? ? ? ? FF 15 ? ? ? ?"), [this](memory::handle ptr)
 		{
 			m_object_array = ptr.add(3).rip().as<decltype(m_object_array)>();
 		});
 
-		main_batch.add("Game Engine", "48 8B 0D ? ? ? ? E8 ? ? ? ? 48 8D 4D 08 E8 ? ? ? ? 0F 28 D6 0F 28 CF B9", [this](memory::handle ptr)
+		main_batch.add(xorstr("Game Engine"), xorstr("48 8B 0D ? ? ? ? E8 ? ? ? ? 48 8D 4D 08 E8 ? ? ? ? 0F 28 D6 0F 28 CF B9"), [this](memory::handle ptr)
 		{
 			m_engine = ptr.add(3).rip().as<decltype(m_engine)>();
 		});
 
-		main_batch.add("Screen Resolution", "8B 0D ? ? ? ? 8B 05 ? ? ? ? 41 89 4E 04 E9 ? ? ? ? 32 C9", [this](memory::handle ptr)
+		main_batch.add(xorstr("Screen Resolution"), xorstr("8B 0D ? ? ? ? 8B 05 ? ? ? ? 41 89 4E 04 E9 ? ? ? ? 32 C9"), [this](memory::handle ptr)
 		{
 			m_screen = ptr.add(8).rip().as<decltype(m_screen)>();
 		});
 
-		main_batch.add("Matrix", "48 8B 05 ? ? ? ? 48 85 C0 74 0B 48 89 58 08 48 8B 05 ? ? ? ? 48 89 03", [this](memory::handle ptr)
+		main_batch.add(xorstr("Matrix"), xorstr("48 8B 05 ? ? ? ? 48 85 C0 74 0B 48 89 58 08 48 8B 05 ? ? ? ? 48 89 03"), [this](memory::handle ptr)
 		{
 			m_view_matrix = ptr.add(3).rip().as<decltype(m_view_matrix)>();
 		});
 
-		main_batch.add("Cooldown", "74 ? 83 79 08 ? 7F", [this](memory::handle ptr)
+		main_batch.add(xorstr("Cooldown"), xorstr("74 ? 83 79 08 ? 7F"), [this](memory::handle ptr)
 		{
 			m_cooldown = ptr.as<decltype(m_cooldown)>();
 		});
 
-		main_batch.add("Player Navigation", "48 89 05 ? ? ? ? E8 ? ? ? ? 48 8B 45 38 48 89 05 ? ? ? ? 48 85 DB", [this](memory::handle ptr)
+		main_batch.add(xorstr("Player Navigation"), xorstr("48 89 05 ? ? ? ? E8 ? ? ? ? 48 8B 45 38 48 89 05 ? ? ? ? 48 85 DB"), [this](memory::handle ptr)
 		{
 			m_player_nav = ptr.add(3).rip().as<decltype(m_player_nav)>();
 		});
 
-		main_batch.add("Rapid Attack", "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC 50 48 8B 31 4D 8B F8", [this](memory::handle ptr)
+		main_batch.add(xorstr("Rapid Attack"), xorstr("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC 50 48 8B 31 4D 8B F8"), [this](memory::handle ptr)
 		{
 			m_rapid_attack = ptr.as<decltype(m_rapid_attack)>();//0F 28 C2 74 12 F3 0F 10 4F ? F3 0F 5C 4C 24 ? 0F 2F D1
 		});
 
-		main_batch.add("xmmword_7FF67F73A040", "0F 28 0D ? ? ? ? 66 41 0F 38 14 CF 0F 28 C1 66 0F 15 C1 0F 5D C1 F3 0F 16 C8 F3 0F 5D C1 F3 41 0F 11 03 0F B6 C1", [this](memory::handle ptr)
+		main_batch.add(xorstr("xmmword_7FF67F73A040"), xorstr("0F 28 0D ? ? ? ? 66 41 0F 38 14 CF 0F 28 C1 66 0F 15 C1 0F 5D C1 F3 0F 16 C8 F3 0F 5D C1 F3 41 0F 11 03 0F B6 C1"), [this](memory::handle ptr)
 		{
 			xmmword_7FF67F73A040 = ptr.add(3).rip().as<decltype(xmmword_7FF67F73A040)>();
 		});
 
-		main_batch.add("Attack Range", "41 0F 10 88 ? ? 00 00 41 0F 10 80 ? ? 00 00 0F C2 C1 04 0F 50 C0", [this](memory::handle ptr)
+		main_batch.add(xorstr("Attack Range"), xorstr("41 0F 10 88 ? ? 00 00 41 0F 10 80 ? ? 00 00 0F C2 C1 04 0F 50 C0"), [this](memory::handle ptr)
 		{
 			m_attack_range = ptr.add(2).as<decltype(m_attack_range)>();
 		});
 
-		main_batch.add("Unlimited Jump Hit (Drill)", "75 ? 48 8B ? 48 8B ? FF 90 ? ? ? ? 84 C0 0F 84 ? ? ? ? 80 BF 70 01 00 00", [this](memory::handle ptr)
+		main_batch.add(xorstr("Unlimited Jump Hit (Drill)"), xorstr("75 ? 48 8B ? 48 8B ? FF 90 ? ? ? ? 84 C0 0F 84 ? ? ? ? 80 BF 70 01 00 00"), [this](memory::handle ptr)
 		{
 			
 		});
 
-		main_batch.add("Crash Report", "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC 20", [this](memory::handle ptr)
+		main_batch.add(xorstr("Crash Report"), xorstr("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC 20"), [this](memory::handle ptr)
 		{
 			m_crash_report = ptr.as<decltype(m_crash_report)>();
 		});
 
-		main_batch.add("Local Player", "48 89 3D ? ? ? ? C7 05 ? ? ? ? ? ? ? ? 89 05 ? ? ? ? 40 88 3D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? E9", [this](memory::handle ptr)
+		main_batch.add(xorstr("Local Player"), xorstr("48 89 3D ? ? ? ? C7 05 ? ? ? ? ? ? ? ? 89 05 ? ? ? ? 40 88 3D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? E9"), [this](memory::handle ptr)
 		{
 			m_player = ptr.add(3).rip().as<decltype(m_player)>();
 		});
 
-		main_batch.add("UObjectt::ProcessEvent", "E8 ? ? ? ? 48 8B 74 24 ? 48 8B 5C 24 ? 48 8B 6C 24 ? 48 83 C4 20 5F C3 40 57", [this](memory::handle ptr)
+		main_batch.add(xorstr("UObjectt::ProcessEvent"), xorstr("E8 ? ? ? ? 48 8B 74 24 ? 48 8B 5C 24 ? 48 8B 6C 24 ? 48 83 C4 20 5F C3 40 57"), [this](memory::handle ptr)
 		{
 			m_process_event = ptr.add(1).rip().as<decltype(m_process_event)>();
 		});
@@ -146,9 +147,17 @@ namespace big
 		g_pointers = nullptr;
 	}
 
-	bool pointers::get_swapchain()
+	directx_version pointers::get_swapchain()
 	{
-		return directx_11();
+		if (directx_11())
+		{
+			return directx_version::DX11;
+		}
+		else if (directx_12())
+		{
+			return directx_version::DX12;
+		}
+		return directx_version::FAILED;
 	}
 
 	bool pointers::directx_11()

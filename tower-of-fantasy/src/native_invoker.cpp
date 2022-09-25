@@ -66,7 +66,16 @@ namespace big
 		return nullptr;
 	}
 
-	UFunction* NativeInvoker::get_native(std::string name)
+	UFunction* NativeInvoker::get_native(std::string_view name)
+	{
+		if (auto function = UObject::find_object<UFunction*>(name); function)
+		{
+			return function;
+		}
+		return nullptr;
+	}
+
+	UFunction* NativeInvoker::get_native(uint32_t name)
 	{
 		if (auto function = UObject::find_object<UFunction*>(name); function)
 		{

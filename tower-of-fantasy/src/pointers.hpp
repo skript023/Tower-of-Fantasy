@@ -15,6 +15,7 @@ namespace big
 		HWND m_hwnd{};
 		uintptr_t m_base_address;
 		void* m_swapchain_methods[19];
+		directx_version m_swapchain_version;
 
 		GWorld** m_world{};
 		Player** m_player{};
@@ -44,9 +45,8 @@ namespace big
 		PVOID m_crash_report;
 		functions::get_bone_matrix_t m_get_bone_matrix{};
 	private:
-		bool get_swapchain();
+		directx_version get_swapchain();
 		bool directx_11();
-		bool swapchain_found = false;
 		HWND m_window;
 		IDXGISwapChain* m_swapchain;
 		ID3D11Device* m_d3d_device;

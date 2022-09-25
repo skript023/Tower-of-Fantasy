@@ -169,7 +169,7 @@ namespace big
 		const char* get_fullname_ex() const;
 
 		template<typename T>
-		inline static T find_object(const std::string& name)
+		inline static T find_object(const std::string_view& name)
 		{
 			for (int i = 0; i < get_global_object()->num(); ++i)
 			{

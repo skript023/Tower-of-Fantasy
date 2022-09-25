@@ -15,7 +15,7 @@ namespace big
 		{
 			K2_DrawText params{};
 			if (!m_k2_draw_text)
-				m_k2_draw_text = UObject::find_object<UFunction*>("Function Engine.Canvas.K2_DrawText");
+				m_k2_draw_text = UObject::find_object<UFunction*>(RAGE_JOAAT("Function Engine.Canvas.K2_DrawText"));
 
 			params = { RenderFont , RenderText, ScreenPosition, Scale, RenderColor, Kerning, ShadowColor, ShadowOffset, bCentreX, bCentreY, bOutlined, OutlineColor };
 			process_event(m_k2_draw_text, &params);
@@ -25,7 +25,7 @@ namespace big
 		{
 			K2_DrawLine params{ source, destination, thickness, RenderColor };
 			if (!m_k2_draw_line)
-				m_k2_draw_line = UObject::find_object<UFunction*>("Function Engine.Canvas.K2_DrawLine");
+				m_k2_draw_line = UObject::find_object<UFunction*>(RAGE_JOAAT("Function Engine.Canvas.K2_DrawLine"));
 
 			process_event(m_k2_draw_line, &params);
 		}
@@ -34,7 +34,7 @@ namespace big
 		{
 			K2_DrawBox params{};
 			if (!m_k2_draw_box)
-				m_k2_draw_box = UObject::find_object<UFunction*>("Function Engine.Canvas.K2_DrawBox");
+				m_k2_draw_box = UObject::find_object<UFunction*>(RAGE_JOAAT("Function Engine.Canvas.K2_DrawBox"));
 
 			params = { pos, size, thickness, RenderColor };
 			process_event(m_k2_draw_box, &params);

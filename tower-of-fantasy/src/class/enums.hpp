@@ -690,6 +690,13 @@ enum class EElementalType
 	ELEMENTAL_TYPE_MAX
 };
 
+enum class directx_version
+{
+	FAILED,
+	DX11,
+	DX12
+};
+
 struct HottaAwardProgressData
 {
 	int64_t m_award_id;

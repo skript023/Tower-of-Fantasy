@@ -12,7 +12,8 @@ namespace big
 
 		template <typename T>
 		T get_class(std::string name);
-		UFunction* get_native(std::string name);
+		UFunction* get_native(std::string_view name);
+		UFunction* get_native(uint32_t name);
 		static void execute_native_function(std::string className, std::string functionName, void* parameters);
 		static void execute_native_function(UClass* classInstance, std::string functionName, void* parameters);
 		std::string get_output_path_type(EHottaOutputPathType PathType);
@@ -59,6 +60,7 @@ namespace big
 		UFunction* m_k2_set_actor_relative_location;
 		UFunction* m_k2_get_root_component;
 		UFunction* m_get_forward_vector;
+		UFunction* m_k2_on_reset;
 	public:
 		UClass* m_kismet_text_library;
 	public:

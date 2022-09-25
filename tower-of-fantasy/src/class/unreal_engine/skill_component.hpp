@@ -46,7 +46,7 @@ namespace big
 		void spawn_artifac_arrow(float duration)
 		{
 			if (!g_native_invoker->m_spawn_artifact_arrow)
-				g_native_invoker->m_spawn_artifact_arrow = g_native_invoker->get_native("Function HottaFramework.HottaSkillSystemComponent.SpawnArtifactArrow");
+				g_native_invoker->m_spawn_artifact_arrow = g_native_invoker->get_native(RAGE_JOAAT("Function HottaFramework.HottaSkillSystemComponent.SpawnArtifactArrow"));
 
 			g_native_invoker->m_spawn_artifact_arrow_params.m_duration_time = duration;
 

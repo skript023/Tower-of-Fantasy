@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include <D3D11.h>
 #include <d3d12.h>
+#include <dxgi1_4.h>
 #include "utility/includes/d3dx9.h"
 #include <wrl/client.h>
 
