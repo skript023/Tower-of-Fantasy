@@ -52,16 +52,10 @@ namespace big
 			SweepHitResult = params.m_sweep_hit_result;
 		}
 
-		void k2_on_reset()
-		{
-			constexpr auto native = RAGE_JOAAT("Function Engine.Actor.K2_OnReset");
-
-			if (!g_native_invoker->m_k2_on_reset)
-				g_native_invoker->m_k2_on_reset = g_native_invoker->get_native(native);
-
-			process_event(g_native_invoker->m_k2_on_reset, nullptr);
-		}
-
+		/**
+		 * \brief Get the forward (X) unit direction vector from this component, in world space.
+		 * \return Forward coordinates
+		 */
 		Vector3 get_forward_vector()
 		{
 			GetForwardVector params{};
@@ -148,6 +142,12 @@ namespace big
 			this->m_can_use_auto_pickup = activate;
 		}
 
+		/**
+		 * \brief Move the actor instantly to the specified location.
+		 * \param NewLocation - The new location to teleport the Actor to.
+		 * \param NewRotation - The new rotation for the Actor.
+		 * \return Whether the location was successfully set.
+		 */
 		bool k2_teleport_to(FVector pos, Rotator rot)
 		{
 			K2_TeleportTo params{};
@@ -166,6 +166,17 @@ namespace big
 			return params.m_return;
 		}
 
+		/**
+		 * \brief Move the actor instantly to the specified location.
+		 * \param NewLocation - The new location to teleport the Actor to.
+		 * \param
+		 * \param bSweep - Whether we sweep to the destination location, triggering overlaps along the way and stopping short of the target if blocked by something. Only the root component is swept and checked for blocking collision, child components move without sweeping. If collision is off, this has no effect.
+		 * \param
+		 * \param bTeleport - Whether we teleport the physics state (if physics collision is enabled for this object). If true, physics velocity for this object is unchanged (so ragdoll parts are not affected by change in location). If false, physics velocity is updated based on the change in position (affecting ragdoll parts). If CCD is on and not teleporting, this will affect objects along the entire swept volume.
+		 * \param
+		 * \param SweepHitResult - The hit result from the move if swept.
+		 * \return Whether the location was successfully set.
+		 */
 		bool k2_set_actor_location(FVector pos, bool Sweeped, FHitResult& SweepHitResult, bool bTeleport = false)
 		{
 			K2_SetActorLocation params{};
@@ -184,6 +195,19 @@ namespace big
 			return params.m_return;
 		}
 
+		/**
+		 * \brief Move the actor instantly to the specified location and rotation.
+		 * \param NewLocation - The new location to teleport the Actor to.
+		 * \param
+		 * \param NewRotation - The new rotation for the Actor.
+		 * \param
+		 * \param bSweep - Whether we sweep to the destination location, triggering overlaps along the way and stopping short of the target if blocked by something. Only the root component is swept and checked for blocking collision, child components move without sweeping. If collision is off, this has no effect.
+		 * \param
+		 * \param bTeleport - Whether we teleport the physics state (if physics collision is enabled for this object). If true, physics velocity for this object is unchanged (so ragdoll parts are not affected by change in location). If false, physics velocity is updated based on the change in position (affecting ragdoll parts). If CCD is on and not teleporting, this will affect objects along the entire swept volume.
+		 * \param
+		 * \param SweepHitResult - The hit result from the move if swept.
+		 * \return Whether the rotation was successfully set.
+		 */
 		bool k2_set_actor_location_and_rotation(FVector pos, Rotator rot, bool Sweeped, FHitResult& SweepHitResult, bool bTeleport = false)
 		{
 			K2_SetActorLocationAndRotation params{};
@@ -204,6 +228,14 @@ namespace big
 			return params.m_return;
 		}
 
+		/**
+		 * \brief Set the actor's RootComponent to the specified relative location.
+		 * \param NewRelativeLocation - New relative location of the actor's root component
+		 * \param
+		 * \param bSweep - Whether we sweep to the destination location, triggering overlaps along the way and stopping short of the target if blocked by something. Only the root component is swept and checked for blocking collision, child components move without sweeping. If collision is off, this has no effect.
+		 * \param
+		 * \param bTeleport - Whether we teleport the physics state (if physics collision is enabled for this object). If true, physics velocity for this object is unchanged (so ragdoll parts are not affected by change in location). If false, physics velocity is updated based on the change in position (affecting ragdoll parts). If CCD is on and not teleporting, this will affect objects along the entire swept volume.
+		 */
 		void k2_set_relative_location(FVector NewRelativeLocation, bool bSweep, FHitResult& SweepHitResult, bool bTeleport = false)
 		{
 			K2_SetActorRelativeLocation params{};
@@ -219,6 +251,19 @@ namespace big
 			process_event(g_native_invoker->m_k2_set_actor_relative_location, &params);
 
 			SweepHitResult = params.m_sweep_hit_result;
+		}
+
+		/**
+		 * \brief Event called when this Actor is reset to its initial state - used when restarting level without reloading.
+		 */
+		void k2_on_reset()
+		{
+			constexpr auto native = RAGE_JOAAT("Function Engine.Actor.K2_OnReset");
+
+			if (!g_native_invoker->m_k2_on_reset)
+				g_native_invoker->m_k2_on_reset = g_native_invoker->get_native(native);
+
+			process_event(g_native_invoker->m_k2_on_reset, nullptr);
 		}
 	};
 	const auto test = sizeof(AActor);

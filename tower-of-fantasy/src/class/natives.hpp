@@ -379,4 +379,32 @@ namespace big
 		float m_thickness;
 		FLinearColor m_render_color;
 	};
+
+	struct ServerSetRotation
+	{
+		FRotator m_rotation;
+	};
+
+	struct ClientSetRotation
+	{
+		FRotator m_rotation;
+		bool m_reset_camera;
+	};
+
+	struct ServerTriggerAnotherOmnislashLinkedEffect
+	{
+		AcknowledgedPawn* m_hotta_character;
+		FVector m_location;
+		FRotator m_rotation;
+		bool m_reset;
+	};
+
+	struct ServerTriggerOmnislashLinkedEffect
+	{
+		AcknowledgedPawn* m_hotta_character;
+		FVector m_new_attached_location;
+		FVector m_last_attached_location;
+		bool m_reset;
+		bool m_change_target;
+	};
 }

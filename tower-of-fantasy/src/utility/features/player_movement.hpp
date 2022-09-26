@@ -254,13 +254,14 @@ namespace big
 
 									target.x += 300 * forward.x;
 									target.y += 300 * forward.y;
-									target.z -= 100;
+									target.z -= 80;
 									if (distance > 100.f && distance < 2500.f)
 									{
 										if (!actor->harvested() && actor->allow_pick())
 										{
 											if (actor->k2_set_actor_location(target, true, hit_result))
 											{
+												actor->k2_on_reset();
 												g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near supply pods"));
 											}
 										}
@@ -283,9 +284,10 @@ namespace big
 
 									target.x += 300 * forward.x;
 									target.y += 300 * forward.y;
-									target.z -= 90;
+									target.z -= 80;
 									if (actor->k2_set_actor_location(target, true, hit_result, true))
 									{
+										actor->k2_on_reset();
 										g_notification_service->success(xorstr("Ellohim Teleport"), xorstr("Teleported to near supply pods"));
 									}
 								}

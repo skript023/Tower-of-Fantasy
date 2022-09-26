@@ -53,8 +53,10 @@ namespace big
 						{
 							if (auto self = local_player->m_player_controller; self)
 							{
+								if (pos == 0.f) continue;
+
 								Vector2 location;
-								if (self->project_world_to_screen(pos, location, false))
+								if (self->project_world_to_screen(pos, location, true))
 								{
 									auto distance = g_features->movement.get_entity_coords() != nullptr ? g_features->movement.get_entity_coords()->distance(pos) : 0.f;
 									draw::RGBA red = { 255, 0, 0, 255 };

@@ -77,6 +77,7 @@ namespace big
 		Vector3 operator+(const Vector3& vec3) const { return { x + vec3.x, y * vec3.y, z * vec3.z }; }
 		Vector3 operator/(const Vector3& vec3) const { return { vec3.x / x, vec3.y / y, vec3.z / z }; }
 		bool operator==(const Vector3 a) const { return x == a.x && y == a.y && z == a.z; }
+		bool operator==(float a) const { return x == a && y == a && z == a; }
 	};
 
 	struct Rotator
@@ -209,4 +210,5 @@ namespace big
 
 	using FVector = Vector3;
 	using FVector2D = Vector2;
+	using FRotator = Rotator;
 }

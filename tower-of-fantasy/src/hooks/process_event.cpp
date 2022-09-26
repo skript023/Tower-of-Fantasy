@@ -232,6 +232,14 @@ namespace big
 			{
 				g_notification_service->success(xorstr("Ellohim Ability"), xorstr("Damage has been received succesfully"));
 			}
+			if (function->get_name() == "ServerTriggerAnotherOmnislashLinkedEffect" || function->get_name() == "ServerTriggerOmnislashLinkedEffect")
+			{
+				g_notification_service->success(xorstr("Ellohim Slow Motion"), xorstr("Slow motion effect has been linked succesfully"));
+			}
+			if (function->get_name() == "ServerAntiPluginReport")
+			{
+
+			}
 		}
 
 		return g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);

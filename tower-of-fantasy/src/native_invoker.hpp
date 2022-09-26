@@ -61,6 +61,8 @@ namespace big
 		UFunction* m_k2_get_root_component;
 		UFunction* m_get_forward_vector;
 		UFunction* m_k2_on_reset;
+		UFunction* m_server_set_rotation;
+		UFunction* m_client_set_rotation;
 	public:
 		UClass* m_kismet_text_library;
 	public:

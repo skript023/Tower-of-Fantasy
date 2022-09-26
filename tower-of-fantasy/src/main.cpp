@@ -13,6 +13,10 @@
 #include "fiber.hpp"
 #include "utility/services/init_services.hpp"
 
+/**
+ * \brief The main function of the library
+ * \param LPVOID The void parameter of the main function
+ */
 DWORD APIENTRY main_thread(LPVOID)
 {
 	using namespace big;
@@ -151,6 +155,8 @@ BOOL APIENTRY DllMain(HMODULE hmod, DWORD reason, PVOID)
 		break;
 	case DLL_PROCESS_DETACH:
 		g_running = false;
+		CloseHandle(g_main_thread);
+		FreeLibraryAndExitThread(g_hmodule, 0);
 		break;
 	}
 

@@ -8,10 +8,16 @@ namespace big
 	{
 		if (g_running)
 		{
+			g_script_mgr.tick();
+
 			if (g_settings->player.infinite_dodge)
 			{
-				static const float v1 = (float)(a1->m_cur_bean_count - a1->m_cur_bean_count / 10);
-				return (__int64)(signed int)floor((float)(v1 * *(float*)g_pointers->dword_7FF681753804) - 3.0);
+				EvadeBeanParam params{};
+				params.m_rand_bean = 6001;
+				params.m_cur_bean_count = 6641;
+				params.m_change_time = 637963816908830000;
+
+				return g_hooking->m_evasion_handler_hook.get_original<decltype(&evasion_handler)>()(&params);
 			}
 		}
 
@@ -19,3 +25,5 @@ namespace big
 	}
 }
 
+//static const float v1 = (float)(a1->m_cur_bean_count - a1->m_cur_bean_count / 10);
+//(__int64)(signed int)floor((float)(v1 * *(float*)g_pointers->dword_7FF681753804) - 3.0);

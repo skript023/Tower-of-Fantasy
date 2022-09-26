@@ -19,7 +19,7 @@ namespace big
 
 	void script_mgr::tick()
 	{
-		std::invoke(std::mem_fn(&script_mgr::tick_internal), this);
+		std::invoke(std::forward<std::remove_reference<std::remove_cv<std::remove_reference<std::_Mem_fn<void(big::script_mgr::*)()>>::type>::type>::type>(std::mem_fn(&script_mgr::tick_internal)), std::forward<script_mgr*>(this));
 	}
 
 	void script_mgr::get_function(UObject* _this)

@@ -25,7 +25,7 @@ namespace big
 		v6 = a1;
 		if (g_running)
 		{
-			g_script_mgr.tick();
+			
 		}
 		/*
 		if (v3 && (v7 = *(uintptr_t*)(a1 + 8)) != 0)

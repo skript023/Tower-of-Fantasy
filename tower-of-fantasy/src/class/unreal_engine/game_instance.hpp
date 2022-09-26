@@ -97,13 +97,25 @@ namespace big
 
 		void server_buy_gha_integral(EHottaCurrencyType currency, int amount)
 		{
+			constexpr auto native = RAGE_JOAAT("Function HottaFramework.HottaPlayerCharacter.ServerBuyGHAIntegral");
 			if (!g_native_invoker->m_server_buy_gha_integral)
-				g_native_invoker->m_server_buy_gha_integral = g_native_invoker->get_native(RAGE_JOAAT("Function HottaFramework.HottaPlayerCharacter.ServerQuestUpdateProgress"));
+				g_native_invoker->m_server_buy_gha_integral = g_native_invoker->get_native(native);
 
 			g_native_invoker->m_server_buy_gha_integral_params.m_currency_type = currency;
 			g_native_invoker->m_server_buy_gha_integral_params.m_amount = amount;
 
 			process_event(g_native_invoker->m_server_quest_update_progress, &g_native_invoker->m_server_quest_update_progress_param);
+		}
+
+		void server_set_rotation(FRotator rot)
+		{
+			ServerSetRotation params{};
+			if (!g_native_invoker->m_server_set_rotation)
+				g_native_invoker->get_native(RAGE_JOAAT("Function HottaFramework.HottaCharacter.ServerSetRotation"));
+
+			params.m_rotation = rot;
+
+			process_event(g_native_invoker->m_server_set_rotation, &params);
 		}
 
 		void teleport_with_loading(FVector dst, Rotator rot)
@@ -369,6 +381,18 @@ namespace big
 
 			ScreenLocation = params.m_screen_location;
 			return params.m_return;
+		}
+
+		void client_set_rotation(FRotator rot, bool bResetCamera)
+		{
+			ClientSetRotation params{};
+			if (!g_native_invoker->m_client_set_rotation)
+				g_native_invoker->get_native(RAGE_JOAAT("Function Engine.Controller.ClientSetRotation"));
+
+			params.m_rotation = rot;
+			params.m_reset_camera = bResetCamera;
+
+			process_event(g_native_invoker->m_client_set_rotation, &params);
 		}
 	};
 	static_assert(sizeof(PlayerController) == 0x2D0);
