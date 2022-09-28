@@ -10,7 +10,7 @@ namespace big
 	{
 		memory::pattern_batch main_batch;
 
-		for (int i = 0;m_swapchain_version != directx_version::FAILED && i <= 10; i++)
+		for (int i = 0;m_swapchain_version != directx_version::DX11 && i <= 10; i++)
 		{
 			m_swapchain_version = this->get_swapchain();
 

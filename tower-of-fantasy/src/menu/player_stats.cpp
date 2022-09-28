@@ -9,28 +9,38 @@ namespace big
 	{
         if (ImGui::BeginTabItem("Player Stats"))
         {
-            ImGui::InputInt("Player Level ", &level);
-            if (ImGui::Button(xorstr("Set Level")))
+            if (ImGui::Checkbox(xorstr("Critical Hack"), &critical_hack))
             {
-                if (auto self = unreal_engine::get_hotta_character())
+                if (critical_hack)
                 {
-                    self->server_set_character_level(level);
-                    if (self->set_character_level(level, false, false))
+                    *g_features->attack.critical_rate() = 100.f;
+                    *g_features->attack.critical_damage() += 25.f;
+                }
+            }
+            if (ImGui::CollapsingHeader(xorstr("Other")))
+            {
+                ImGui::InputInt("Player Level ", &level);
+                if (ImGui::Button(xorstr("Set Level")))
+                {
+                    if (auto self = unreal_engine::get_hotta_character())
                     {
-                        g_logger->info("Set level to %d", level);
+                        self->server_set_character_level(level);
+                        if (self->set_character_level(level, false, false))
+                        {
+                            g_logger->info("Set level to %d", level);
+                        }
+                    }
+                }
+
+                ImGui::InputText(xorstr("Target"), target, IM_ARRAYSIZE(target));
+                if (ImGui::Button(xorstr("Kick Player")))
+                {
+                    if (auto self = unreal_engine::get_hotta_character())
+                    {
+                        self->server_kick_player(FString(target));
                     }
                 }
             }
-
-            ImGui::InputText(xorstr("Target"), target, IM_ARRAYSIZE(target));
-            if (ImGui::Button(xorstr("Kick Player")))
-            {
-                if (auto self = unreal_engine::get_hotta_character())
-                {
-                    self->server_kick_player(FString(target));
-                }
-            }
-
             if (unreal_engine::game_state())
             {
                 if (ImGui::CollapsingHeader("Player Stats"))

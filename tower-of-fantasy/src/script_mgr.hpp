@@ -15,8 +15,6 @@ namespace big
 		void remove_all_scripts();
 		
 		void tick();
-		
-		void get_function(UObject* _this);
 	private:
 		void tick_internal();
 	private:

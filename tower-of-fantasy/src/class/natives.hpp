@@ -407,4 +407,9 @@ namespace big
 		bool m_reset;
 		bool m_change_target;
 	};
+
+	struct ServerRequireEnterBigSecret
+	{
+		int m_enter_type;
+	};
 }

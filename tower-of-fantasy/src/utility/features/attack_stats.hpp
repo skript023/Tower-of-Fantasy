@@ -152,5 +152,20 @@ namespace big
 
 			return nullptr;
 		}
+
+		inline void critical_hack(bool activate)
+		{
+			if (activate)
+			{
+				if (auto self = unreal_engine::get_pawn(); self)
+				{
+					if (auto skill_component = self->m_skill_component; skill_component)
+					{
+						skill_component->m_critical_rate = 100.f;
+						skill_component->m_critical_damage += 25.f;
+					}
+				}
+			}
+		}
 	};
 }

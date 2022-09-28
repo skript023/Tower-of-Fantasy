@@ -22,14 +22,6 @@ namespace big
 		std::invoke(std::forward<std::remove_reference<std::remove_cv<std::remove_reference<std::_Mem_fn<void(big::script_mgr::*)()>>::type>::type>::type>(std::mem_fn(&script_mgr::tick_internal)), std::forward<script_mgr*>(this));
 	}
 
-	void script_mgr::get_function(UObject* _this)
-	{
-		if (this->m_crossmap.size() <= 2162688)
-		{
-			this->m_crossmap.push_back({ _this->get_fullname(), _this });
-		}
-	}
-
 	void script_mgr::tick_internal()
 	{
 		static bool ensure_main_fiber = (ConvertThreadToFiber(nullptr), true);

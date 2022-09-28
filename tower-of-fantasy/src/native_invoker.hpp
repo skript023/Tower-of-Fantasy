@@ -63,6 +63,7 @@ namespace big
 		UFunction* m_k2_on_reset;
 		UFunction* m_server_set_rotation;
 		UFunction* m_client_set_rotation;
+		UFunction* m_server_require_big_secret;
 	public:
 		UClass* m_kismet_text_library;
 	public:

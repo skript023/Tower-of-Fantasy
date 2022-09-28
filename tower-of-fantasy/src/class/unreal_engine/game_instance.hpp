@@ -28,6 +28,16 @@ namespace big
 
 			process_event(g_native_invoker->m_server_match_solo_league, &g_native_invoker->m_server_match_solo_league_params);
 		}
+
+		void server_require_enter_big_secret(int EnterType)
+		{
+			ServerRequireEnterBigSecret params{};
+			if (!g_native_invoker->m_server_require_big_secret)
+				g_native_invoker->m_server_require_big_secret = g_native_invoker->get_native(RAGE_JOAAT("Function QRSL.QRSLPlayerCharacter.ServerRequireEnterBigSecret"));
+		
+			params.m_enter_type = EnterType;
+			process_event(g_native_invoker->m_server_require_big_secret, &params);
+		}
 	};
 
 	/**
@@ -104,7 +114,7 @@ namespace big
 			g_native_invoker->m_server_buy_gha_integral_params.m_currency_type = currency;
 			g_native_invoker->m_server_buy_gha_integral_params.m_amount = amount;
 
-			process_event(g_native_invoker->m_server_quest_update_progress, &g_native_invoker->m_server_quest_update_progress_param);
+			process_event(g_native_invoker->m_server_quest_update_progress, &g_native_invoker->m_server_buy_gha_integral_params);
 		}
 
 		void server_set_rotation(FRotator rot)
