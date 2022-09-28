@@ -1,5 +1,5 @@
 # Tower of Fantasy Internal
-A trainer menu base Tower of Fantasy.
+A cheat menu base Tower of Fantasy.
 Strictly for educational purposes.
 
 ## Features
