@@ -77,7 +77,10 @@ DWORD APIENTRY main_thread(LPVOID)
 		g_hooking->enable();
 		g_logger->info("Hooking enabled.");
 
-		g_thread_pool->hold();
+		while (g_running)
+		{
+			std::this_thread::sleep_for(1000ms);
+		}
 
 		g_hooking->disable();
 		g_logger->info("Hooking disabled.");

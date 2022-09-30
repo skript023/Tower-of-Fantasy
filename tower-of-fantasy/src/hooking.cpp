@@ -60,7 +60,6 @@ namespace big
 		m_enabled = false;
 
 		*g_pointers->m_cooldown = 0x74;
-		*g_pointers->m_skip_button = 0x74;
 		m_process_event_hook.disable();
 		m_evasion_handler_hook.disable();
 		m_rapid_attack_hook.disable();
@@ -72,8 +71,6 @@ namespace big
 		m_swapchain_resizebuffers_hook.disable();
 		m_swapchain_present_hook.disable();
 		//m_client_viewport_hook.disable();
-
-		free(g_pointers->m_swapchain_methods);
 	}
 
 	minhook_keepalive::minhook_keepalive()
