@@ -187,10 +187,6 @@ namespace big
 
 			g_gui.m_opened ^= true;
 		}
-		if (wparam == VK_LBUTTON)
-		{
-			this->m_is_mouse_clicked ^= true;
-		}
 	
 		if (g_gui.m_opened)
 		{

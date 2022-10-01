@@ -63,18 +63,8 @@ namespace big
 			{
 				auto params = static_cast<ClientOnCurrencyAmountChanged*>(parms);
 
-				if (params->m_add_amount < 0)
-				{
-					params->m_add_amount = 1000000;
-					params->m_path_type = EHottaOutputPathType::Add_DailyGift;
-
-					g_notification_service->success(xorstr("Ellohim Currency"), xorstr("No currency used"));
-
-					return;
-				}
-
 				g_notification_service->success(xorstr("Ellohim Currency"),
-					std::format("Currency Successullfy Added {}",
+					std::format("Currency adjusted Successullfy {}",
 						params->m_add_amount));
 			}
 			if (function->get_name() == "ServerUpgradeItem")
@@ -188,7 +178,6 @@ namespace big
 			{
 				auto params = static_cast<ServerSetCharacterLevel*>(parms);
 
-				//params->m_level += 5;
 				g_notification_service->success(xorstr("Ellohim Level"), xorstr("Level has been adjusted succesfully"));
 			}
 			if (function->get_name() == "ServerLotteryExtract")
@@ -238,7 +227,17 @@ namespace big
 			}
 			if (function->get_name() == "ServerAntiPluginReport")
 			{
+				auto params = static_cast<ServerAntiPluginReport*>(parms);
+				g_notification_service->warning(xorstr("Report Information"), std::format("Report Type : {} Report Role Name : {} Report Reason : {} Report Description : {}",
+					(int8_t)params->m_report_info.m_anti_report_type,
+					params->m_report_info.m_reported_role_name.to_string().c_str(),
+					params->m_report_info.m_reported_reason.to_string().c_str(),
+					params->m_report_info.m_reported_desc.to_string().c_str()
+					));
 
+				g_notification_service->success(xorstr("Server Anti Plugin Report"), xorstr("Report blocked successfully"));
+
+				return;
 			}
 		}
 

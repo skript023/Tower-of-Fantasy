@@ -35,9 +35,4 @@ namespace big
 		return g_hooking->m_swapchain_resizebuffers_hook.get_original<decltype(&swapchain_resizebuffers)>()
 			(this_, buffer_count, width, height, new_format, swapchain_flags);
 	}
-
-	void APIENTRY hooks::swapchain_draw_indexed(ID3D11DeviceContext* pContext, UINT IndexCount, UINT StartIndexLocation, INT BaseVertexLocation)
-	{
-		//return g_hooking->m_swapchain_draw_indexed_hook.get_original<decltype(&swapchain_draw_indexed)>()(pContext, IndexCount, StartIndexLocation, BaseVertexLocation);
-	}
 }

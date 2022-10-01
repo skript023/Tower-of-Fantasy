@@ -79,19 +79,19 @@ DWORD APIENTRY main_thread(LPVOID)
 
 		while (g_running)
 		{
-			std::this_thread::sleep_for(1000ms);
+			std::this_thread::sleep_for(1s);
 		}
 
 		g_hooking->disable();
 		g_logger->info("Hooking disabled.");
 
-		std::this_thread::sleep_for(1000ms);
-
-		hooking_instance.reset();
-		g_logger->info("Hooking uninitialized.");
+		std::this_thread::sleep_for(1s);
 
 		g_script_mgr.remove_all_scripts();
 		g_logger->info("Scripts unregistered.");
+
+		hooking_instance.reset();
+		g_logger->info("Hooking uninitialized.");
 
 		g_thread_pool->destroy();
 		g_logger->info("Destroyed thread pool.");
@@ -111,6 +111,7 @@ DWORD APIENTRY main_thread(LPVOID)
 		renderer_instance.reset();
 		g_logger->info("Renderer uninitialized.");
 
+		g_virtual_protect->disable();
 		virtual_protect_instance.reset();
 		g_logger->info("Virtual Protect uninitialized");
 
@@ -158,8 +159,6 @@ BOOL APIENTRY DllMain(HMODULE hmod, DWORD reason, PVOID)
 		break;
 	case DLL_PROCESS_DETACH:
 		g_running = false;
-		CloseHandle(g_main_thread);
-		FreeLibraryAndExitThread(g_hmodule, 0);
 		break;
 	}
 

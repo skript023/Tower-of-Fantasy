@@ -412,4 +412,27 @@ namespace big
 	{
 		int m_enter_type;
 	};
+
+	struct ReportInfo
+	{
+		EAntiReportType m_anti_report_type;
+		int64_t m_report_unique_id;
+		FString m_reported_role_name;
+		int m_reported_level;
+		int m_reported_total_cash;
+		int m_reported_fight;
+		FString m_reported_weapon1;
+		FString m_reported_weapon2;
+		FString m_reported_weapon3;
+		FString m_reported_artifact1;
+		FString m_reported_artifact2;
+		FString m_reported_reason;
+		FString m_reported_desc;
+		FString m_reported_server_id;
+	};
+
+	struct ServerAntiPluginReport
+	{
+		ReportInfo m_report_info;
+	};
 }

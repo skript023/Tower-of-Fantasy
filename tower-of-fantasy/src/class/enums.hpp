@@ -304,6 +304,14 @@ enum class EQuestRpcRequireType
 	QRT_MAX
 };
 
+enum class EAntiReportType
+{
+	OldIllusion,
+	PVP,
+	RankList,
+	EAntiReportType_MAX
+};
+
 enum class EHottaOutputPathType
 {
 	OutputPathType_None,

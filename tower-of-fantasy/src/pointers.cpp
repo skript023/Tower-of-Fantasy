@@ -10,9 +10,9 @@ namespace big
 	{
 		memory::pattern_batch main_batch;
 
-		for (int i = 0;m_swapchain_version != directx_version::DX11 && i <= 10; i++)
+		for (int i = 0; !m_get_swapchain && i <= 5; i++)
 		{
-			m_swapchain_version = this->get_swapchain();
+			m_get_swapchain = this->get_swapchain();
 
 			std::this_thread::sleep_for(0ms);
 		}
@@ -147,17 +147,9 @@ namespace big
 		g_pointers = nullptr;
 	}
 
-	directx_version pointers::get_swapchain()
+	bool pointers::get_swapchain()
 	{
-		if (directx_11())
-		{
-			return directx_version::DX11;
-		}
-		else if (directx_12())
-		{
-			return directx_version::DX12;
-		}
-		return directx_version::FAILED;
+		return this->directx_11();
 	}
 
 	bool pointers::directx_11()
