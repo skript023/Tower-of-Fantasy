@@ -3,7 +3,7 @@ A cheat menu base Tower of Fantasy.
 Strictly for educational purposes.
 
 ## Credits
-* [Pocakking] (https://github.com/Pocakking/BigBaseV2)
+* [Pocakking](https://github.com/Pocakking/BigBaseV2)
 
 ## Features
 * ImGui–based user interface
