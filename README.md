@@ -2,11 +2,17 @@
 A cheat menu base Tower of Fantasy.
 Strictly for educational purposes.
 
+## Credits
+* [Pocakking] (https://github.com/Pocakking/BigBaseV2)
+
 ## Features
 * ImGui–based user interface
 * Log console
 * Thread Pool Concept by [Yimura](https://github.com/Yimura)
 * Game Engine Function Access
+* Log console
+* Script fibers
+* Fiber pool
 
 ## Building
 To build Tower of Fantasy Internal you need:
