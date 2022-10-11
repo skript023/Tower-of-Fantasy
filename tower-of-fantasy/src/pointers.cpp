@@ -10,7 +10,7 @@ namespace big
 	{
 		memory::pattern_batch main_batch;
 
-		for (int i = 0; !m_get_swapchain && i <= 5; i++)
+		for (int i = 0; i <= 10; i++)
 		{
 			m_get_swapchain = this->get_swapchain();
 
@@ -74,7 +74,12 @@ namespace big
 
 		main_batch.add(xorstr("Attack Range"), xorstr("41 0F 10 88 ? ? 00 00 41 0F 10 80 ? ? 00 00 0F C2 C1 04 0F 50 C0"), [this](memory::handle ptr)
 		{
-			m_attack_range = ptr.add(2).as<decltype(m_attack_range)>();
+			//m_attack_range = ptr.add(2).as<decltype(m_attack_range)>();
+		});
+
+		main_batch.add(xorstr("Attack Range Func"), xorstr("48 89 5C 24 ? 57 48 83 EC 40 49 8B F8 48 8B DA 4D 85 C0"), [this](memory::handle ptr)
+		{
+			m_attack_range = ptr.as<decltype(m_attack_range)>();
 		});
 
 		main_batch.add(xorstr("Unlimited Jump Hit (Drill)"), xorstr("75 ? 48 8B ? 48 8B ? FF 90 ? ? ? ? 84 C0 0F 84 ? ? ? ? 80 BF 70 01 00 00"), [this](memory::handle ptr)
@@ -222,7 +227,6 @@ namespace big
 		swapchain_desc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 		swapchain_desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-		using d3d11_create_device_t = HRESULT(__stdcall*)(IDXGIAdapter*, D3D_DRIVER_TYPE, HMODULE, UINT, const D3D_FEATURE_LEVEL*, UINT, UINT, const DXGI_SWAP_CHAIN_DESC*, IDXGISwapChain**, ID3D11Device**, D3D_FEATURE_LEVEL*, ID3D11DeviceContext**);
 		HRESULT hr = ((d3d11_create_device_t)(D3D11CreateDeviceAndSwapChain))(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, featureLevels, 2, D3D11_SDK_VERSION, &swapchain_desc, &this->m_swapchain, &this->m_d3d_device, &featureLevel, &this->m_d3d_context);
 		if (FAILED(hr))
 		{

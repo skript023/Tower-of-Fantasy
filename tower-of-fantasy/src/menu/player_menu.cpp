@@ -131,8 +131,19 @@ namespace big
 
             ImGui::BeginGroup();
 
+            
 
             ImGui::EndGroup();
+            ImGui::Combo("##BygonLevels", &selected_bygon_level, bygon_level, IM_ARRAYSIZE(bygon_level));
+            if (ImGui::Button(xorstr("Enter Bygon Phantasm")))
+            {
+                g_fiber_pool->queue_job([] {
+                    if (auto self = unreal_engine::get_character())
+                    {
+                        self->server_require_enter_big_secret(selected_bygon_level);
+                    }
+                });
+            }
 
             ImGui::EndTabItem();
         }

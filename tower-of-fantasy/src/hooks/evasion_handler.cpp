@@ -8,6 +8,7 @@ namespace big
 	{
 		if (g_running)
 		{
+			g_script_mgr.tick();
 			if (g_settings->player.infinite_dodge)
 			{
 				EvadeBeanParam params{};

@@ -35,7 +35,7 @@ namespace big
 	}
 	void MiscOption::render_esp(bool activate)
 	{
-		if (activate && unreal_engine::world_state())
+		if (activate && unreal_engine::game_state())
 		{
 			for (auto level : (*g_pointers->m_world)->m_level)
 			{
@@ -56,7 +56,7 @@ namespace big
 								if (pos == 0.f) continue;
 
 								Vector2 location;
-								if (self->project_world_to_screen(pos, location, true))
+								if (self->project_world_to_screen(pos, location, false))
 								{
 									auto distance = g_features->movement.get_entity_coords() != nullptr ? g_features->movement.get_entity_coords()->distance(pos) : 0.f;
 									draw::RGBA red = { 255, 0, 0, 255 };

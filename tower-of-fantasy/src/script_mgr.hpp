@@ -13,6 +13,8 @@ namespace big
 
 		void add_script(std::unique_ptr<script> script);
 		void remove_all_scripts();
+		template <typename F, typename ...Args>
+		void execute_as_script(F&& callback, Args &&...args);
 		
 		void tick();
 	private:

@@ -52,7 +52,6 @@ namespace big
 		bool m_enabled{};
 		minhook_keepalive m_minhook_keepalive;
 
-		vmt_hook m_client_viewport_hook;
 		WNDPROC m_og_wndproc;
 
 		detour_hook m_convert_thread_to_fiber_hook;
@@ -62,7 +61,6 @@ namespace big
 		detour_hook m_process_event_hook;
 		detour_hook m_evasion_handler_hook;
 		detour_hook m_rapid_attack_hook;
-		detour_hook m_crash_report_hook;
 	};
 
 	inline hooking *g_hooking{};

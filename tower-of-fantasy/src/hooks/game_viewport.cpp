@@ -9,7 +9,7 @@ namespace big
 		TRY_CLAUSE
 		{
 
-			return g_hooking->m_client_viewport_hook.get_original<decltype(&draw_transition)>(hooks::draw_transition_index)(_this, canvas);
+			//return g_hooking->m_client_viewport_hook.get_original<decltype(&draw_transition)>(hooks::draw_transition_index)(_this, canvas);
 		} EXCEPT_CLAUSE
 	}
 
@@ -19,7 +19,7 @@ namespace big
 		{
 
 
-			return g_hooking->m_client_viewport_hook.get_original<decltype(&post_render)>(hooks::post_render_index)(_this, canvas);
+			//return g_hooking->m_client_viewport_hook.get_original<decltype(&post_render)>(hooks::post_render_index)(_this, canvas);
 		} EXCEPT_CLAUSE
 	}
 }

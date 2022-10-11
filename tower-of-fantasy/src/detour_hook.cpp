@@ -49,7 +49,7 @@ namespace big
 	{
 		if (auto status = MH_DisableHook(m_target); status == MH_OK)
 		{
-			g_logger->file("Disabled hook '%s'.", m_name);
+			g_logger->file("Disabled hook '%s'.", m_name.c_str());
 		}
 		else
 		{

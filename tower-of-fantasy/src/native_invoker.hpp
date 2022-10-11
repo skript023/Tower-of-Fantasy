@@ -16,6 +16,7 @@ namespace big
 		UFunction* get_native(uint32_t name);
 		static void execute_native_function(std::string className, std::string functionName, void* parameters);
 		static void execute_native_function(UClass* classInstance, std::string functionName, void* parameters);
+		static std::string quest_require_type(EQuestRpcRequireType requireType);
 		std::string get_output_path_type(EHottaOutputPathType PathType);
 	public:
 		UFunction* m_world_to_screen;

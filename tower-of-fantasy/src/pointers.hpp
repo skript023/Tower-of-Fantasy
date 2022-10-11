@@ -6,6 +6,8 @@
 
 namespace big
 {
+	using d3d11_create_device_t = HRESULT(__stdcall*)(IDXGIAdapter*, D3D_DRIVER_TYPE, HMODULE, UINT, const D3D_FEATURE_LEVEL*, UINT, UINT, const DXGI_SWAP_CHAIN_DESC*, IDXGISwapChain**, ID3D11Device**, D3D_FEATURE_LEVEL*, ID3D11DeviceContext**);
+	
 	class pointers
 	{
 	public:
@@ -34,7 +36,7 @@ namespace big
 		uint8_t* m_cooldown;
 		uint8_t* m_skip_button;
 		float* xmmword_7FF67F73A040;
-		int* m_ssr_stuff;
+		void* m_ssr_stuff;
 		PVOID m_player_navigation;
 		PVOID m_task_queue;
 		PVOID m_evasion_handler;

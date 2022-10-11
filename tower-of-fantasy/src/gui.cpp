@@ -93,6 +93,9 @@ namespace big
 		colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.00f, 1.00f, 1.00f, 0.70f);
 		colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.20f);
 		colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);
+
+		g_notification_service->success(xorstr("Ellohim Private Cheat"), xorstr("Cheat succesfully injected to the game press 'Insert' to show/hide menu"));
+		g_gui.m_opened = true;
 	}
 
 	void gui::dx_draw_menu()
@@ -120,8 +123,7 @@ namespace big
 
 	void gui::script_init()
 	{
-		g_notification_service->success(xorstr("Ellohim Private Cheat"), xorstr("Cheat succesfully injected to the game press 'Insert' to show/hide menu"));
-		g_gui.m_opened = true;
+		
 	}
 
 	void gui::script_on_tick()
@@ -141,6 +143,7 @@ namespace big
 		while (g_running)
 		{
 			g_gui.script_on_tick();
+			script::get_current()->yield();
 		}
 	}
 }

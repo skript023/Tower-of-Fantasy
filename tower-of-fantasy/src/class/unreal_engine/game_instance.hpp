@@ -377,7 +377,7 @@ namespace big
 		char pad_2B8[16]; //0x2B8
 		class PlayerCameraManager* m_camera_manager; //0x2C8
 	public:
-		bool project_world_to_screen(FVector& WorldLocation, FVector2D& ScreenLocation, bool bPlayerViewportRelative = true)
+		bool project_world_to_screen(FVector WorldLocation, FVector2D& ScreenLocation, bool bPlayerViewportRelative = true)
 		{
 			WorldToScreenParam params{};
 			if (!g_native_invoker->m_world_to_screen)

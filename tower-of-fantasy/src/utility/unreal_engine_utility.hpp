@@ -66,6 +66,28 @@ namespace big::unreal_engine
 		return nullptr;
 	}
 
+	inline Character* get_character()
+	{
+		if (auto world = *g_pointers->m_world)
+		{
+			if (auto game_instance = world->m_game_instance)
+			{
+				if (auto local_player = game_instance->m_local_player[0])
+				{
+					if (auto control = local_player->m_player_controller)
+					{
+						if (auto qrsl_player_character = control->m_character)
+						{
+							return qrsl_player_character;
+						}
+					}
+				}
+			}
+		}
+
+		return nullptr;
+	}
+
 	inline PlayerNavigation* get_player_pos()
 	{
 		if (auto navigation = *g_pointers->m_player_nav)

@@ -698,6 +698,60 @@ enum class EElementalType
 	ELEMENTAL_TYPE_MAX
 };
 
+enum ETrackIconType
+{
+	QUEST_MAIN,
+	QUEST_ENERGY,
+	QUEST_DAILY,
+	QUEST_SIDE,
+	QUEST_REWARD,
+	QUEST_TEAM,
+	QUEST_BOOK,
+	QUEST_HIDE,
+	QUEST_GUILD,
+	QUEST_GUIDE,
+	QUEST_HOME,
+	QUEST_WEEKLY,
+	QUEST_IMITATION,
+	QUEST_REGRESSION,
+	COMMON,
+	TEAM_1P,
+	TEAM_2P,
+	TEAM_3P,
+	TEAM_4P,
+	TEAM_5P,
+	TEAM_6P,
+	TEAM_7P,
+	TEAM_8P,
+	HARVEST_TREASUREBOX,
+	HARVEST_GEM,
+	DREAMCLONE_ENTRANCE,
+	BIG_SECRET_ENTERANCE,
+	BIG_SECRET_GATHER,
+	ValorActivityBoss,
+	SecondaryPlaneEntrance,
+	MAX
+};
+
+enum EHottaNetMode
+{
+	Server,
+	Client,
+	Standalone,
+	Other,
+	EHottaNetMode_MAX
+};
+
+enum class EWormholeDifficulty
+{
+	None,
+	Easy,
+	Normal,
+	Hard,
+	Challenge,
+	MAX
+};
+
 enum class directx_version
 {
 	FAILED,

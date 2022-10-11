@@ -70,7 +70,7 @@ DWORD APIENTRY main_thread(LPVOID)
 		auto service_instance = std::make_unique<init_service>();
 		g_logger->info("Service initialized.");
 
-		g_thread_pool->push(gui::script_func);
+		g_script_mgr.add_script(std::make_unique<script>(&gui::script_func));
 		g_script_mgr.add_script(std::make_unique<script>(&fiber::fiber_func));
 		g_logger->info("Scripts registered.");
 
@@ -79,6 +79,8 @@ DWORD APIENTRY main_thread(LPVOID)
 
 		while (g_running)
 		{
+			if (GetAsyncKeyState(VK_DELETE) & 0x8000) g_running = false;
+
 			std::this_thread::sleep_for(1s);
 		}
 
@@ -155,7 +157,7 @@ BOOL APIENTRY DllMain(HMODULE hmod, DWORD reason, PVOID)
 		DisableThreadLibraryCalls(hmod);
 
 		g_hmodule = hmod;
-		g_main_thread = CreateThread(nullptr, 0, &main_thread, nullptr, 0, &g_main_thread_id);
+		g_main_thread = CreateThread(nullptr, 0, main_thread, nullptr, 0, &g_main_thread_id);
 		break;
 	case DLL_PROCESS_DETACH:
 		g_running = false;

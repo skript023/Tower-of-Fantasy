@@ -55,9 +55,11 @@ namespace big
 				auto params = static_cast<ServerCheckQuestRpcRequire*>(parms);
 
 				g_notification_service->warning(xorstr("Server Side RPC Check"), 
-					std::format("Quest ID : {} Objective ID : {}", 
+					std::format("Quest ID : {} Objective ID : {} Quest Status {}", 
 						params->m_quest_id.get_name(), 
-						params->m_objective_id.get_name()));
+						params->m_objective_id.get_name(), NativeInvoker::quest_require_type(params->m_require_type)));
+
+				return;
 			}
 			if (function->get_name() == "ClientOnCurrencyAmountChanged")
 			{

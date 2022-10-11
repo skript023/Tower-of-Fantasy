@@ -17,9 +17,15 @@ namespace big
 		m_scripts.clear();
 	}
 
+	template <typename F, typename ...Args>
+	void script_mgr::execute_as_script(F&& callback, Args &&...args)
+	{
+		std::invoke(std::forward<F>(callback), std::forward<Args>(args)...);
+	}
+
 	void script_mgr::tick()
 	{
-		std::invoke(std::forward<std::remove_reference<std::remove_cv<std::remove_reference<std::_Mem_fn<void(big::script_mgr::*)()>>::type>::type>::type>(std::mem_fn(&script_mgr::tick_internal)), std::forward<script_mgr*>(this));
+		execute_as_script(std::mem_fn(&script_mgr::tick_internal), this);
 	}
 
 	void script_mgr::tick_internal()
