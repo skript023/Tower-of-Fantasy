@@ -406,7 +406,24 @@ namespace big
 		}
 
 		void server_request_transfer_level(Fstring levelName, struct Transform, bool isSaveMapState, int lineID, bool isSummonTeammates, int cloneSceneID, bool setSwitchCD);
-		void server_exchange_item(class UHottaInventoryComponent* SourceInventory, int32_t SourceSlot, class UHottaInventoryComponent* TargetInventory, int32_t TargetSlot, int32_t ItemType);
+		
+		/**
+		 * \brief Steal other player item from their inventory
+		 * \param UHottaInventoryComponent* Source inventory
+		 * \param int Source inventory slot
+		 * \param UHottaInventoryComponent* Target inventory
+		 * \param int Target inventory slot
+		 * \param EItemType Enum Item Type
+		 */
+		void server_exchange_item(class UHottaInventoryComponent* SourceInventory, int32_t SourceSlot, class UHottaInventoryComponent* TargetInventory, int32_t TargetSlot, EItemType ItemType)
+		{
+			ServerExchangeItem params{};
+			if (!g_native_invoker->m_server_exchange_item)
+				g_native_invoker->m_server_exchange_item = g_native_invoker->get_native("Function HottaFramework.HottaPlayerController.ServerExchangeItem");
+
+			params { SourceInventory, SourceSlot, TargetInventory, TargetSlot, ItemType };
+			process_event(g_native_invoker->m_server_exchange_item, &params);
+		}
 	};
 	static_assert(sizeof(PlayerController) == 0x2D0);
 

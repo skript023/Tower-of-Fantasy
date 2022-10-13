@@ -435,4 +435,13 @@ namespace big
 	{
 		ReportInfo m_report_info;
 	};
+
+	struct ServerExchangeItem
+	{
+		class UHottaInventoryComponent* SourceInventory;
+		int32_t SourceSlot;
+		class UHottaInventoryComponent* TargetInventory;
+		int32_t TargetSlot;
+		int32_t ItemType;
+	}
 }

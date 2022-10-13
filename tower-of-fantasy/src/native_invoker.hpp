@@ -65,6 +65,7 @@ namespace big
 		UFunction* m_server_set_rotation;
 		UFunction* m_client_set_rotation;
 		UFunction* m_server_require_big_secret;
+		UFunction* m_server_exchange_item;
 	public:
 		UClass* m_kismet_text_library;
 	public:
