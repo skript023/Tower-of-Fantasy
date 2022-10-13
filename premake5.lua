@@ -4,9 +4,7 @@ workspace "tower-of-fantasy"
 
   configurations
   {
-    "Debug",
-    "Release",
-    "Dist"
+    "Release"
   }
 
   outputdir = "%{cfg.buildcfg}"
@@ -181,17 +179,45 @@ workspace "tower-of-fantasy"
 
     flags { "NoImportLib", "Maps" }
 
-    filter "configurations:Debug"
-	  flags { "LinkTimeOptimization", "MultiProcessorCompile" }
-	  editandcontinue "Off"
-      defines { "TowerOfFantasy_DEBUG" }
-
     filter "configurations:Release"
 	  flags { "LinkTimeOptimization", "NoManifest", "MultiProcessorCompile" }
-      defines { "TowerOfFantasy_RELEASE" }
+      defines { "ScarletNexus_RELEASE" }
       optimize "speed"
 
-    filter "configurations:Dist"
-      flags { "LinkTimeOptimization", "FatalWarnings", "NoManifest", "MultiProcessorCompile" }
-      defines { "TowerOfFantasy_DIST" }
-      optimize "speed"
+  project "tower-of-fantasy-injector"
+	kind "ConsoleApp"
+	language "C++"
+	location "tower-of-fantasy-injector"
+
+	characterset ("MBCS")
+
+	targetdir ("bin/%{cfg.buildcfg}")
+	objdir ("bin/obj/%{cfg.buildcfg}/%{prj.name}")
+
+	PrecompiledHeaderInclude = "common.hpp"
+	PrecompiledHeaderSource = "%{prj.name}/src/common.cpp"
+
+	includedirs
+	{
+	"%{prj.name}/src"
+	}
+
+	files
+	{
+	"%{prj.name}/src/**.hpp",
+	"%{prj.name}/src/**.h",
+	"%{prj.name}/src/**.cpp",
+        "%{prj.name}/src/**.rc",
+        "%{prj.name}/src/**.aps"
+	}
+
+	filter "configurations:Debug"
+	 defines { "DEBUG" }
+	 symbols "On"
+
+	filter "configurations:Release"
+	 defines { "NDEBUG" }
+	 optimize "On"
+
+    DeclareMSVCOptions()
+    DeclareDebugOptions()

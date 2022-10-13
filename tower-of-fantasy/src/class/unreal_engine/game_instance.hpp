@@ -404,6 +404,9 @@ namespace big
 
 			process_event(g_native_invoker->m_client_set_rotation, &params);
 		}
+
+		void server_request_transfer_level(Fstring levelName, struct Transform, bool isSaveMapState, int lineID, bool isSummonTeammates, int cloneSceneID, bool setSwitchCD);
+		void server_exchange_item(class UHottaInventoryComponent* SourceInventory, int32_t SourceSlot, class UHottaInventoryComponent* TargetInventory, int32_t TargetSlot, int32_t ItemType);
 	};
 	static_assert(sizeof(PlayerController) == 0x2D0);
 
