@@ -438,10 +438,10 @@ namespace big
 
 	struct ServerExchangeItem
 	{
-		class UHottaInventoryComponent* SourceInventory;
-		int32_t SourceSlot;
-		class UHottaInventoryComponent* TargetInventory;
-		int32_t TargetSlot;
-		int32_t ItemType;
-	}
+		class UHottaInventoryComponent* m_source_inventory;
+		int32_t m_source_slot;
+		class UHottaInventoryComponent* m_target_inventory;
+		int32_t m_target_slot;
+		EItemType m_item_type;
+	};
 }
