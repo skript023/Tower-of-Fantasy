@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push: 
+    branches: 
+      - main
+  pull_request: 
+    branches: 
+      - main
+      
+jobs:
+  build:
+    runs-on: windows-2022
+  
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Setup msbuild
+      uses: microsoft/setup-msbuild@v1.1
+    
+    - name: Setup premake
+      uses: abel0b/setup-premake@v2
+      with:
+        version: "5.0.0-beta1"
+      
+    - name: Generate project files using Premake  
+      run: |
+        ls .premake
+        premake5 vs2022
+        
+    - name: Build Tower-of-Fantasy
+      shell: cmd
+      run: 'msbuild tower-of-fantasy/tower-of-fantasy.vcxproj /p:Platform=x64 /p:Configuration=Release'
+
+    - name: Upload binaries to GitHub
+      uses: actions/upload-artifact@v2
+      with:
+        name: Tower-of-Fantasy
+        path: |
+          bin/Release/tower-of-fantasy.dll
