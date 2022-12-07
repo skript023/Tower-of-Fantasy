@@ -1,6 +1,17 @@
-# Tower of Fantasy Internal
-A cheat menu base Tower of Fantasy.
-Strictly for educational purposes.
+<p align="center"><a title="Jeremy Kratz, Public domain, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:ISO_C%2B%2B_Logo.svg"><img width="256" alt="ISO C++ Logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/ISO_C%2B%2B_Logo.svg/256px-ISO_C%2B%2B_Logo.svg.png"></a></p>
+
+<h1 align="center">Tower of Fantasy Internal</h1>
+<p align="center">
+  <a href="https://github.com/skript023/Tower-of-Fantasy/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/skript023/Tower-of-Fantasy.svg?style=flat-square"/>
+   </a>
+  <a href="https://github.com/skript023/Tower-of-Fantasy/actions">
+      <img src="https://img.shields.io/github/workflow/status/skript023/Tower-of-Fantasy/CI/main?style=flat-square"/>
+   </a>
+  <br>
+  A cheat menu base Tower of Fantasy.
+  Strictly for educational purposes.
+</p>
 
 ## Credits
 * BigbaseV2 Concept by [Pocakking](https://github.com/Pocakking/BigBaseV2)
