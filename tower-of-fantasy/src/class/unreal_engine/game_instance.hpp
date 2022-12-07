@@ -405,7 +405,7 @@ namespace big
 			process_event(g_native_invoker->m_client_set_rotation, &params);
 		}
 
-		void server_request_transfer_level(Fstring levelName, struct Transform, bool isSaveMapState, int lineID, bool isSummonTeammates, int cloneSceneID, bool setSwitchCD);
+		void server_request_transfer_level(FString levelName, struct Transform, bool isSaveMapState, int lineID, bool isSummonTeammates, int cloneSceneID, bool setSwitchCD);
 		
 		/**
 		 * \brief Steal other player item from their inventory
@@ -421,7 +421,12 @@ namespace big
 			if (!g_native_invoker->m_server_exchange_item)
 				g_native_invoker->m_server_exchange_item = g_native_invoker->get_native("Function HottaFramework.HottaPlayerController.ServerExchangeItem");
 
-			params { SourceInventory, SourceSlot, TargetInventory, TargetSlot, ItemType };
+			params.m_source_inventory = SourceInventory;
+			params.m_source_slot = SourceSlot;
+			params.m_target_inventory = TargetInventory;
+			params.m_target_slot = TargetSlot;
+			params.m_item_type = ItemType;
+
 			process_event(g_native_invoker->m_server_exchange_item, &params);
 		}
 	};

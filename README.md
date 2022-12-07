@@ -10,7 +10,7 @@
    </a>
   <br>
   A cheat menu base Tower of Fantasy.
-  Strictly for educational purposes.
+  Strictly for educational purposes. 
 </p>
 
 ## Credits
